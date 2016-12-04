@@ -1,0 +1,37 @@
+build-out
+
+# Files installed to prebuilt dir, we don't need.
+prebuilt/android/19/armeabi/man/
+prebuilt/android/19/armeabi/share/
+prebuilt/android/19/armeabi/misc/
+prebuilt/android/19/armeabi/openssl.cnf
+prebuilt/android/19/x86/man/
+prebuilt/android/19/x86/share/
+prebuilt/android/19/x86/misc/
+prebuilt/android/19/x86/openssl.cnf
+prebuilt/linux/x86_64/man/
+prebuilt/linux/x86_64/share/
+prebuilt/linux/x86_64/misc/
+prebuilt/linux/x86_64/openssl.cnf
+
+
+#temp build files
+sources/sqlite3/.deps/
+sources/sqlite3/libsee-sqlite3.a
+sources/sqlite3/libsqlite3.a
+sources/sqlite3/see-sqlite3.o
+sources/sqlite3/sqlite3.o
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.idea
+*.iml
+.DS_Store
+/build
+
+# build output
+app/src/main/libs/
+app/src/main/obj/
+*/bld
+*/*/bld
