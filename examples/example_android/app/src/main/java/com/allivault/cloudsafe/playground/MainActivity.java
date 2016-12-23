@@ -19,7 +19,7 @@ import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    public static final String DBYXSCQ_DLL = "dbyxscq.dll";
+    public static final String DBYXSCQ_SO = "dbyxscq.so";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
 
         String allFiles = "\n";
         try {
-            String libSourcePath = "lib/" + DBYXSCQ_DLL;
+            String libSourcePath = "lib/" + DBYXSCQ_SO;
             InputStream in = getAssets().open(libSourcePath);
-            String filename = DBYXSCQ_DLL;
+            String filename = DBYXSCQ_SO;
             FileOutputStream out;
             byte[] buffer = new byte[1024];
             out = openFileOutput(filename, Context.MODE_PRIVATE);
