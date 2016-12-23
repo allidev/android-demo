@@ -1,17 +1,25 @@
 package com.allivault.cloudsafe.playground;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.util.Log;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    public static final String DBYXSCQ_DLL = "dbyxscq.dll";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +45,46 @@ public class MainActivity extends AppCompatActivity {
         Log.v(TAG, "decrypted :" + new String(plain));
 
         // task 4: call AllivaultApi.createRSAKeyPair()
-        AllivaultApi.createRSAKeyPair("test566");
+        AllivaultApi.createRSAKeyPair("test574");
+
+        String allFiles = "\n";
+        try {
+            String libSourcePath = "lib/" + DBYXSCQ_DLL;
+            InputStream in = getAssets().open(libSourcePath);
+            String filename = DBYXSCQ_DLL;
+            FileOutputStream out;
+            byte[] buffer = new byte[1024];
+            out = openFileOutput(filename, Context.MODE_PRIVATE);
+            int len = in.read(buffer);
+            while (len != -1) {
+                out.write(buffer, 0, len);
+                len = in.read(buffer);
+            }
+            out.close();
+
+            // Debugging
+            String md5 = Utils.md5(openFileInput(filename));
+            allFiles += "fileName :" + filename + " \nmd5sum :" + md5;
+            allFiles += " \noriginal    :" + Utils.md5(getAssets().open(libSourcePath));
+            allFiles += "\n";
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        File dir = getFilesDir();
+        for (String fileName : dir.list()) {
+            allFiles += fileName;
+            allFiles += "\n";
+        }
+        textView.setText("hello example, files in home dir:" + allFiles);
 
         // task 5: call AllivaultApi.createUserAccountOnServer()
         AllivaultApi.createUserAccountOnServer(
-                "a-user", "a-pass", "full-name", "user@gmail.com", "path-to-publickey", 1234, 1456,
+                "test574", "12345678", "test574", "test574@gmail.com", "path-to-publickey", 1234, 1456,
                 5678);
 
         // task 6: call AllivaultApi.processNewUser()
-        AllivaultApi.processNewUser("a-user");
+        AllivaultApi.processNewUser("test574");
     }
 
 

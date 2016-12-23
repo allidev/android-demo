@@ -233,7 +233,15 @@ JNIEXPORT jboolean JNICALL
   bool ret = alliNewUserP->createRSAKeyPair(uname_utf8, pubKeyPath);
   __android_log_print(ANDROID_LOG_INFO, "Apis", "calling createRSAKeyPair, and the result is %d, the public key path is %s",
   ret, pubKeyPath.string().c_str());
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "checking if public key exists, and the result is %d, the public key path is %s",
+                      boost::filesystem::exists(pubKeyPath), pubKeyPath.string().c_str());
+  boost::filesystem::path priKeyPath = pubKeyPath.parent_path();
+  priKeyPath /= "test574_rsa.pem";
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "checking if private key exists, and the result is %d, the private key path is %s",
+                      boost::filesystem::exists(priKeyPath), priKeyPath.string().c_str());
   pub_key_path = pubKeyPath;
+  delete alliNewUserP;
+  env->ReleaseStringUTFChars(uname, userName);
 }
 
 JNIEXPORT jboolean JNICALL
@@ -254,20 +262,21 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_createUserAccountOnServer(J
   const char *publicKeyFile = env->GetStringUTFChars(publicKeyFile_, 0);
 
   // TODO
-
-  env->ReleaseStringUTFChars(userName_, userName);
-  env->ReleaseStringUTFChars(passWord_, passWord);
-  env->ReleaseStringUTFChars(fullName_, fullName);
-  env->ReleaseStringUTFChars(emailAddress_, emailAddress);
-  env->ReleaseStringUTFChars(publicKeyFile_, publicKeyFile);
-
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>createUserAccountOnServer");
   ALLIVaultCore::Helpers::ALLIUserAccount account;
-  account.set_userName(std::string(userName));
-  account.set_passwdSha1(passWord);
+  std::string uname(userName);
+  account.set_userName(uname);
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "==>username is %s", userName);
+  std::string passwdSha1;
+  std::string passwd_utf8(passWord);
+  bool ret = ALLIVaultCore::Helpers::ALLIUtilsP::getPasswordSha1(uname, passwd_utf8, passwdSha1);
+  account.set_passwdSha1(passwdSha1);
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "==>password is %s", passwdSha1.c_str());
   account.set_fullName(fullName);
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "==>fullname is %s", fullName);
   const std::string e("hello");
-  account.set_emailAddress("abc");
+  std::string email(emailAddress);
+  account.set_emailAddress(email);
   account.set_publicKeyFile(boost::filesystem::path(pub_key_path));
 
   std::chrono::time_point<std::chrono::system_clock> td = std::chrono::system_clock::from_time_t(curTime);
@@ -278,10 +287,19 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_createUserAccountOnServer(J
   ALLIVaultCore::FrontEnd::ALLINewUserP *alliNewUserP = new ALLIVaultCore::FrontEnd::ALLINewUserP(&repo_path);
 //  alliNewUserP->processNewUser("a-user");
 
-  bool ret = alliNewUserP->createUserAccount(account);
+  ret = alliNewUserP->createUserAccount(account);
 
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>createUserAccountOnServer returns %d", ret);
+  delete alliNewUserP;
+
+  env->ReleaseStringUTFChars(userName_, userName);
+  env->ReleaseStringUTFChars(passWord_, passWord);
+  env->ReleaseStringUTFChars(fullName_, fullName);
+  env->ReleaseStringUTFChars(emailAddress_, emailAddress);
+  env->ReleaseStringUTFChars(publicKeyFile_, publicKeyFile);
+
   return ret;
+  //return false;
 }
 
 JNIEXPORT void JNICALL
@@ -290,15 +308,22 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_processNewUser(JNIEnv *env,
   const char *userName = env->GetStringUTFChars(userName_, 0);
 
   // TODO
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "==>processNewUser");
+  ALLIVaultCore::FrontEnd::ALLINewUserP *alliNewUserP = new ALLIVaultCore::FrontEnd::ALLINewUserP(&repo_path);
+  std::string uname(userName);
+  alliNewUserP->processNewUser(uname);
+  delete alliNewUserP;
 
   env->ReleaseStringUTFChars(userName_, userName);
-  __android_log_print(ANDROID_LOG_INFO, "Apis", "==>processNewUser");
 }
 
 JNIEXPORT void JNICALL
 Java_com_allivault_cloudsafe_playground_AllivaultApi_appInitialize(JNIEnv *env, jclass type,
                                                                     jstring rootPath) {
   const char *rp = env->GetStringUTFChars(rootPath, 0);
+
   boost::filesystem::path rootDir(rp);
   ALLIVaultCore::Helpers::ALLIAppInit::appInitialize(rootDir);
+
+  env->ReleaseStringUTFChars(rootPath, rp);
 }

@@ -102,6 +102,7 @@ namespace ALLIVaultCore
 			static ALLIVAULTCOREP_API std::string *getShaFromFile(const boost::filesystem::path &filePath);
 			static ALLIVAULTCOREP_API bool getShaFromFile(const boost::filesystem::path &filePath, std::string &sha1);
 			static ALLIVAULTCOREP_API bool getShaFromUTF8String(const std::string &src, std::string &sha1);
+			static ALLIVAULTCOREP_API bool getPasswordSha1(const std::string &uname, const std::string &password, std::string &sha1);
 			static ALLIVAULTCOREP_API bool isWindowsXP();
 			static ALLIVAULTCOREP_API std::string retrieveUserNameFromIdentityFile();
 			static ALLIVAULTCOREP_API void safeDeleteAFile(const boost::filesystem::path &aFile);

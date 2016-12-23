@@ -1,3 +1,9 @@
+/*
+* Copyright (C) ALLI Enterprises, Inc. ALL rights reserved.
+*
+* This file is part of ALLIVault. For full terms see the included
+* COPYING file.
+*/
 #pragma once
 #include "ALLINetworkStatus.h"
 #include "alli_event.h"
@@ -15,6 +21,11 @@ namespace ALLIVaultCore
 		{
 		public:
 			std::string username;
+			/**
+			 * Function pointer for network reachability
+			 *
+			 * @return a value from enum NetworkStatus
+			 */
 			ALLIVaultCore::Engine::NetworkStatus(*chkHost)();
 			ALLIVaultCore::FrontEnd::mach_new_status_updated_event machNewStatusUpdated;
 			ALLIVaultCore::Helpers::ALLINewMachineStateP *nmState;
