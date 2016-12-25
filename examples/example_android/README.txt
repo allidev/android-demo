@@ -11,7 +11,7 @@ app/prebuilt: ln -s ../../../prebuilt/android/19/ ./app/prebuilt
   * copy  app/prebuilt/armeabi app/prebuilt/armeabi-v7a
   * open Android studio project under ${android-demo-root-folder}\examples\example_android, 
   set the path to ndk
-  * I am using crystax-ndk, here is the download address for windows, 
+  * I am using crystax-ndk, the version number is 10.3.2. here is the download address for windows, 
 https://www.crystax.net/en/download
 
 NOTE: it can only be compliled for armeabi, so you have to start emulator or connect to a physical device with arm chip.
