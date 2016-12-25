@@ -9,6 +9,7 @@ app/prebuilt: ln -s ../../../prebuilt/android/19/ ./app/prebuilt
 
      app/prebuilt/armeabi-v7a
   * copy  app/prebuilt/armeabi app/prebuilt/armeabi-v7a
+  * Android Studio version number 2.2.2
   * open Android studio project under ${android-demo-root-folder}\examples\example_android, 
   set the path to ndk
   * I am using crystax-ndk, the version number is 10.3.2. here is the download address for windows, 
