@@ -25,7 +25,7 @@ model {
             // toolchain  = "clang"
             toolchain = "gcc"
             toolchainVersion = "5"
-            platformVersion = 23
+            platformVersion = 21
             moduleName = "allivault-api"
             stl        = 'gnustl_shared' // recommending gnustl_static/gnustl_shared for android
             cppFlags.addAll([
