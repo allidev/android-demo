@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
         Log.v(TAG, "decrypted :" + new String(plain));
 
         // task 4: call AllivaultApi.createRSAKeyPair()
-        AllivaultApi.createRSAKeyPair("test574");
+        String uname = "test574";
+        AllivaultApi.createRSAKeyPair(uname);
 
         String allFiles = "\n";
         try {
@@ -79,12 +80,15 @@ public class MainActivity extends AppCompatActivity {
         textView.setText("hello example, files in home dir:" + allFiles);
 
         // task 5: call AllivaultApi.createUserAccountOnServer()
+        String fullname = uname;
+        String email = uname + "@gmail.com";
+        String passwd = "12345678";
         AllivaultApi.createUserAccountOnServer(
-                "test574", "12345678", "test574", "test574@gmail.com", "path-to-publickey", 1234, 1456,
+                uname, passwd, fullname, email, "path-to-publickey", 1234, 1456,
                 5678);
 
         // task 6: call AllivaultApi.processNewUser()
-        AllivaultApi.processNewUser("test574");
+        AllivaultApi.processNewUser(uname);
     }
 
 
