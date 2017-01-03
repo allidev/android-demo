@@ -11,7 +11,6 @@ namespace ALLIVaultCore
 	}
 	namespace FrontEnd
 	{
-		class ALLIMailboxP;
 		class ALLINewMachineP :
 			public ALLIUserP
 		{
@@ -39,8 +38,8 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API ~ALLINewMachineP();
 
 			ALLIVAULTCOREP_API bool userPasswordMatch(const std::string &username, const std::string &passwd, bool &dbTimeout);
-			ALLIVAULTCOREP_API void openServerRepositoryForEncryptedRepo(const std::string &remoteURL);
-			ALLIVAULTCOREP_API void openServerRepositoryForMBEncryptedRepo(const std::string &remoteMBURL);
+			ALLIVAULTCOREP_API void openServerRepositoryForEncryptedRepo();
+			ALLIVAULTCOREP_API void openServerRepositoryForMBEncryptedRepo();
 			ALLIVAULTCOREP_API void batchActionsForNewMachine();
 
 		private:
