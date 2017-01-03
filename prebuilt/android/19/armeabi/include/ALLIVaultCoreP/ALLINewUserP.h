@@ -6,6 +6,7 @@
  */
 #pragma once
 
+#include "alli_common.h"
 #include "ALLIUserP.h"
 
 #include <boost/filesystem.hpp>
