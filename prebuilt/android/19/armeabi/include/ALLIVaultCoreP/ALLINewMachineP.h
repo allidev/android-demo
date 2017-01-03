@@ -33,7 +33,6 @@ namespace ALLIVaultCore
 			void(*update_total_bytes_mb_fn_ptr)();
 			bool(*downloadOneFilePairExPtr) (const std::string &src, const boost::filesystem::path &dest, const std::string &src_key, const boost::filesystem::path &dest_key, void *caller);
 			bool nm_mbexists;
-			ALLIVaultCore::FrontEnd::ALLIMailboxP *mailbox;
 
 			ALLIVAULTCOREP_API explicit ALLINewMachineP(void(*slot_callback)(void *, ALLIVaultCore::Helpers::transfer_progress_event_args &));
 			ALLINewMachineP(const ALLIVaultCore::FrontEnd::ALLINewMachineP &src);
