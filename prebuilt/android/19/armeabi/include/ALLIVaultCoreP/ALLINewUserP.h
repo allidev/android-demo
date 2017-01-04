@@ -28,47 +28,6 @@ namespace ALLIVaultCore
 		{
 		public:
 			/**
-			 * Function pointer for plain repo.
-			 *
-			 * @param a boost filesystem path object
-			 */
-			void(*open_plain_repo_fn_ptr)(const boost::filesystem::path &);
-			/**
-			 * Function pointer for encrypt repo.
-			 *
-			 * @param a boost filesystem path object
-			 */
-			void(*open_encrypt_repo_fn_ptr)(const boost::filesystem::path &);
-			/**
-			 * Function pointer for plain folder.
-			 *
-			 * @param a boost filesystem path object
-			 */
-			void(*monitor_plain_folder_fn_ptr)(const boost::filesystem::path &);
-			/**
-			 * Function pointer for mailbox registry. This is for Windows use only.
-			 */
-			void(*mb_registry_fn_ptr)();
-			/**
-			 * Function pointer for mailbox plain repo.
-			 *
-			 * @param a boost filesystem path object
-			 */
-			void(*mb_open_plain_repo_fn_ptr)(const boost::filesystem::path &);
-			/**
-			 * Function pointer for mailbox encrypt repo.
-			 *
-			 * @param a boost filesystem path object
-			 */
-			void(*mb_open_encrypt_repo_fn_ptr)(const boost::filesystem::path &);
-			/**
-			 * Function pointer for mailbox plain folder.
-			 *
-			 * @param a boost filesystem path object
-			 */
-			void(*mb_monitor_plain_folder_fn_ptr)(const boost::filesystem::path &);
-
-			/**
 			 * Class constructor. Create an ALLINewUserP object.
 			 *
 			 * @param uri_fn_ptr a function pointer to build a uri string

@@ -7,7 +7,6 @@
 #pragma once
 #include "alli_common.h"
 #include "ALLIUserP.h"
-#include "ALLINetworkStatus.h"
 
 namespace ALLIVaultCore
 {
@@ -25,42 +24,6 @@ namespace ALLIVaultCore
 			public ALLIUserP
 		{
 		public:
-			/**
-			 * Function pointer for plain repo.
-			 *
-			 * @param a boost filesystem path object
-			 */
-			void(*open_plain_repo_fn_ptr)(const boost::filesystem::path &);
-			/**
-			* Function pointer for encrypt repo.
-			*
-			* @param a boost filesystem path object
-			*/
-			void(*open_encrypt_repo_fn_ptr)(const boost::filesystem::path &);
-			/**
-			* Function pointer for plain folder.
-			*
-			* @param a boost filesystem path object
-			*/
-			void(*monitor_plain_folder_fn_ptr)(const boost::filesystem::path &);
-			/**
-			* Function pointer for mailbox plain repo.
-			*
-			* @param a boost filesystem path object
-			*/
-			void(*mb_open_plain_repo_fn_ptr)(const boost::filesystem::path &);
-			/**
-			* Function pointer for mailbox encrypt repo.
-			*
-			* @param a boost filesystem path object
-			*/
-			void(*mb_open_encrypt_repo_fn_ptr)(const boost::filesystem::path &);
-			/**
-			* Function pointer for mailbox plain folder.
-			*
-			* @param a boost filesystem path object
-			*/
-			void(*mb_monitor_plain_folder_fn_ptr)(const boost::filesystem::path &);
 			/**
 			 * Function pointer for init DB for sync folder.
 			 */
@@ -94,10 +57,6 @@ namespace ALLIVaultCore
 			 * Function pointer to a mailbox friend.
 			 */
 			bool(*mb_friend_fn_ptr)();
-			/**
-			* Function pointer for mailbox registry. This is for Windows use only.
-			*/
-			void(*mb_registry_fn_ptr)();
 			/**
 			 * Function pointer to update total bytes used by sync folder.
 			 */
