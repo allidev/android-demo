@@ -16,6 +16,7 @@ namespace ALLIVaultCore
 	}
 	namespace FrontEnd
 	{
+		class ALLIExistingUserP;
 		/**
 		* Class ALLINewMachineP. It handles all operations related to
 		* syncing data to a new machine.
@@ -117,6 +118,7 @@ namespace ALLIVaultCore
 			 * Operations to actually sync all contents of a user to a local machine.
 			 */
 			ALLIVAULTCOREP_API void batchActionsForNewMachine();
+			ALLIVAULTCOREP_API void setExistingUser(ALLIVaultCore::FrontEnd::ALLIExistingUserP &eu);
 
 		private:
 			class ALLINewMachineP_impl;

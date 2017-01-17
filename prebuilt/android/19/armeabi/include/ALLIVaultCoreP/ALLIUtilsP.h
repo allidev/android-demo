@@ -33,6 +33,7 @@ namespace libgit2cpp
 
 namespace ALLIVaultCore
 {
+	enum class ALLIRepoTypeP;
 	namespace Engine
 	{
 		class ALLIFolderIndex;
@@ -56,12 +57,19 @@ namespace ALLIVaultCore
 			static ALLIVAULTCOREP_API bool are_git_threads_shutdown;
 			static ALLIVAULTCOREP_API bool git_native_calls_enabled;
 			static ALLIVAULTCOREP_API bool sync_new_machine_sharing_groups_finished;
+			static ALLIVAULTCOREP_API bool isTesting;
+			static ALLIVAULTCOREP_API bool corepTestingOnly;
 			static ALLIVAULTCOREP_API boost::filesystem::path *ALLIHomeFolderPath;
 			static ALLIVAULTCOREP_API boost::filesystem::path *ALLIMyDocumentsPath;
+			static ALLIVAULTCOREP_API boost::filesystem::path *ALLITestingRootFolderPath;
+#ifdef ALLI_WIN32
+			static ALLIVAULTCOREP_API std::wstring ALLIRegistryName;
+#endif
 			static ALLIVAULTCOREP_API std::string alliUserName;
 			static ALLIVAULTCOREP_API std::string alliVersion;
 			static ALLIVAULTCOREP_API std::string ID_name;
 			static ALLIVAULTCOREP_API std::string ALLIHOST;
+			static ALLIVAULTCOREP_API void(*filePermPtr) (const boost::filesystem::path &);
 
 			static ALLIVAULTCOREP_API bool deleteEmptyParentDirectory(const boost::filesystem::path &srcPath, const boost::filesystem::path &topFolder);
 			static ALLIVAULTCOREP_API int convertBoostPathToChar(char **dest, const boost::filesystem::path &btPath);
@@ -150,12 +158,16 @@ namespace ALLIVaultCore
 			static ALLIVAULTCOREP_API std::string format_time_t(time_t src_time);
 			static ALLIVAULTCOREP_API std::string format_time_point(const std::chrono::time_point<std::chrono::system_clock> &tp);
 			static ALLIVAULTCOREP_API int convert_string_2_char(char **dest, const std::string &src);
-			static bool isSourceFileReady(const boost::filesystem::path &srcPath);
+			static ALLIVAULTCOREP_API bool isSourceFileReady(const boost::filesystem::path &srcPath);
 			static boost::filesystem::path getFavoritesPath();
 			static ALLIVAULTCOREP_API bool extractDate(const std::string& s, std::chrono::time_point<std::chrono::system_clock> &tp);
 			static ALLIVAULTCOREP_API bool extractDateLong(const std::string& s, std::chrono::time_point<std::chrono::system_clock> &tp);
 			static ALLIVAULTCOREP_API void setExecutionState();
 			static ALLIVAULTCOREP_API void resetExecutionState();
+			static ALLIVAULTCOREP_API void safe_create_directory(const boost::filesystem::path &dir);
+			static void resetFolders();
+			static std::string build_uri(const std::string &repo, const std::string &host);
+			static std::string build_uri(const std::string &uname, ALLIVaultCore::ALLIRepoTypeP type, const std::string &groupName = "");
 
 		private:
 			static std::string mysqlPassword;
@@ -164,6 +176,12 @@ namespace ALLIVaultCore
 
 			static int getShaForLargeFile(char **sha1, const char *src_file);
 			static bool isNetworkFailure(bool &networkFailed);
+			static boost::filesystem::path extractPrivateKeyForMySQL();
+			static void updateFilesPermissions(const boost::filesystem::path &dir);
+			static void updatePermissionsForFiles(const std::vector<std::shared_ptr<boost::filesystem::path>> &files);
+			static void updatePermissionsForDirs(const std::vector<std::shared_ptr<boost::filesystem::path>> &dirs);
+			static void safeUpdatePermissionsAsync(void *obj);
+			static std::string buildRemoteGitFolderPath(const std::string &uname, ALLIVaultCore::ALLIRepoTypeP type, const std::string &groupName);
 #ifdef ALLI_WIN32
 			static ::FILETIME *convert_time_t_2_FILETIME(time_t src_time);
 #endif
