@@ -80,21 +80,21 @@ namespace ALLIVaultCore
 			/**
 			 * Set today's date.
 			 *
-			 * @param td a time point for today
+			 * @param td a time point for today, it has a default value if not set
 			 */
 			ALLIVAULTCOREP_API void set_today(const std::chrono::time_point<std::chrono::system_clock> &td);
 			std::chrono::time_point<std::chrono::system_clock> get_today() const;
 			/**
 			 * Set expiration date for the user account.
 			 *
-			 * @param expdate the expiration date for the user account
+			 * @param expdate the expiration date for the user account, it has a default value if not set
 			 */
 			ALLIVAULTCOREP_API void set_expiration(const std::chrono::time_point<std::chrono::system_clock> &expdate);
 			std::chrono::time_point<std::chrono::system_clock> get_expiration() const;
 			/**
 			 * Set quote size for the user account.
 			 *
-			 * @param qsize the quota size for the user account
+			 * @param qsize the quota size for the user account, it has a default value if not set
 			 */
 			ALLIVAULTCOREP_API void set_quotaSize(const unsigned long long &qsize);
 			unsigned long long get_quotaSize() const;
