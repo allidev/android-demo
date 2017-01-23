@@ -131,7 +131,7 @@ namespace ALLIVaultCore
 			template <typename T>
 			static std::string to_string(T t, unsigned int decimal)
 			{
-                          std::string ret = to_string(t);
+				std::string ret = std::to_string(t);
 				size_t pos = ret.find('.');
 				ret = ret.substr(0, pos + decimal + 1);
 				return ret;
@@ -166,8 +166,11 @@ namespace ALLIVaultCore
 			static ALLIVAULTCOREP_API void resetExecutionState();
 			static ALLIVAULTCOREP_API void safe_create_directory(const boost::filesystem::path &dir);
 			static void resetFolders();
-			static std::string build_uri(const std::string &repo, const std::string &host);
+			static ALLIVAULTCOREP_API std::string build_uri(const std::string &repo, const std::string &host);
 			static std::string build_uri(const std::string &uname, ALLIVaultCore::ALLIRepoTypeP type, const std::string &groupName = "");
+			static void updateSyncNewMachineSharingGroupsFlag(bool status);
+			static boost::filesystem::path validateRootFolderForSharingWorkDirs();
+			static void updateFilesPermissions(const boost::filesystem::path &dir);
 
 		private:
 			static std::string mysqlPassword;
@@ -177,7 +180,6 @@ namespace ALLIVaultCore
 			static int getShaForLargeFile(char **sha1, const char *src_file);
 			static bool isNetworkFailure(bool &networkFailed);
 			static boost::filesystem::path extractPrivateKeyForMySQL();
-			static void updateFilesPermissions(const boost::filesystem::path &dir);
 			static void updatePermissionsForFiles(const std::vector<std::shared_ptr<boost::filesystem::path>> &files);
 			static void updatePermissionsForDirs(const std::vector<std::shared_ptr<boost::filesystem::path>> &dirs);
 			static void safeUpdatePermissionsAsync(void *obj);
@@ -185,6 +187,7 @@ namespace ALLIVaultCore
 #ifdef ALLI_WIN32
 			static ::FILETIME *convert_time_t_2_FILETIME(time_t src_time);
 #endif
+			static void addSharingFolderToFavorites();
 		};
 	}
 }

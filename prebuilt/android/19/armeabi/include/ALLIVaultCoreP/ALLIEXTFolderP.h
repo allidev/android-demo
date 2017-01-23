@@ -24,6 +24,8 @@ namespace ALLIVaultCore
 		 * @return an unordered_map object of string and ALLIFolderIndex
 		 */
 		ALLIVAULTCOREP_API std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFolderIndex> getFolderContentList();
+		bool addUserToFriendListDB(const std::string &uname, const std::string &fname);
+		void updateTotalBytesUsed();
 
 	protected:
 		bool switching;
@@ -35,6 +37,14 @@ namespace ALLIVaultCore
 		bool isDataVersionSet(int ver);
 		int verctrl_query_callback(sqlite3_stmt *sqlstmt, int ver);
 		int updateDataVersion(int ver);
+
+	private:
+		bool hasFriendUserName;
+		unsigned long long totalBytesUsed;
+
+		bool containsUserInFriendList(const std::string &uname);
+		int friend_query_callback(sqlite3_stmt *sqlstmt);
+		virtual void updateTotalBytesUsedImpl();
 	};
 }
 

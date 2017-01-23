@@ -23,6 +23,8 @@
 #include <condition_variable>
 #include <memory>
 #include <chrono>
+#include <thread>
+#include <fstream>
 #include <boost/filesystem.hpp>
 #include "git2.h"
 #include "sqlite3.h"

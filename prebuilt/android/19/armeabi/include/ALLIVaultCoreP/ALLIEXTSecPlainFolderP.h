@@ -14,7 +14,7 @@ namespace ALLIVaultCore
 
 	private:
 		ALLIVaultCore::Engine::SimpleFolder *plainFolder;
-		const ALLIVaultCore::ALLIEXTSecPlainRepoP *plainRepo;
+		ALLIVaultCore::ALLIEXTSecPlainRepoP *plainRepo;
 
 		virtual void monitorPlainFolderImpl(const boost::filesystem::path &plainURL);
 		void downloadPublicKeysForContacts(void *obj);

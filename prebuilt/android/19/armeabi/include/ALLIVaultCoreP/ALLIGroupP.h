@@ -9,7 +9,7 @@ namespace ALLIVaultCore
 		{
 		public:
 			ALLIVAULTCOREP_API ALLIGroupP(const std::string &huname, const std::string &gname);
-			ALLIGroupP(const ALLIVaultCore::Helpers::ALLIGroupP &src);
+			ALLIVAULTCOREP_API ALLIGroupP(const ALLIVaultCore::Helpers::ALLIGroupP &src);
 			ALLIVAULTCOREP_API ~ALLIGroupP();
 
 			void loadMembers(const std::unordered_set<std::string> &guestList);

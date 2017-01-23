@@ -1,9 +1,18 @@
 #pragma once
 #include "ALLIRepoP.h"
+#include "alli_event.h"
+#include "alli_hash.h"
 #include <unordered_map>
+#include <unordered_set>
+
+struct sqlite3_stmt;
 
 namespace boost
 {
+	namespace signals2
+	{
+		class connection;
+	}
 	namespace filesystem
 	{
 		class path;
@@ -30,6 +39,8 @@ namespace ALLIVaultCore
 		public ALLIRepoP
 	{
 	public:
+		typedef ALLIVaultCore::Helpers::alli_event::slot_type RepoFatalErrorSlotType;
+
 		ALLIEXTRepoP();
 		ALLIEXTRepoP(const ALLIVaultCore::ALLIEXTRepoP &src);
 		~ALLIEXTRepoP();
@@ -41,6 +52,10 @@ namespace ALLIVaultCore
 		**/
 		std::unordered_map<std::string, git_status_t> *trackWorkingDirectoryChanges();
 		void set_hasInitialCommit(bool status);
+		std::unordered_set<group_t> checkSharingGroupsForNM();
+		boost::signals2::connection connectFatalError(const RepoFatalErrorSlotType &slot);
+		void updateTotalBytesUsed();
+		unsigned long long getTotalBytesUsed() const;
 
 	protected:
 		bool commitStagedFilesLocallyWithMessageEx(std::vector<std::string> &messages);
@@ -59,6 +74,8 @@ namespace ALLIVaultCore
 		bool hasInitialCommit;
 		bool switching;
 		ALLIVaultCore::Engine::ALLIMonitorP *monitor;
+		ALLIVaultCore::Helpers::alli_event RepoFatalError;
+		std::unordered_set<group_t> sharingGroups;
 
 		bool getLockForChangedFile(const boost::filesystem::path &fileName, int *fd);
 		bool releaseLockForChangedFile(int *fd);
@@ -66,6 +83,10 @@ namespace ALLIVaultCore
 		std::vector<std::shared_ptr<libgit2cpp::commit>> createParentsVector(libgit2cpp::repository &repo);
 		void attachToEventHandlerForRepoFatalError();
 		void processRepoFatalError(void *sender, ALLIVaultCore::Helpers::alli_event_args &e);
+		void createSharingGroupDB();
+		std::unordered_set<group_t> load_group_db(const boost::filesystem::path &groupDBURL);
+		int extrepo_query_callback(sqlite3_stmt *sqlstmt);
+		virtual void updateTotalBytesUsedImpl();
 	};
 }
 

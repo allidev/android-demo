@@ -12,6 +12,7 @@ namespace ALLIVaultCore
 {
 	namespace Helpers
 	{
+		class ALLIErrorP;
 		class ALLINewMachineStateP;
 	}
 	namespace FrontEnd
@@ -21,12 +22,14 @@ namespace ALLIVaultCore
 		{
 		public:
 			std::string username;
+			typedef std::function<void(const boost::filesystem::path &)> OpenCallback;
 			/**
 			* Function pointer for plain repo.
 			*
 			* @param a boost filesystem path object
 			*/
 			void(*open_plain_repo_fn_ptr)(const boost::filesystem::path &);
+			ALLIVAULTCOREP_API void connectOpenPlainRepo(OpenCallback cb);
 			/**
 			* Function pointer for encrypt repo.
 			*
@@ -76,11 +79,14 @@ namespace ALLIVaultCore
 			ALLIUserP(const ALLIVaultCore::FrontEnd::ALLIUserP &src);
 			~ALLIUserP();
 
+			bool userNameExists(const std::string &userName, std::string &fullName, ALLIVaultCore::Helpers::ALLIErrorP &error);
 			bool userNameExists(const std::string &userName, std::string &fullName, bool &timedOut);
+			void passOnNewMachineUpdate(void *sender, ALLIVaultCore::FrontEnd::new_machine_event_args &e);
 
 		protected:
+			OpenCallback m_open_plain_repo_cb;
+
 			void OnMachNewStatusUpdated(ALLIVaultCore::FrontEnd::new_machine_event_args &e);
-			void passOnNewMachineUpdate(void *sender, ALLIVaultCore::FrontEnd::new_machine_event_args &e);
 		};
 	}
 }
