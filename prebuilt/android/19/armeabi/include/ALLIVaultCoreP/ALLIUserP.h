@@ -70,7 +70,8 @@ namespace ALLIVaultCore
 			 * @return a value from enum NetworkStatus
 			 */
 			ALLIVaultCore::Engine::NetworkStatus(*chkHost)();
-			typedef ALLIVaultCore::FrontEnd::mach_new_status_updated_event::slot_type machNewStatusUpdatedCB;
+			typedef ALLIVaultCore::FrontEnd::mach_new_status_updated_event::slot_type machNewStatusUpdatedSlotType;
+			typedef std::function<void(void *, new_machine_event_args &)> MachNewCallback;
 			ALLIVaultCore::Helpers::ALLINewMachineStateP *nmState;
 			std::string(*retrieveGlobalResourcePtr) (const std::string &key);
 			void(*filePermPtr) (const boost::filesystem::path &);
@@ -82,11 +83,12 @@ namespace ALLIVaultCore
 			bool userNameExists(const std::string &userName, std::string &fullName, ALLIVaultCore::Helpers::ALLIErrorP &error);
 			bool userNameExists(const std::string &userName, std::string &fullName, bool &timedOut);
 			void passOnNewMachineUpdate(void *sender, ALLIVaultCore::FrontEnd::new_machine_event_args &e);
-			ALLIVAULTCOREP_API boost::signals2::connection connectMachNewStatusUpdated(machNewStatusUpdatedCB cb);
+			ALLIVAULTCOREP_API boost::signals2::connection connectMachNewStatusUpdated(machNewStatusUpdatedSlotType cb);
 
 		protected:
 			ALLIVaultCore::FrontEnd::mach_new_status_updated_event machNewStatusUpdated;
 			OpenCallback m_open_plain_repo_cb;
+			MachNewCallback m_mach_new_cb;
 
 			void OnMachNewStatusUpdated(ALLIVaultCore::FrontEnd::new_machine_event_args &e);
 		};
