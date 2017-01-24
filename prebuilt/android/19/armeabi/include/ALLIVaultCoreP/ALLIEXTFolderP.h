@@ -24,6 +24,7 @@ namespace ALLIVaultCore
 		 * @return an unordered_map object of string and ALLIFolderIndex
 		 */
 		ALLIVAULTCOREP_API std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFolderIndex> getFolderContentList();
+		ALLIVAULTCOREP_API std::string getFolderContentListJson();
 		bool addUserToFriendListDB(const std::string &uname, const std::string &fname);
 		void updateTotalBytesUsed();
 
