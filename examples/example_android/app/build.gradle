@@ -100,34 +100,34 @@ model {
             //TARGET_ARCH_ABI
             // armeabi, armeabi-v7a, arm64-v8a, x86, x86_64, mips, mips64
             libcrypto {
-                headers.srcDir "${prebuiltHome}/armeabi/include"
+                headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libcrypto.a")
                 }
             }
 
             libssl {
-                headers.srcDir "${prebuiltHome}/armeabi/include"
+                headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libssl.a")
                 }
             }
 
             libssh2 {
-                headers.srcDir "${prebuiltHome}/armeabi/include"
+                headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libssh2.a")
                 }
             }
 
             libgit2 {
-                headers.srcDir "${prebuiltHome}/armeabi/include"
+                headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libgit2.a")
                 }
             }
             libALLIVaultCoreP {
-                headers.srcDir "${prebuiltHome}/armeabi/include"
+                headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libALLIVaultCoreP.a")
                 }
@@ -157,28 +157,28 @@ model {
                 }
             }
             libsqlite3 {
-                headers.srcDir "${prebuiltHome}/armeabi/include"
+                headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libsee-sqlite3.a")
                 }
             }
 
             libgit2cpp {
-                headers.srcDir "${prebuiltHome}/armeabi/include"
+                headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libgit2cpp.a")
                 }
             }
 
             libmysqlcppconn {
-                headers.srcDir "${prebuiltHome}/armeabi/include"
+                headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libmysqlcppconn-static.a")
                 }
             }
 
             libmysqlclient {
-                headers.srcDir "${prebuiltHome}/armeabi/include"
+                headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libmysqlclient.a")
                 }
