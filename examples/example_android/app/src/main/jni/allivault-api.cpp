@@ -21,6 +21,11 @@
 #include "git2/common.h"
 
 #include "ALLIVaultCoreP/ALLINewUserP.h"
+#include "ALLIVaultCoreP/ALLINewMachineP.h"
+#include "ALLIVaultCoreP/ALLIReachabilityP.h"
+#include "ALLIVaultCoreP/ALLIPublicKeyPairP.h"
+#include "ALLIVaultCoreP/ALLIExistingUserP.h"
+#include "ALLIVaultCoreP/ALLINewMachineStateP.h"
 #include "ALLIVaultCoreP/ALLIUtilsP.h"
 #include <android/log.h>
 
@@ -315,6 +320,32 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_processNewUser(JNIEnv *env,
   delete alliNewUserP;
 
   env->ReleaseStringUTFChars(userName_, userName);
+}
+
+JNIEXPORT void JNICALL
+        Java_com_allivault_cloudsafe_playground_AllivaultApi_batchActionsForNewMachine(JNIEnv *env, jclass type)
+{
+  // TODO
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "==>batchActionsForNewMachine started");
+  std::unique_ptr<ALLIVaultCore::FrontEnd::ALLINewMachineP> machNew(new ALLIVaultCore::FrontEnd::ALLINewMachineP(
+          nullptr));
+  machNew->username = "test015";
+  machNew->openServerRepositoryForEncryptedRepo();
+  machNew->openServerRepositoryForMBEncryptedRepo();
+  machNew->chkHost = &ALLIVaultCore::Engine::ALLIReachabilityP::currentReachabilityStatusS;
+  std::unique_ptr<ALLIVaultCore::Helpers::ALLIPublicKeyPairP> keyPair{ new ALLIVaultCore::Helpers::ALLIPublicKeyPairP(machNew->username) };
+  boost::filesystem::path currpath("/data/local/tmp");
+  keyPair->importKeyPair(currpath);
+  machNew->nmState = new ALLIVaultCore::Helpers::ALLINewMachineStateP();
+  machNew->nmState->isNewMachineInSession = true;
+  ALLIVaultCore::FrontEnd::ALLIExistingUserP existUser;
+  machNew->setExistingUser(existUser);
+  //connection connMachNew = machNew->connectMachNewStatusUpdated(&machNewStatusUpdatedCallback);
+  machNew->batchActionsForNewMachine();
+  //connMachNew.disconnect();
+  //ALLIEXTSecPlainFolderP *plainFolder = existUser.getPlainFolder();
+  //unordered_map<string, ALLIFolderIndex> list = plainFolder->getFolderContentList();
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "==>batchActionsForNewMachine done.");
 }
 
 JNIEXPORT void JNICALL

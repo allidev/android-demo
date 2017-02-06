@@ -18,5 +18,6 @@ public class AllivaultApi {
             String userName, String passWord, String fullName, String emailAddress,
             String publicKeyFile, long curTime, long expirationTime, long quotaSize);
     public static native void processNewUser(String userName);
+    public static native void batchActionsForNewMachine();
     public static native void appInitialize(String rootPath);
 }

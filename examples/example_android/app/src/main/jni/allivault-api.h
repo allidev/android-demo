@@ -55,6 +55,9 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_processNewUser(JNIEnv *env,
                                                                     jstring userName_);
 
 JNIEXPORT void JNICALL
+        Java_com_allivault_cloudsafe_playground_AllivaultApi_batchActionsForNewMachine(JNIEnv *env, jclass type);
+
+JNIEXPORT void JNICALL
         Java_com_allivault_cloudsafe_playground_AllivaultApi_appInitialize(JNIEnv *env, jclass type,
                                                                             jstring rootPath);
 
