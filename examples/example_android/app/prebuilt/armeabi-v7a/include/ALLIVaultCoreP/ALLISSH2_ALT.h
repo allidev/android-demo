@@ -3,10 +3,6 @@
 #include "alli_common.h"
 #include "ALLINetworkStatus.h"
 
-#ifdef ANDROID
-#include <sys/socket.h>
-#endif
-
 namespace boost
 {
 	namespace filesystem

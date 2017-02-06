@@ -8,7 +8,6 @@
 #include "git2/types.h"
 #include "sqlite3/sqlite3.h"
 #endif
-#include <sstream>
 #include <string>
 #include <memory>
 #include <vector>
@@ -135,17 +134,6 @@ namespace ALLIVaultCore
 				size_t pos = ret.find('.');
 				ret = ret.substr(0, pos + decimal + 1);
 				return ret;
-			};
-			template <typename T>
-			static std::string to_string(T value)
-			{
-#ifdef ANDROID
-				std::ostringstream os;
-				os << value;
-				return os.str();
-#else
-				return std::to_string(value);
-#endif
 			};
 			static std::string buildLogHeader(const boost::filesystem::path &srcFileName, int lineNumber);
 			static ALLIVAULTCOREP_API int querySqliteDB(const boost::filesystem::path &dbURL,
