@@ -16,6 +16,14 @@
 #ifndef ALLI_WIN32
 #define ALLI_WIN32 1
 #endif
+#elif defined(ANDROID)
+#ifndef ALLI_ANDROID
+#define ALLI_ANDROID 1
+#endif
+#elif defined(IOS)
+#ifndef ALLI_IOS
+#define ALLI_IOS 1
+#endif
 #endif
 
 #if __GNUC__ >= 4
