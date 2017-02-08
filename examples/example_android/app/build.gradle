@@ -24,7 +24,7 @@ model {
         ndk {
             // toolchain  = "clang"
             toolchain = "gcc"
-            toolchainVersion = "4.9"
+            toolchainVersion = "5"
             platformVersion = 16
             moduleName = "allivault-api"
             stl        = 'gnustl_shared' // recommending gnustl_static/gnustl_shared for android
