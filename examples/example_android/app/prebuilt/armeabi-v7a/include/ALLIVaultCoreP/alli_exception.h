@@ -7,7 +7,8 @@ namespace ALLIVaultCore
 {
 	namespace Helpers
 	{
-		class alli_exception
+		class alli_exception :
+			public std::exception
 		{
 		public:
 			ALLIVAULTCOREP_API alli_exception(void);

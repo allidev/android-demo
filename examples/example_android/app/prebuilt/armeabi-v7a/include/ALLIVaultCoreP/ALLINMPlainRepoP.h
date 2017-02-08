@@ -12,7 +12,7 @@ namespace ALLIVaultCore
 		ALLIVAULTCOREP_API ~ALLINMPlainRepoP();
 		ALLIVAULTCOREP_API bool processLocalChangedFilesWithCommitMessage(const std::unordered_map<std::string, git_status_t> &files, std::vector<std::string> &messages);
 		ALLIVAULTCOREP_API void setPlainURL(const boost::filesystem::path &plainURL);
-		ALLIVAULTCOREP_API boost::filesystem::path getPlainURL();
+		ALLIVAULTCOREP_API boost::filesystem::path getPlainURL() const;
 
 	protected:
 		virtual void setRepoEx(ALLIVaultCore::Engine::SimpleRepositoryP &repo) override;

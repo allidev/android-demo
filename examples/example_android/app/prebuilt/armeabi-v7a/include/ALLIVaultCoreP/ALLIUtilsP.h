@@ -76,9 +76,12 @@ namespace ALLIVaultCore
 			static ALLIVAULTCOREP_API std::unique_ptr<boost::filesystem::path> convertUTF8StringToBoostPath(const std::string &path_str);
 			static ALLIVAULTCOREP_API boost::filesystem::path convertCharToBoostPath(const char *src);
 			static ALLIVAULTCOREP_API void checkErrorRetries(const int &err_retry, const std::string &err_text, const std::string &err_title);
+			static ALLIVAULTCOREP_API void checkErrorRetries(const int &err_retry, const std::string &err_text, const std::string &err_title, const char *file, const int line);
 			static ALLIVAULTCOREP_API void checkErrorRetries(const int &err_retry, const std::string &err_text, const std::string &err_title, bool &networkFailed);
 			static ALLIVAULTCOREP_API void checkErrorRetries(const int &err_retry, int max, const std::string &err_text, const std::string &err_title);
+			static ALLIVAULTCOREP_API void checkErrorRetries(const int &err_retry, int max, const std::string &err_text, const std::string &err_title, const char *file, const int line);
 			static ALLIVAULTCOREP_API void checkErrorRetries(const int &err_retry, int max, const std::string &err_text, const std::string &err_title, bool &networkFailed);
+			static ALLIVAULTCOREP_API void checkErrorRetries(const int &err_retry, int max, const std::string &err_text, const std::string &err_title, bool &networkFailed, const char *file, const int line);
 			static ALLIVAULTCOREP_API bool checkForGitIgnoreFile(const boost::filesystem::path &src, const boost::filesystem::path &dest);
 			static ALLIVAULTCOREP_API bool checkForSymlinkFile(const boost::filesystem::path &src, const boost::filesystem::path &dest);
 			static ALLIVAULTCOREP_API bool copyFileMode(const boost::filesystem::path &srcPath, const boost::filesystem::path &destPath);
