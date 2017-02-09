@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onStart() {
             super.onStart();
-            //LProgressLoadingDialog.initProgressLoadingDialog(mActivity,resources.getString(R.string.submit_checked_loading));
         }
 
         @Override
