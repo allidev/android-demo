@@ -27,6 +27,7 @@
 #include "ALLIVaultCoreP/ALLIExistingUserP.h"
 #include "ALLIVaultCoreP/ALLINewMachineStateP.h"
 #include "ALLIVaultCoreP/ALLIUtilsP.h"
+#include "ALLIVaultCoreP/ALLIEXTSecPlainFolderP.h"
 #include <android/log.h>
 
 static boost::filesystem::path *homePath, pub_key_path;
@@ -329,7 +330,7 @@ JNIEXPORT void JNICALL
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>batchActionsForNewMachine started");
   std::unique_ptr<ALLIVaultCore::FrontEnd::ALLINewMachineP> machNew(new ALLIVaultCore::FrontEnd::ALLINewMachineP(
           nullptr));
-  machNew->username = "test015";
+  machNew->username = "test580";
   machNew->openServerRepositoryForEncryptedRepo();
   machNew->openServerRepositoryForMBEncryptedRepo();
   machNew->chkHost = &ALLIVaultCore::Engine::ALLIReachabilityP::currentReachabilityStatusS;
@@ -343,8 +344,9 @@ JNIEXPORT void JNICALL
   //connection connMachNew = machNew->connectMachNewStatusUpdated(&machNewStatusUpdatedCallback);
   machNew->batchActionsForNewMachine();
   //connMachNew.disconnect();
-  //ALLIEXTSecPlainFolderP *plainFolder = existUser.getPlainFolder();
-  //unordered_map<string, ALLIFolderIndex> list = plainFolder->getFolderContentList();
+  ALLIVaultCore::ALLIEXTSecPlainFolderP *plainFolder = existUser.getPlainFolder();
+  std::string json = plainFolder->getFolderContentListJson();
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "==>The file list contains %s.", json.c_str());
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>batchActionsForNewMachine done.");
 }
 

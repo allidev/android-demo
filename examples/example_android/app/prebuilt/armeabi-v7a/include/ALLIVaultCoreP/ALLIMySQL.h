@@ -42,6 +42,7 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API bool downloadContactPublicKey(const std::string &contactUserName, std::string &contactFullName, bool &dbTimeout);
 			ALLIVAULTCOREP_API bool isAccountActive(const std::string &username, const std::chrono::time_point<std::chrono::system_clock> &today, unsigned long long totalBytes, bool &dbTimeout, bool &maxTries);
 			ALLIVAULTCOREP_API bool retrieveAccountInfo(const std::string &username, unsigned long long &qsize, std::chrono::time_point<std::chrono::system_clock> &expdate, bool &dbTimeout);
+			ALLIVAULTCOREP_API bool retrieveAccountInfo(ALLIVaultCore::Helpers::ALLIUserAccount &uacct, bool &dbTimeout);
 			ALLIVAULTCOREP_API bool retrieveAccountInfoRegCode(const std::string &username, std::string &rcode, bool &dbTimeout);
 			ALLIVAULTCOREP_API bool userNameExists(const std::string &username, std::string &fullname, bool &timedOut);
 			ALLIVAULTCOREP_API bool validateRegistrationCode(const std::string &regcode, bool &timedOut);
@@ -79,6 +80,7 @@ namespace ALLIVaultCore
 			void downloadContactPublicKey_parseResultSet(sql::ResultSet &res, const std::string &contactUserName, std::string &contactFullName);
 			bool isAccountActive_parseResultSet(sql::ResultSet &res, const std::chrono::time_point<std::chrono::system_clock> &today, unsigned long long totalBytes);
 			bool retrieveAccountInfo_parseResultSet(sql::ResultSet &res, unsigned long long &qsize, std::chrono::time_point<std::chrono::system_clock> &expdate);
+			bool retrieveAccountInfo_parseResultSet(sql::ResultSet &res, ALLIVaultCore::Helpers::ALLIUserAccount &uacct);
 			bool retrieveAccountInfoRegCode_parseResultSet(sql::ResultSet &res, std::string &rcode);
 			bool userNameExists_parseResultSet(sql::ResultSet &res, std::string &fullname);
 			bool checkGroupInvites_parseResultSet(sql::ResultSet &res, std::vector<ALLIGroupP> &groupInvites);
@@ -98,6 +100,7 @@ namespace ALLIVaultCore
 			bool downloadContactPublicKey_transact(const std::string &contactUserName, std::string &contactFullName, bool &dbTimeout);
 			bool isAccountActive_transact(const std::string &username, const std::chrono::time_point<std::chrono::system_clock> &today, unsigned long long totalBytes, bool &maxTries);
 			bool retrieveAccountInfo_transact(const std::string &username, unsigned long long &qsize, std::chrono::time_point<std::chrono::system_clock> &expdate);
+			bool retrieveAccountInfo_transact(ALLIVaultCore::Helpers::ALLIUserAccount &uacct);
 			bool retrieveAccountInfoRegCode_transact(const std::string &username, std::string &rcode);
 			bool userNameExists_transact(const std::string &username, std::string &fullname);
 			bool validateRegistrationCode_transact(const std::string &regcode);

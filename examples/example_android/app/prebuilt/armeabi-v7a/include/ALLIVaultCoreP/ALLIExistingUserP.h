@@ -10,6 +10,9 @@ namespace ALLIVaultCore
 	class ALLIEXTSecEncryptRepoP;
 	class ALLIEXTSecPlainRepoP;
 	class ALLIEXTSecPlainFolderP;
+	class ALLIEXTSecMBEncryptRepoP;
+	class ALLIEXTSecMBPlainRepoP;
+	class ALLIEXTSecMBPlainFolderP;
 	class ALLIEXTSharingPlainRepoP;
 	class ALLISSClientRepoP;
 	class ALLISSEncryptedRepoP;
@@ -34,7 +37,9 @@ namespace ALLIVaultCore
 
 			void openEncryptedRepository(const boost::filesystem::path &encryptedURL, bool hasInitialCommit);
 			ALLIVAULTCOREP_API void monitorPlainFolder(const boost::filesystem::path &plainFolderURL);
+			ALLIVAULTCOREP_API void monitorMBPlainFolder(const boost::filesystem::path &plainFolderURL);
 			ALLIVAULTCOREP_API ALLIVaultCore::ALLIEXTSecPlainFolderP *getPlainFolder();
+			ALLIVAULTCOREP_API ALLIVaultCore::ALLIEXTSecMBPlainFolderP *getMBPlainFolder();
 			ALLIVAULTCOREP_API void checkSharingGroupsSync();
 			ALLIVAULTCOREP_API void openPlainRepository(const boost::filesystem::path &plainURL);
 			ALLIVAULTCOREP_API void initializeDBForSyncFolder();
@@ -66,6 +71,9 @@ namespace ALLIVaultCore
 			ALLIVaultCore::ALLIEXTSecEncryptRepoP *encryptedRepo;
 			ALLIVaultCore::ALLIEXTSecPlainRepoP *plainRepo;
 			ALLIVaultCore::ALLIEXTSecPlainFolderP *plainFolder;
+			ALLIVaultCore::ALLIEXTSecMBEncryptRepoP *mbEncryptedRepo;
+			ALLIVaultCore::ALLIEXTSecMBPlainRepoP *mbPlainRepo;
+			ALLIVaultCore::ALLIEXTSecMBPlainFolderP *mbPlainFolder;
 			ALLIVaultCore::ALLISSClientRepoP *ssClientRepoP;
 			ALLIVaultCore::ALLISSEncryptedRepoP *ssEncryptedRepoP;
 			ALLIVaultCore::ALLISSPlainRepoP *ssPlainRepoP;

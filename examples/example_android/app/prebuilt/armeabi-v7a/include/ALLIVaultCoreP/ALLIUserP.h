@@ -14,6 +14,7 @@ namespace ALLIVaultCore
 	{
 		class ALLIErrorP;
 		class ALLINewMachineStateP;
+		class ALLIUserAccount;
 	}
 	namespace FrontEnd
 	{
@@ -84,6 +85,10 @@ namespace ALLIVaultCore
 			bool userNameExists(const std::string &userName, std::string &fullName, bool &timedOut);
 			void passOnNewMachineUpdate(void *sender, ALLIVaultCore::FrontEnd::new_machine_event_args &e);
 			ALLIVAULTCOREP_API boost::signals2::connection connectMachNewStatusUpdated(machNewStatusUpdatedSlotType cb);
+			ALLIVAULTCOREP_API std::string getFullName() const;
+			ALLIVAULTCOREP_API std::string getEmailAddress() const;
+			ALLIVAULTCOREP_API unsigned long long getQuotaSize() const;
+			ALLIVAULTCOREP_API std::string getExpirationDate() const;
 
 		protected:
 			ALLIVaultCore::FrontEnd::mach_new_status_updated_event machNewStatusUpdated;
@@ -91,6 +96,11 @@ namespace ALLIVaultCore
 			MachNewCallback m_mach_new_cb;
 
 			void OnMachNewStatusUpdated(ALLIVaultCore::FrontEnd::new_machine_event_args &e);
+			void populateUserAccount();
+
+		private:
+			ALLIVaultCore::Helpers::ALLIUserAccount *useracct_;
+			std::string expdate_str;
 		};
 	}
 }
