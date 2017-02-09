@@ -1,5 +1,6 @@
 package com.allivault.cloudsafe.playground;
 
+import com.yljt.platform.common.ThreadTask;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.os.Bundle;
@@ -91,7 +92,31 @@ public class MainActivity extends AppCompatActivity {
         //AllivaultApi.processNewUser(uname);
 
         // task 7: call AllivaultApi.batchActionsForNewMachine()
-        AllivaultApi.batchActionsForNewMachine();
+        //AllivaultApi.batchActionsForNewMachine();
+        new SyncFileTask().execute();
+    }
+    class SyncFileTask extends ThreadTask<String> {
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            //LProgressLoadingDialog.initProgressLoadingDialog(mActivity,resources.getString(R.string.submit_checked_loading));
+        }
+
+        @Override
+        public String onDoInBackground() {
+            try {
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            AllivaultApi.batchActionsForNewMachine();
+            return  "";
+        }
+
+        @Override
+        public void onResult(String s) {
+            super.onResult(s);
+        }
     }
 
 
