@@ -14,7 +14,11 @@ namespace std
 		typedef std::size_t result_type;
 		result_type operator()(argument_type const& g) const
 		{
-			return 0;
+			std::string huname = g.getHostUserName();
+			std::string gname = g.getGroupName();
+			result_type const h1(std::hash<std::string>{}(huname));
+			result_type const h2(std::hash<std::string>{}(gname));
+			return h1 ^ (h2 << 1);
 		}
 	};
 
@@ -24,7 +28,8 @@ namespace std
 		typedef ALLIVaultCore::Helpers::ALLIGroupP argument_type;
 		bool operator()(argument_type const& lhs, argument_type const& rhs) const
 		{
-			return false;
+			return lhs.getHostUserName() == rhs.getHostUserName() &&
+				lhs.getGroupName() == rhs.getGroupName();
 		}
 	};
 

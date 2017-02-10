@@ -45,8 +45,9 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API void initializeDBForSyncFolder();
 			ALLIVAULTCOREP_API void updateTotalBytesUsedForSecPlainFolder();
 			std::unordered_map<std::string, std::unordered_set<std::string> > &getDictGroupMembers();
-			ALLIVAULTCOREP_API std::string getDictGroupMembersJson();
+			ALLIVAULTCOREP_API std::string getDictGroupMembersJson() const;
 			ALLIVAULTCOREP_API std::vector<ALLIVaultCore::Helpers::ALLIGroupP> getSharingALLIGroupList() const;
+			ALLIVAULTCOREP_API std::string getSharingALLIGroupListJson() const;
 			ALLIVAULTCOREP_API std::unordered_set<running_sharing_group_t> getSharingGroups() const;
 
 		private:

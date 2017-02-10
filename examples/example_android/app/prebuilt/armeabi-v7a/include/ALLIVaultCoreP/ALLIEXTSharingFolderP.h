@@ -14,6 +14,8 @@ namespace ALLIVaultCore
 		void setGroupName(const std::string &gname);
 		void setGuestList(const std::unordered_set<std::string> src);
 		void setGuestListURL(const boost::filesystem::path &src);
+		ALLIVAULTCOREP_API std::string getHostUserName() const;
+		ALLIVAULTCOREP_API std::string getGroupName() const;
 
 	protected:
 		std::string hostUserName;
