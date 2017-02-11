@@ -26,12 +26,17 @@ namespace ALLIVaultCore
 			ALLIVaultCore::Engine::NetworkStatus(*chkHost)();
 			void(*filePermPtr) (const boost::filesystem::path &);
 			void(*registry_fn_ptr)();
+			typedef std::function<void(const boost::filesystem::path &)> OpenCallback;
 			void(*open_plain_repo_fn_ptr)(const boost::filesystem::path &);
+			void connectOpenPlainRepo(OpenCallback cb);
 			void(*open_encrypt_repo_fn_ptr)(const boost::filesystem::path &);
+			void connectOpenEncryptRepo(OpenCallback cb);
 			void(*monitor_plain_folder_fn_ptr)(const boost::filesystem::path &);
 			std::string(*uri_fn_ptr)(const std::string &repo, const std::string &host);
 			std::string(*retrieveGlobalResourcePtr) (const std::string &key);
+			typedef std::function<void()> UpdateTotalBytesCallback;
 			void(*update_total_bytes_fn_ptr)();
+			void connectUpdateTotalBytes(UpdateTotalBytesCallback cb);
 			void(*init_db_fn_ptr)();
 			void(*slot_callback_mailbox)(void *, ALLIVaultCore::FrontEnd::new_machine_event_args &);
 			bool(*downloadOneFilePairExPtr) (const std::string &src, const boost::filesystem::path &dest, const std::string &src_key, const boost::filesystem::path &dest_key, void *caller);
@@ -61,6 +66,8 @@ namespace ALLIVaultCore
 			ALLIVaultCore::ALLINMMBPlainRepoP *nmMBPlainRepo;
 			ALLIVaultCore::ALLINMMBPlainFolderP *nmMBPlainFolder;
 			void(*slot_callback)(void *, ALLIVaultCore::Helpers::transfer_progress_event_args &);
+			UpdateTotalBytesCallback m_update_total_bytes_cb;
+			OpenCallback m_open_plain_repo_cb, m_open_crypt_repo_cb;
 
 			void initRepoesandFolder();
 			bool createRemoteMBEncryptedRepo(std::string userName);

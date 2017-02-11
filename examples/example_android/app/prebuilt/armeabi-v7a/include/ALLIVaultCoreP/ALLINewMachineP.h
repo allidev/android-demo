@@ -58,14 +58,17 @@ namespace ALLIVaultCore
 			 * Function pointer to a mailbox friend.
 			 */
 			bool(*mb_friend_fn_ptr)();
+			typedef std::function<void()> UpdateTotalBytesCallback;
 			/**
 			 * Function pointer to update total bytes used by sync folder.
 			 */
 			void(*update_total_bytes_fn_ptr)();
+			ALLIVAULTCOREP_API void connectUpdateTotalBytesSync(UpdateTotalBytesCallback cb);
 			/**
 			 * Function pointer to update total bytes used by mailbox.
 			 */
 			void(*update_total_bytes_mb_fn_ptr)();
+			ALLIVAULTCOREP_API void connectUpdateTotalBytesMB(UpdateTotalBytesCallback cb);
 			/**
 			* Function pointer to download a file for mailbox.
 			*
@@ -117,6 +120,14 @@ namespace ALLIVaultCore
 			/**
 			 * Operations to actually sync all contents of a user to a local machine.
 			 */
+			ALLIVAULTCOREP_API void openServerRepositories();
+			/**
+			* Import a key-pair from a designated source
+			*
+			* @param keyDir the folder where the key-pair source is located
+			* @return true on success, false otherwise
+			*/
+			ALLIVAULTCOREP_API bool importKeyPair(const boost::filesystem::path &keyDir);
 			ALLIVAULTCOREP_API void batchActionsForNewMachine();
 			ALLIVAULTCOREP_API void setExistingUser(ALLIVaultCore::FrontEnd::ALLIExistingUserP &eu);
 

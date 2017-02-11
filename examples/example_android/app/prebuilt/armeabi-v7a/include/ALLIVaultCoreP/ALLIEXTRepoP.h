@@ -27,6 +27,7 @@ namespace libgit2cpp
 
 namespace ALLIVaultCore
 {
+	class repo_event_args;
 	namespace Engine
 	{
 		class ALLIMonitorP;
@@ -40,6 +41,7 @@ namespace ALLIVaultCore
 	{
 	public:
 		typedef ALLIVaultCore::Helpers::alli_event::slot_type RepoFatalErrorSlotType;
+		typedef ALLIVaultCore::repo_updated_event::slot_type RepoUpdatedSlotType;
 
 		ALLIEXTRepoP();
 		ALLIEXTRepoP(const ALLIVaultCore::ALLIEXTRepoP &src);
@@ -54,10 +56,15 @@ namespace ALLIVaultCore
 		void set_hasInitialCommit(bool status);
 		std::unordered_set<group_t> checkSharingGroupsForNM();
 		boost::signals2::connection connectFatalError(const RepoFatalErrorSlotType &slot);
+		boost::signals2::connection connectRepoUpdated(const RepoUpdatedSlotType &slot);
 		void updateTotalBytesUsed();
+		void setTotalBytesUsed(unsigned long long totbytes);
 		unsigned long long getTotalBytesUsed() const;
+		void OnRepoUpdated(ALLIVaultCore::repo_event_args &e);
 
 	protected:
+		unsigned long long totalBytesUsed;
+
 		bool commitStagedFilesLocallyWithMessageEx(std::vector<std::string> &messages);
 		bool stageFileWithRelativePath(const std::string &fileName);
 		bool stageRemovedFileToIndex(const std::string &fileName);
@@ -75,6 +82,7 @@ namespace ALLIVaultCore
 		bool switching;
 		ALLIVaultCore::Engine::ALLIMonitorP *monitor;
 		ALLIVaultCore::Helpers::alli_event RepoFatalError;
+		ALLIVaultCore::repo_updated_event RepoUpdated;
 		std::unordered_set<group_t> sharingGroups;
 
 		bool getLockForChangedFile(const boost::filesystem::path &fileName, int *fd);
@@ -87,6 +95,7 @@ namespace ALLIVaultCore
 		std::unordered_set<group_t> load_group_db(const boost::filesystem::path &groupDBURL);
 		int extrepo_query_callback(sqlite3_stmt *sqlstmt);
 		virtual void updateTotalBytesUsedImpl();
+		virtual void OnRepoUpdatedImpl(ALLIVaultCore::repo_event_args &e);
 	};
 }
 

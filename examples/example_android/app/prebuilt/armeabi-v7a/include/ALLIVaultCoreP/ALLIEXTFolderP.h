@@ -32,20 +32,20 @@ namespace ALLIVaultCore
 		bool switching;
 		std::string serverRootFolder;
 		ALLIVaultCore::Engine::ALLIMonitorP *monitor;
+		unsigned long long totalBytesUsed;
 
 		virtual void load_index_db_ex();
 		bool setDataVersion(int ver);
 		bool isDataVersionSet(int ver);
 		int verctrl_query_callback(sqlite3_stmt *sqlstmt, int ver);
 		int updateDataVersion(int ver);
+		virtual void updateTotalBytesUsedImpl();
 
 	private:
 		bool hasFriendUserName;
-		unsigned long long totalBytesUsed;
 
 		bool containsUserInFriendList(const std::string &uname);
 		int friend_query_callback(sqlite3_stmt *sqlstmt);
-		virtual void updateTotalBytesUsedImpl();
 	};
 }
 

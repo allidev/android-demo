@@ -4,6 +4,8 @@
 
 namespace ALLIVaultCore
 {
+	class repo_event_args;
+	typedef boost::signals2::signal<void(void *, ALLIVaultCore::repo_event_args &)> repo_updated_event;
 	namespace FrontEnd
 	{
 		class new_machine_event_args;

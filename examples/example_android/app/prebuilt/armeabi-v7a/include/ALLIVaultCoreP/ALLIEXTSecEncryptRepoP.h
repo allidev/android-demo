@@ -3,6 +3,7 @@
 
 namespace ALLIVaultCore
 { 
+	class ALLIEXTSecPlainRepoP;
 	class ALLIEXTSecEncryptRepoP :
 		public ALLIVaultCore::ALLIEXTRepoP
 	{
@@ -13,6 +14,14 @@ namespace ALLIVaultCore
 
 		void openEncryptedRepository(const boost::filesystem::path &encryptedURL);
 		void initializeDBForSyncFolder();
+		void linkSecPlainRepo(ALLIVaultCore::ALLIEXTSecPlainRepoP *src);
+
+	private:
+		ALLIVaultCore::ALLIEXTSecPlainRepoP *secPlainRepo;
+		ALLIVaultCore::Engine::SimpleRepositoryP *encryptedRepoP;
+
+		void updateTotalBytesUsedImpl() override;
+		void openEncryptedRepositoryEx(const boost::filesystem::path &encryptedURL);
 	};
 }
 

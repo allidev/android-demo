@@ -7,7 +7,7 @@ namespace ALLIVaultCore
 		public ALLIEXTSecPlainFolderP
 	{
 	public:
-		ALLIEXTSecMBPlainFolderP(const ALLIVaultCore::ALLIEXTSecMBPlainRepoP &plainRepo);
+		ALLIEXTSecMBPlainFolderP(ALLIVaultCore::ALLIEXTSecMBPlainRepoP &plainRepo);
 		~ALLIEXTSecMBPlainFolderP();
 	};
 }

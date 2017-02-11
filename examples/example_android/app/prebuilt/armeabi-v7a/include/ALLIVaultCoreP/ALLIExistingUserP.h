@@ -14,6 +14,7 @@ namespace ALLIVaultCore
 	class ALLIEXTSecMBPlainRepoP;
 	class ALLIEXTSecMBPlainFolderP;
 	class ALLIEXTSharingPlainRepoP;
+	class ALLIEXTRepoP;
 	class ALLISSClientRepoP;
 	class ALLISSEncryptedRepoP;
 	class ALLISSPlainRepoP;
@@ -35,20 +36,24 @@ namespace ALLIVaultCore
 			ALLIExistingUserP(const ALLIVaultCore::FrontEnd::ALLIExistingUserP &src);
 			ALLIVAULTCOREP_API ~ALLIExistingUserP();
 
-			void openEncryptedRepository(const boost::filesystem::path &encryptedURL, bool hasInitialCommit);
+			ALLIVAULTCOREP_API void openEncryptedRepository(const boost::filesystem::path &encryptedURL, bool hasInitialCommit);
+			ALLIVAULTCOREP_API void openMBEncryptedRepository(const boost::filesystem::path &mbEncryptedURL, bool hasInitialCommit);
 			ALLIVAULTCOREP_API void monitorPlainFolder(const boost::filesystem::path &plainFolderURL);
 			ALLIVAULTCOREP_API void monitorMBPlainFolder(const boost::filesystem::path &plainFolderURL);
 			ALLIVAULTCOREP_API ALLIVaultCore::ALLIEXTSecPlainFolderP *getPlainFolder();
 			ALLIVAULTCOREP_API ALLIVaultCore::ALLIEXTSecMBPlainFolderP *getMBPlainFolder();
 			ALLIVAULTCOREP_API void checkSharingGroupsSync();
 			ALLIVAULTCOREP_API void openPlainRepository(const boost::filesystem::path &plainURL);
+			ALLIVAULTCOREP_API void openMBPlainRepository(const boost::filesystem::path &mbPlainURL);
 			ALLIVAULTCOREP_API void initializeDBForSyncFolder();
 			ALLIVAULTCOREP_API void updateTotalBytesUsedForSecPlainFolder();
+			ALLIVAULTCOREP_API void updateTotalBytesUsedForSecMBPlainFolder();
 			std::unordered_map<std::string, std::unordered_set<std::string> > &getDictGroupMembers();
 			ALLIVAULTCOREP_API std::string getDictGroupMembersJson() const;
 			ALLIVAULTCOREP_API std::vector<ALLIVaultCore::Helpers::ALLIGroupP> getSharingALLIGroupList() const;
 			ALLIVAULTCOREP_API std::string getSharingALLIGroupListJson() const;
 			ALLIVAULTCOREP_API std::unordered_set<running_sharing_group_t> getSharingGroups() const;
+			ALLIVAULTCOREP_API unsigned long long getTotalBytesUsed() const;
 
 		private:
 			int shSyncCounter;
@@ -85,6 +90,9 @@ namespace ALLIVaultCore
 			ALLIVaultCore::Helpers::alli_semaphore *sharingCurSemap;
 			bool resetNewMachineState;
 			ALLIVaultCore::ALLIEXTSharingPlainRepoP *sharingPlainRepo;
+			std::unordered_map<std::string, unsigned long long> totalBytesUsedSet;
+			unsigned long long totalBytesUsed;
+			boost::signals2::connection encrypt_conn;
 
 			std::unordered_set<group_t> checkSharingGroups();
 			bool createSharingGroupProgressFile();
@@ -104,6 +112,9 @@ namespace ALLIVaultCore
 			void assignNotifyIcon();
 			void addSharingFolderToFavorites();
 			void attachToEventHandlerForMachNewStatusUpdated(ALLIVaultCore::Helpers::ALLISharingGroupSyncNMP *src);
+			boost::signals2::connection attachToEventHandlerForRepoUpdated(ALLIVaultCore::ALLIEXTRepoP *src);
+			void secEncryptRepoUpdated(void *sender, ALLIVaultCore::repo_event_args &e);
+			void EncryptRepoUpdatedEx(void *sender, ALLIVaultCore::repo_event_args &e);
 		};
 	}
 }

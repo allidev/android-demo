@@ -7,7 +7,7 @@ namespace ALLIVaultCore
 		public ALLIEXTFolderP
 	{
 	public:
-		ALLIEXTSecPlainFolderP(const ALLIVaultCore::ALLIEXTSecPlainRepoP &plainRepo);
+		ALLIEXTSecPlainFolderP(ALLIVaultCore::ALLIEXTSecPlainRepoP &plainRepo);
 		~ALLIEXTSecPlainFolderP();
 
 		void monitorPlainFolder(const boost::filesystem::path &plainURL);
@@ -19,6 +19,7 @@ namespace ALLIVaultCore
 		virtual void monitorPlainFolderImpl(const boost::filesystem::path &plainURL);
 		void downloadPublicKeysForContacts(void *obj);
 		virtual void load_index_db_ex() override;
+		virtual void updateTotalBytesUsedImpl() override;
 	};
 }
 

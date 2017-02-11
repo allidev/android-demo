@@ -37,6 +37,7 @@ namespace ALLIVaultCore
 			* @param a boost filesystem path object
 			*/
 			void(*open_encrypt_repo_fn_ptr)(const boost::filesystem::path &);
+			ALLIVAULTCOREP_API void connectOpenEncryptRepo(OpenCallback cb);
 			/**
 			* Function pointer for plain folder.
 			*
@@ -53,12 +54,14 @@ namespace ALLIVaultCore
 			* @param a boost filesystem path object
 			*/
 			void(*mb_open_plain_repo_fn_ptr)(const boost::filesystem::path &);
+			ALLIVAULTCOREP_API void connectMBOpenPlainRepo(OpenCallback cb);
 			/**
 			* Function pointer for mailbox encrypt repo.
 			*
 			* @param a boost filesystem path object
 			*/
 			void(*mb_open_encrypt_repo_fn_ptr)(const boost::filesystem::path &);
+			ALLIVAULTCOREP_API void connectMBOpenEncryptRepo(OpenCallback cb);
 			/**
 			* Function pointer for mailbox plain folder.
 			*
@@ -92,7 +95,7 @@ namespace ALLIVaultCore
 
 		protected:
 			ALLIVaultCore::FrontEnd::mach_new_status_updated_event machNewStatusUpdated;
-			OpenCallback m_open_plain_repo_cb;
+			OpenCallback m_open_plain_repo_cb, m_open_encrypt_repo_cb, m_mb_open_plain_repo_cb, m_mb_open_encrypt_repo_cb;
 			MachNewCallback m_mach_new_cb;
 
 			void OnMachNewStatusUpdated(ALLIVaultCore::FrontEnd::new_machine_event_args &e);
