@@ -29,6 +29,7 @@
 #include "ALLIVaultCoreP/ALLIUtilsP.h"
 #include "ALLIVaultCoreP/ALLIEXTSecPlainFolderP.h"
 #include "ALLIVaultCoreP/AliyunOssP.h"
+#include "ALLIVaultCoreP/ALLIFolderIndex.h"
 #include <android/log.h>
 #include <cpprest/http_client.h>
 
@@ -356,15 +357,28 @@ JNIEXPORT void JNICALL
   machNew->nmState->isNewMachineInSession = true;
   ALLIVaultCore::FrontEnd::ALLIExistingUserP existUser;
   machNew->setExistingUser(existUser);
+/*
   machNew->connectDownloadOneFileEx([=](const std::string &filePath, const boost::filesystem::path &localPath, void *)
                                     {
                                         ALLIVaultCore::Engine::AliyunOssP oss("xvault");
                                         return oss.downloadFile(filePath, localPath);
                                     });
+*/
   //connection connMachNew = machNew->connectMachNewStatusUpdated(&machNewStatusUpdatedCallback);
   machNew->batchActionsForNewMachine();
   //connMachNew.disconnect();
   ALLIVaultCore::ALLIEXTSecPlainFolderP *plainFolder = existUser.getPlainFolder();
+  std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFolderIndex> list = plainFolder->getFolderContentList();
+  for (const auto & rec : list)
+  {
+    std::string fpath = rec.first;
+    ALLIVaultCore::Engine::ALLIFolderIndex meta = rec.second;
+    std::string fullpath = meta.get_col2();
+    unsigned long long fsize = meta.get_col6();
+    time_t mtime = meta.get_col7();
+    printf("The file is %s, with %llu bytes.\n", fullpath.c_str(), fsize);
+    plainFolder->downloadOneFileJson(fpath);
+  }
   std::string json = plainFolder->getFolderContentListJson();
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>The file list contains %s.", json.c_str());
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>batchActionsForNewMachine done.");
