@@ -50,6 +50,7 @@ namespace ALLIVaultCore
 			 ** it does not exist.
 			 **/
 			ALLIVAULTCOREP_API bool retrieveServerPathForFile(const std::string &localSha1, std::string &svrPath);
+			ALLIVAULTCOREP_API bool retrieveServerPathForFileUsingFilePath(const std::string &localPath, std::string &svrPath);
 			/**
 			 ** return true if the sqlite db op is successful, and false otherwise.
 			 ** The out param anAESKeyPath contains the aes key path if it exists, and

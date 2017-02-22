@@ -20,6 +20,9 @@ namespace ALLIVaultCore
 		void downloadPublicKeysForContacts(void *obj);
 		virtual void load_index_db_ex() override;
 		virtual void updateTotalBytesUsedImpl() override;
+		bool downloadOneFileJsonImpl(const std::string &localPath) override;
+		bool decryptFileToPlainFolder(const std::string &src);
+		bool decryptFileToPlainFolder(const std::string &src, const boost::filesystem::path &dest);
 	};
 }
 

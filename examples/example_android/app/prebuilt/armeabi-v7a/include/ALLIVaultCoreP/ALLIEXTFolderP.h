@@ -27,6 +27,7 @@ namespace ALLIVaultCore
 		ALLIVAULTCOREP_API std::string getFolderContentListJson();
 		bool addUserToFriendListDB(const std::string &uname, const std::string &fname);
 		void updateTotalBytesUsed();
+		ALLIVAULTCOREP_API bool downloadOneFileJson(const std::string &localPath);
 
 	protected:
 		bool switching;
@@ -46,6 +47,7 @@ namespace ALLIVaultCore
 
 		bool containsUserInFriendList(const std::string &uname);
 		int friend_query_callback(sqlite3_stmt *sqlstmt);
+		virtual bool downloadOneFileJsonImpl(const std::string &localPath);
 	};
 }
 

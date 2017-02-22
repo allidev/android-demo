@@ -27,7 +27,6 @@ namespace ALLIVaultCore
 	public:
 		typedef std::function<bool(const std::string &, const boost::filesystem::path &, void *)> DownloadOneFileExCallback;
 		bool(*downloadOneFileExPtr) (const std::string &src, const boost::filesystem::path &dest, void *caller);
-		void connectDownloadOneFileEx(DownloadOneFileExCallback cb);
 		bool(*downloadOneFilePairExPtr) (const std::string &src, const boost::filesystem::path &dest, const std::string &src_key, const boost::filesystem::path &dest_key, void *caller);
 		std::string(*retrieveGlobalResourcePtr) (const std::string &key);
 
@@ -40,6 +39,7 @@ namespace ALLIVaultCore
 		ALLIVAULTCOREP_API boost::filesystem::path *getFileURL();
 		ALLIVAULTCOREP_API void updateDownloadStatus(std::string &tempFile, long long bytesReceived);
 		ALLIVAULTCOREP_API void setUserName(std::string &uname);
+		void connectDownloadOneFileEx(DownloadOneFileExCallback cb);
 
 	protected:
 		std::string username;
@@ -53,6 +53,7 @@ namespace ALLIVaultCore
 		std::string updateMessageWithBytesReceivedOSS();
 		bool downloadOneFile(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);
 		bool extractServerPathForFile(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow, std::string &svrPath);
+		bool extractServerPathForFile(const std::string &aRow, std::string &svrPath);
 		bool createEmptyFolder(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);
 		void open_output_file(FILE **output, const boost::filesystem::path &dest);
 		void validate_dest(const boost::filesystem::path &dest);
