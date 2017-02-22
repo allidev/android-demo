@@ -28,6 +28,7 @@
 #include "ALLIVaultCoreP/ALLINewMachineStateP.h"
 #include "ALLIVaultCoreP/ALLIUtilsP.h"
 #include "ALLIVaultCoreP/ALLIEXTSecPlainFolderP.h"
+#include "ALLIVaultCoreP/AliyunOssP.h"
 #include <android/log.h>
 #include <cpprest/http_client.h>
 
@@ -355,6 +356,11 @@ JNIEXPORT void JNICALL
   machNew->nmState->isNewMachineInSession = true;
   ALLIVaultCore::FrontEnd::ALLIExistingUserP existUser;
   machNew->setExistingUser(existUser);
+  machNew->connectDownloadOneFileEx([=](const std::string &filePath, const boost::filesystem::path &localPath, void *)
+                                    {
+                                        ALLIVaultCore::Engine::AliyunOssP oss("xvault");
+                                        return oss.downloadFile(filePath, localPath);
+                                    });
   //connection connMachNew = machNew->connectMachNewStatusUpdated(&machNewStatusUpdatedCallback);
   machNew->batchActionsForNewMachine();
   //connMachNew.disconnect();
