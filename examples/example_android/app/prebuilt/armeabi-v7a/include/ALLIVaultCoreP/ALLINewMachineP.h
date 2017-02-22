@@ -39,6 +39,7 @@ namespace ALLIVaultCore
 			 * @param a string object
 			 */
 			void(*pass_uname_fn_ptr)(const std::string &);
+			typedef std::function<bool(const std::string &, const boost::filesystem::path &, void *)> DownloadOneFileExCallback;
 			/**
 			 * Function pointer to download a file for sync folder.
 			 *
@@ -47,6 +48,7 @@ namespace ALLIVaultCore
 			 * @param a void pointer to the calling object
 			 */
 			bool(*downloadOneFileExPtr) (const std::string &src, const boost::filesystem::path &dest, void *caller);
+			ALLIVAULTCOREP_API void connectDownloadOneFileEx(DownloadOneFileExCallback cb);
 			/**
 			 * Function pointer to report new machine sync progress.
 			 *

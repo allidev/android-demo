@@ -25,7 +25,9 @@ namespace ALLIVaultCore
 	class ALLIFolderP
 	{
 	public:
+		typedef std::function<bool(const std::string &, const boost::filesystem::path &, void *)> DownloadOneFileExCallback;
 		bool(*downloadOneFileExPtr) (const std::string &src, const boost::filesystem::path &dest, void *caller);
+		void connectDownloadOneFileEx(DownloadOneFileExCallback cb);
 		bool(*downloadOneFilePairExPtr) (const std::string &src, const boost::filesystem::path &dest, const std::string &src_key, const boost::filesystem::path &dest_key, void *caller);
 		std::string(*retrieveGlobalResourcePtr) (const std::string &key);
 
@@ -46,6 +48,7 @@ namespace ALLIVaultCore
 		long long totalBytesReceived;
 		std::unordered_map<std::string, long long> totalBytesRecGroup;
 		ALLIVaultCore::Helpers::alli_mutex *rec_group_mutex;
+		DownloadOneFileExCallback m_download_one_file_ex_cb;
 
 		std::string updateMessageWithBytesReceivedOSS();
 		bool downloadOneFile(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);
