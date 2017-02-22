@@ -29,6 +29,7 @@
 #include "ALLIVaultCoreP/ALLIUtilsP.h"
 #include "ALLIVaultCoreP/ALLIEXTSecPlainFolderP.h"
 #include <android/log.h>
+#include <cpprest/http_client.h>
 
 static boost::filesystem::path *homePath, pub_key_path;
 
@@ -37,6 +38,19 @@ static std::string repo_path(const std::string &host, const std::string &path) {
 }
 
 
+
+extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
+{
+  JNIEnv* env;
+  if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK)
+  {
+    return -1;
+  }
+
+  cpprest_init(vm);
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "%s", "we just init cpprest.");
+  return JNI_VERSION_1_6;
+}
 
 JNIEXPORT jstring JNICALL
 Java_com_allivault_cloudsafe_playground_AllivaultApi_getMessage(JNIEnv* env,

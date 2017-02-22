@@ -78,6 +78,9 @@ model {
                         library "libALLIVaultCoreP" linkage "static"
                         library "libgit2cpp" linkage "static"
                         library "libgit2" linkage "static"
+                        library "libosssdkcpp" linkage "static"
+                        library "libtinyxml" linkage "static"
+                        library "libcpprest" linkage "static"
                         library "libssh2" linkage "static"
                         library "libssl" linkage "static"
                         library "libcrypto" linkage "static"
@@ -181,6 +184,26 @@ model {
                 headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libmysqlclient.a")
+                }
+            }
+            libcpprest {
+                headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libcpprest.a")
+                }
+            }
+
+            libosssdkcpp {
+                headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libosssdkcpp.a")
+                }
+            }
+
+            libtinyxml {
+                headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libtinyxml.a")
                 }
             }
         }
@@ -433,6 +456,9 @@ class SampleMigrationRuleSource extends RuleSource {
                     "-l${myStaticLibHome}/${arch}/lib/libALLIVaultCoreP.a".toString(),
                     "-l${myStaticLibHome}/${arch}/lib/libgit2cpp.a".toString(),
                     "-l${myStaticLibHome}/${arch}/lib/libgit2.a".toString(),
+                    "-l${myStaticLibHome}/${arch}/lib/libosssdkcpp.a".toString(),
+                    "-l${myStaticLibHome}/${arch}/lib/libtinyxml.a".toString(),
+                    "-l${myStaticLibHome}/${arch}/lib/libcpprest.a".toString(),
                     "-l${myStaticLibHome}/${arch}/lib/libssh2.a".toString(),
                     "-l${myStaticLibHome}/${arch}/lib/libssl.a".toString(),
                     "-l${myStaticLibHome}/${arch}/lib/libcrypto.a".toString(),
