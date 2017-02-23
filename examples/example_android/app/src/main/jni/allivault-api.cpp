@@ -30,6 +30,8 @@
 #include "ALLIVaultCoreP/ALLIEXTSecPlainFolderP.h"
 #include "ALLIVaultCoreP/AliyunOssP.h"
 #include "ALLIVaultCoreP/ALLIFolderIndex.h"
+#include "ALLIVaultCoreP/new_machine_event_args.h"
+#include "ALLIVaultCoreP/ALLINewMachineProgressStatusP.h"
 #include <android/log.h>
 #include <cpprest/http_client.h>
 
@@ -339,6 +341,16 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_processNewUser(JNIEnv *env,
   env->ReleaseStringUTFChars(userName_, userName);
 }
 
+static void machNewStatusUpdatedCallback(void *sender, ALLIVaultCore::FrontEnd::new_machine_event_args &args)
+{
+  std::string fu = args.filesUpdate;
+  std::string su = args.statusUpdate;
+  ALLIVaultCore::Helpers::ALLINMStatusP nms = args.nmstatus;
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "Files udpate is %s.\n", fu.c_str());
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "Status Update is %s.\n", su.c_str());
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "New machine status is %d.\n", nms);
+}
+
 JNIEXPORT void JNICALL
         Java_com_allivault_cloudsafe_playground_AllivaultApi_batchActionsForNewMachine(JNIEnv *env, jclass type)
 {
@@ -364,9 +376,9 @@ JNIEXPORT void JNICALL
                                         return oss.downloadFile(filePath, localPath);
                                     });
 */
-  //connection connMachNew = machNew->connectMachNewStatusUpdated(&machNewStatusUpdatedCallback);
+  boost::signals2::connection connMachNew = machNew->connectMachNewStatusUpdated(&machNewStatusUpdatedCallback);
   machNew->batchActionsForNewMachine();
-  //connMachNew.disconnect();
+  connMachNew.disconnect();
   ALLIVaultCore::ALLIEXTSecPlainFolderP *plainFolder = existUser.getPlainFolder();
   std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFolderIndex> list = plainFolder->getFolderContentList();
   for (const auto & rec : list)
