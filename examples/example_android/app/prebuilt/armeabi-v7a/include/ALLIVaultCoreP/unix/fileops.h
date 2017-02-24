@@ -20,6 +20,7 @@ extern "C" {
 	ALLIVAULTCOREP_API errno_t alli_sopen_s(int *_FileHandle, const char *_Filename, int _OpenFlag, int _ShareFlag, int _PermissionFlag);
 	ALLIVAULTCOREP_API int alli_stat(const char *_Name, alli_stat_t *_Stat);
 	ALLIVAULTCOREP_API int alli_chmod(const char *_Name, alli_stat_t *_Stat);
+	ALLIVAULTCOREP_API int alli_chmod_only(const char *_Name, mode_t st_mode);
 	ALLIVAULTCOREP_API bool alli_set_file_attributes(const char *_Filename, unsigned long _FileAttributes);
 
 #ifdef  __cplusplus

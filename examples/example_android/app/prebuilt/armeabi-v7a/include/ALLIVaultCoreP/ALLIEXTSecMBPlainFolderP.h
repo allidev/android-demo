@@ -9,6 +9,9 @@ namespace ALLIVaultCore
 	public:
 		ALLIEXTSecMBPlainFolderP(ALLIVaultCore::ALLIEXTSecMBPlainRepoP &plainRepo);
 		~ALLIEXTSecMBPlainFolderP();
+
+	private:
+		bool downloadOneFileJsonImpl(const std::string &localPath) override;
 	};
 }
 

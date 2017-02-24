@@ -41,6 +41,7 @@ namespace ALLIVaultCore
 		int verctrl_query_callback(sqlite3_stmt *sqlstmt, int ver);
 		int updateDataVersion(int ver);
 		virtual void updateTotalBytesUsedImpl();
+		bool restoreFileAttributes(const std::string & localPath, const boost::filesystem::path &destURL);
 
 	private:
 		bool hasFriendUserName;

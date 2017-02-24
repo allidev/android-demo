@@ -26,6 +26,7 @@ namespace ALLIVaultCore
 	{
 	public:
 		typedef std::function<bool(const std::string &, const boost::filesystem::path &, void *)> DownloadOneFileExCallback;
+		typedef std::function<bool(const std::string &, const boost::filesystem::path &, const std::string &, const boost::filesystem::path &, void *)> DownloadOneFilePairExCallback;
 		bool(*downloadOneFileExPtr) (const std::string &src, const boost::filesystem::path &dest, void *caller);
 		bool(*downloadOneFilePairExPtr) (const std::string &src, const boost::filesystem::path &dest, const std::string &src_key, const boost::filesystem::path &dest_key, void *caller);
 		std::string(*retrieveGlobalResourcePtr) (const std::string &key);
@@ -40,6 +41,7 @@ namespace ALLIVaultCore
 		ALLIVAULTCOREP_API void updateDownloadStatus(std::string &tempFile, long long bytesReceived);
 		ALLIVAULTCOREP_API void setUserName(std::string &uname);
 		void connectDownloadOneFileEx(DownloadOneFileExCallback cb);
+		void connectDownloadOneFilePairEx(DownloadOneFilePairExCallback cb);
 
 	protected:
 		std::string username;
@@ -49,6 +51,7 @@ namespace ALLIVaultCore
 		std::unordered_map<std::string, long long> totalBytesRecGroup;
 		ALLIVaultCore::Helpers::alli_mutex *rec_group_mutex;
 		DownloadOneFileExCallback m_download_one_file_ex_cb;
+		DownloadOneFilePairExCallback m_download_one_file_pair_ex_cb;
 
 		std::string updateMessageWithBytesReceivedOSS();
 		bool downloadOneFile(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);

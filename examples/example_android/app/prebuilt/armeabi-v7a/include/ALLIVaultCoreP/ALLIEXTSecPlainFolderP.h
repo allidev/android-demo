@@ -12,8 +12,10 @@ namespace ALLIVaultCore
 
 		void monitorPlainFolder(const boost::filesystem::path &plainURL);
 
-	private:
+	protected:
 		ALLIVaultCore::Engine::SimpleFolder *plainFolder;
+
+	private:
 		ALLIVaultCore::ALLIEXTSecPlainRepoP *plainRepo;
 
 		virtual void monitorPlainFolderImpl(const boost::filesystem::path &plainURL);

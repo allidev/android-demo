@@ -32,6 +32,7 @@ model {
                     //"-includeprebuilt/armeabi/include/android_common.h",
                     "-std=c++11",
                     "-fexceptions",
+                    "-frtti",
                     "-Wunused-function",
                     "-DGIT_SSH",
                     "-DSQLITE_HAS_CODEC",

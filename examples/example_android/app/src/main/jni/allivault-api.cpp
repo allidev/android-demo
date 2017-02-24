@@ -28,10 +28,13 @@
 #include "ALLIVaultCoreP/ALLINewMachineStateP.h"
 #include "ALLIVaultCoreP/ALLIUtilsP.h"
 #include "ALLIVaultCoreP/ALLIEXTSecPlainFolderP.h"
+#include "ALLIVaultCoreP/ALLIEXTSecMBPlainFolderP.h"
 #include "ALLIVaultCoreP/AliyunOssP.h"
 #include "ALLIVaultCoreP/ALLIFolderIndex.h"
 #include "ALLIVaultCoreP/new_machine_event_args.h"
 #include "ALLIVaultCoreP/ALLINewMachineProgressStatusP.h"
+#include "ALLIVaultCoreP/ALLISharingGroupBaseP.h"
+#include "ALLIVaultCorep/ALLIEXTSharingPlainFolderP.h"
 #include <android/log.h>
 #include <cpprest/http_client.h>
 
@@ -388,11 +391,49 @@ JNIEXPORT void JNICALL
     std::string fullpath = meta.get_col2();
     unsigned long long fsize = meta.get_col6();
     time_t mtime = meta.get_col7();
-    printf("The file is %s, with %llu bytes.\n", fullpath.c_str(), fsize);
-    plainFolder->downloadOneFileJson(fpath);
+    __android_log_print(ANDROID_LOG_INFO, "Apis", "The file is %s, with %llu bytes.\n", fullpath.c_str(), fsize);
+    existUser.downloadOneFileForSyncFolder(fpath);
   }
   std::string json = plainFolder->getFolderContentListJson();
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>The file list contains %s.", json.c_str());
+  ALLIVaultCore::ALLIEXTSecMBPlainFolderP *mbPlainFolder = existUser.getMBPlainFolder();
+  list = mbPlainFolder->getFolderContentList();
+  printf("The number of files is %lu.\n", list.size());
+  for (const auto & rec : list)
+  {
+    std::string fpath = rec.first;
+    ALLIVaultCore::Engine::ALLIFolderIndex meta = rec.second;
+    std::string fullpath = meta.get_col2();
+    unsigned long long fsize = meta.get_col6();
+    time_t mtime = meta.get_col7();
+    __android_log_print(ANDROID_LOG_INFO, "Apis", "The file is %s, with %llu bytes.\n", fullpath.c_str(), fsize);
+    existUser.downloadOneFileForMailbox(fpath);
+  }
+  existUser.checkSharingGroupsSync();
+  std::unordered_set<running_sharing_group_t> runningGroups = existUser.getSharingGroups();
+  for (auto const &oneRunning : runningGroups)
+  {
+    ALLIVaultCore::ALLIEXTFolderP *ptr = (ALLIVaultCore::ALLIEXTFolderP *)oneRunning[ALLIVaultCore::Helpers::SHARING_PLAIN_FOLDER_POS];
+    ALLIVaultCore::ALLIEXTSharingPlainFolderP *shPlainFolder = dynamic_cast<ALLIVaultCore::ALLIEXTSharingPlainFolderP *>(ptr);
+    list = shPlainFolder->getFolderContentList();
+    std::string list_str = shPlainFolder->getFolderContentListJson();
+    __android_log_print(ANDROID_LOG_INFO, "Apis", "The file list is %s.\n", list_str.c_str());
+    std::string huname = shPlainFolder->getHostUserName();
+    std::string gname = shPlainFolder->getGroupName();
+    __android_log_print(ANDROID_LOG_INFO, "Apis", "The host username is %s and the group name is %s.\n", huname.c_str(), gname.c_str());
+    list = shPlainFolder->getFolderContentList();
+    __android_log_print(ANDROID_LOG_INFO, "Apis", "The number of files is %lu.\n", list.size());
+    for (const auto & rec : list)
+    {
+      std::string fpath = rec.first;
+      ALLIVaultCore::Engine::ALLIFolderIndex meta = rec.second;
+      std::string fullpath = meta.get_col2();
+      unsigned long long fsize = meta.get_col6();
+      time_t mtime = meta.get_col7();
+      __android_log_print(ANDROID_LOG_INFO, "Apis", "The file is %s, with %llu bytes.\n", fullpath.c_str(), fsize);
+      existUser.downloadOneFileForSharingGroup(huname, gname, fpath);
+    }
+  }
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>batchActionsForNewMachine done.");
 }
 
