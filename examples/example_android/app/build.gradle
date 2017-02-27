@@ -78,6 +78,7 @@ model {
                     dependencies {
                         library "libALLIVaultCoreP" linkage "static"
                         library "libgit2cpp" linkage "static"
+                        library "libALLIVaultCommon" linkage "static"
                         library "libgit2" linkage "static"
                         library "libosssdkcpp" linkage "static"
                         library "libtinyxml" linkage "static"
@@ -171,6 +172,13 @@ model {
                 headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libgit2cpp.a")
+                }
+            }
+
+            libALLIVaultCommon {
+                //headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libALLIVaultCommon.a")
                 }
             }
 
