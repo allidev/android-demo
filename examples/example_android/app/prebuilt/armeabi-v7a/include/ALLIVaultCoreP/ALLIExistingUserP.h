@@ -54,9 +54,9 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API std::string getSharingALLIGroupListJson() const;
 			ALLIVAULTCOREP_API std::unordered_set<running_sharing_group_t> getSharingGroups() const;
 			ALLIVAULTCOREP_API unsigned long long getTotalBytesUsed() const;
-			ALLIVAULTCOREP_API bool downloadOneFileForSyncFolder(const std::string &localPath);
-			ALLIVAULTCOREP_API bool downloadOneFileForMailbox(const std::string &localPath);
-			ALLIVAULTCOREP_API bool downloadOneFileForSharingGroup(const std::string &hostUserName, const std::string groupName, const std::string &localPath);
+			ALLIVAULTCOREP_API bool downloadOneFileForSyncFolder(const std::string &localPath, std::string &dest);
+			ALLIVAULTCOREP_API bool downloadOneFileForMailbox(const std::string &localPath, std::string &dest);
+			ALLIVAULTCOREP_API bool downloadOneFileForSharingGroup(const std::string &hostUserName, const std::string groupName, const std::string &localPath, std::string &dest);
 
 		private:
 			int shSyncCounter;

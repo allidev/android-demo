@@ -392,7 +392,9 @@ JNIEXPORT void JNICALL
     unsigned long long fsize = meta.get_col6();
     time_t mtime = meta.get_col7();
     __android_log_print(ANDROID_LOG_INFO, "Apis", "The file is %s, with %llu bytes.\n", fullpath.c_str(), fsize);
-    existUser.downloadOneFileForSyncFolder(fpath);
+    std::string dest;
+    existUser.downloadOneFileForSyncFolder(fpath, dest);
+    __android_log_print(ANDROID_LOG_INFO, "Apis", "The dest file absolute path is %s.\n", dest.c_str());
   }
   std::string json = plainFolder->getFolderContentListJson();
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>The file list contains %s.", json.c_str());
@@ -407,7 +409,9 @@ JNIEXPORT void JNICALL
     unsigned long long fsize = meta.get_col6();
     time_t mtime = meta.get_col7();
     __android_log_print(ANDROID_LOG_INFO, "Apis", "The file is %s, with %llu bytes.\n", fullpath.c_str(), fsize);
-    existUser.downloadOneFileForMailbox(fpath);
+    std::string dest;
+    existUser.downloadOneFileForMailbox(fpath, dest);
+    __android_log_print(ANDROID_LOG_INFO, "Apis", "The dest file absolute path is %s.\n", dest.c_str());
   }
   existUser.checkSharingGroupsSync();
   std::unordered_set<running_sharing_group_t> runningGroups = existUser.getSharingGroups();
@@ -431,7 +435,9 @@ JNIEXPORT void JNICALL
       unsigned long long fsize = meta.get_col6();
       time_t mtime = meta.get_col7();
       __android_log_print(ANDROID_LOG_INFO, "Apis", "The file is %s, with %llu bytes.\n", fullpath.c_str(), fsize);
-      existUser.downloadOneFileForSharingGroup(huname, gname, fpath);
+      std::string dest;
+      existUser.downloadOneFileForSharingGroup(huname, gname, fpath, dest);
+      __android_log_print(ANDROID_LOG_INFO, "Apis", "The dest file absolute path is %s.\n", dest.c_str());
     }
   }
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>batchActionsForNewMachine done.");

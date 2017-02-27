@@ -17,7 +17,7 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Engine::SimpleFolder *sharingPlainFolder;
 
 		void load_index_db_ex() override;
-		bool downloadOneFileJsonImpl(const std::string &localPath) override;
+		bool downloadOneFileJsonImpl(const std::string &localPath, std::string &dest) override;
 	};
 }
 
