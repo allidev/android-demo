@@ -17,7 +17,7 @@ namespace ALLIVaultCore
 
 		ALLISharingExtP();
 		ALLISharingExtP(const ALLIVaultCore::ALLISharingExtP &src);
-		~ALLISharingExtP();
+		virtual ~ALLISharingExtP();
 
 		void openServerRepository(const std::string &remoteURL);
 		bool cloneFromRemoteRepoToURL(const boost::filesystem::path &localURL, ALLIVaultCore::Engine::NetworkStatus(*chkHost)());

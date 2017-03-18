@@ -11,7 +11,7 @@ namespace ALLIVaultCore
 
 		ALLISharingSyncP_external();
 		ALLISharingSyncP_external(const ALLIVaultCore::ALLISharingSyncP_external &src);
-		~ALLISharingSyncP_external();
+		virtual ~ALLISharingSyncP_external();
 	};
 }
 

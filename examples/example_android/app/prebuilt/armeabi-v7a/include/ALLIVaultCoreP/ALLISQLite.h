@@ -26,6 +26,11 @@ namespace ALLIVaultCore
 				std::vector<void *> *params,
 				int(*binding_callback) (sqlite3_stmt *, std::vector<void *> *params),
 				int(*sqlite_query_cb) (sqlite3_stmt *));
+			static int querySqliteDBTrans(const boost::filesystem::path *dbURL,
+				const std::string &tableName,
+				const std::string &sqlstmt,
+				int(*binding_callback) (sqlite3_stmt *, void *, std::vector<void *> *),
+				void *payload);
 
 		private:
 			static std::string mysqlPassword;

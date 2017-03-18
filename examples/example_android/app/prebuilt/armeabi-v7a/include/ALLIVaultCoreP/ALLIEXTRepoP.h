@@ -23,6 +23,7 @@ namespace libgit2cpp
 {
 	class repository;
 	class commit;
+	class index;
 }
 
 namespace ALLIVaultCore
@@ -35,6 +36,7 @@ namespace ALLIVaultCore
 	namespace Helpers
 	{
 		class alli_event_args;
+		class alli_mutex;
 	}
 	class ALLIEXTRepoP :
 		public ALLIRepoP
@@ -45,14 +47,8 @@ namespace ALLIVaultCore
 
 		ALLIEXTRepoP();
 		ALLIEXTRepoP(const ALLIVaultCore::ALLIEXTRepoP &src);
-		~ALLIEXTRepoP();
+		virtual ~ALLIEXTRepoP();
 
-		/**
-		** Track working directory changes for an existing repo.
-		** Return changed files in a dictionary. If the count of
-		** of dictionary is zero, it means there are no changes.
-		**/
-		std::unordered_map<std::string, git_status_t> *trackWorkingDirectoryChanges();
 		void set_hasInitialCommit(bool status);
 		std::unordered_set<group_t> checkSharingGroupsForNM();
 		boost::signals2::connection connectFatalError(const RepoFatalErrorSlotType &slot);
@@ -61,29 +57,67 @@ namespace ALLIVaultCore
 		void setTotalBytesUsed(unsigned long long totbytes);
 		unsigned long long getTotalBytesUsed() const;
 		void OnRepoUpdated(ALLIVaultCore::repo_event_args &e);
+		void createRootGitIgnoreFile();
+		bool trackFolder();
+		void createSharingGroupDB();
+		ALLIVaultCore::Engine::ALLIMonitorP *getMonitor() const;
 
 	protected:
 		unsigned long long totalBytesUsed;
+		bool hasInitialCommit;
+		ALLIVaultCore::Engine::ALLIMonitorP *monitor;
 
+		/**
+		** Copy changed files to the encrypted repo.
+		** Return true if the op is successful and false otherwise.
+		**/
+		bool copyChangedFilesWithCommitMessage(const std::unordered_map<std::string, git_status_t> &files,
+			const std::unordered_map<std::string, std::string> &sha1s,
+			std::vector<std::string> &messages,
+			int *fd);
+		/**
+		** Track working directory changes for an existing repo.
+		** Return changed files in a dictionary. If the count of
+		** of dictionary is zero, it means there are no changes.
+		**/
+		std::unordered_map<std::string, git_status_t> *trackWorkingDirectoryChanges();
+		void processChangedFilesWithCommitMessage(const std::unordered_map<std::string, git_status_t> &files, std::vector<std::string> &messages, bool(*indexContainsMinimumFiles) (libgit2cpp::index *), bool isFinishUploading, std::string &src);
+		void checkEmptyFolderCreated(const boost::filesystem::path &baseDir);
 		bool commitStagedFilesLocallyWithMessageEx(std::vector<std::string> &messages);
 		bool stageFileWithRelativePath(const std::string &fileName);
 		bool stageRemovedFileToIndex(const std::string &fileName);
 		bool deleteEmptyParentDirectory(const boost::filesystem::path &srcPath);
 		void open_input_file(FILE **input, const boost::filesystem::path &src);
+		FILE *open_input_file(const boost::filesystem::path &src, int _ShFlag);
 		void open_output_file(FILE **output, const boost::filesystem::path &dest);
 		void validate_dest(const boost::filesystem::path &dest);
+		void open_public_key_file(FILE **pubKeyFile, const std::string &uname);
+		void open_public_key_file(FILE **pubKeyFile);
 		FILE *open_private_key_file(char **priKeyPath, int _ShFlag);
 		boost::filesystem::path generateAESKeyFileName(const boost::filesystem::path &fileName, std::string &username);
 		void monitorRepositoryP(const boost::filesystem::path &repoURL);
+		std::unordered_map<std::string, std::string> getSha1ForPlainRepogit_odbChangedFiles(const std::unordered_map<std::string, git_status_t> &files);
+		std::string getShaFromFile(const std::string &filePath);
+		std::string getShaFromIndex(const std::string &filePath);
+		bool filesBridgeExists();
+		bool getLockOnFilesBridge(int *fd);
+		bool releaseLockOnFilesBridge(int *fd);
+		bool isWorkingDirectoryClean();
+		bool saveBridgeDictionary(int *fd);
+		bool isTempFile(const std::string &filePath);
+		bool deleteFileAtSecureEncryptedFolder(const std::string &fileName, const std::string &sha);
+		bool trackPlainFolder();
+		bool trackEncryptFolder();
+		std::map<std::string, std::string> importFilesBridge(ALLIVaultCore::Engine::SimpleRepositoryP *theRepo);
+		bool saveBridgeDictionaryImplEx(int *fd, std::map<std::string, std::string> &filesBridge);
 
 	private:
 		boost::filesystem::path *groupDBURL;
-		bool hasInitialCommit;
 		bool switching;
-		ALLIVaultCore::Engine::ALLIMonitorP *monitor;
 		ALLIVaultCore::Helpers::alli_event RepoFatalError;
 		ALLIVaultCore::repo_updated_event RepoUpdated;
 		std::unordered_set<group_t> sharingGroups;
+		ALLIVaultCore::Helpers::alli_mutex *mutDelete;
 
 		bool getLockForChangedFile(const boost::filesystem::path &fileName, int *fd);
 		bool releaseLockForChangedFile(int *fd);
@@ -91,11 +125,29 @@ namespace ALLIVaultCore
 		std::vector<std::shared_ptr<libgit2cpp::commit>> createParentsVector(libgit2cpp::repository &repo);
 		void attachToEventHandlerForRepoFatalError();
 		void processRepoFatalError(void *sender, ALLIVaultCore::Helpers::alli_event_args &e);
-		void createSharingGroupDB();
 		std::unordered_set<group_t> load_group_db(const boost::filesystem::path &groupDBURL);
 		int extrepo_query_callback(sqlite3_stmt *sqlstmt);
 		virtual void updateTotalBytesUsedImpl();
 		virtual void OnRepoUpdatedImpl(ALLIVaultCore::repo_event_args &e);
+		virtual bool trackPlainFolderImpl();
+		virtual std::unordered_map<std::string, std::string> getSha1ForPlainRepogit_odbChangedFilesImpl(const std::unordered_map<std::string, git_status_t> &files);
+		bool getlockOnFilesBridgeEx(const boost::filesystem::path &workdir, int *fd);
+		virtual bool copyChangedFilesWithCommitMessageImpl(const std::unordered_map<std::string, git_status_t> &files,
+			const std::unordered_map<std::string, std::string> &sha1s,
+			std::vector<std::string> &messages,
+			int *fd);
+		virtual bool saveBridgeDictionaryImpl(int *fd);
+		bool encryptFileToSecureEncryptFolder(const std::string &fileName);
+		virtual bool encryptFileToSecureEncryptFolderImpl(const std::string &fileName);
+		virtual bool trackFolderImpl();
+		virtual bool trackEncryptFolderImpl();
+		virtual void processChangedFilesWithCommitMessageImpl(const std::unordered_map<std::string, git_status_t> &files, std::vector<std::string> &messages, bool(*indexContainsMinimumFiles) (libgit2cpp::index *), bool isFinishUploading, std::string &src);
+		bool commitStagedFilesWithMessage(std::vector<std::string> &messages, bool(*indexContainsMinimumFiles) (libgit2cpp::index *), bool isFinishUploading, std::string &src);
+		bool commitStagedFilesWithMessageImpl(std::vector<std::string> &messages, bool(*indexContainsMinimumFiles) (libgit2cpp::index *), bool isFinishUploading, std::string &src);
+		void createCacheForLastCommit(const std::string &lastCommitSha1);
+		void safe_pushCommitToServer();
+		bool pushCommitToServer();
+		bool doRollback();
 	};
 }
 

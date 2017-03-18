@@ -9,6 +9,12 @@ namespace boost
 	}
 }
 
+namespace libgit2cpp
+{
+	class commit;
+	class repository;
+}
+
 namespace ALLIVaultCore
 {
 	namespace Engine
@@ -21,7 +27,7 @@ namespace ALLIVaultCore
 	public:
 		ALLIRepoP();
 		ALLIRepoP(const ALLIVaultCore::ALLIRepoP &src);
-		~ALLIRepoP();
+		virtual ~ALLIRepoP();
 		ALLIVAULTCOREP_API void setRepo(ALLIVaultCore::Engine::SimpleRepositoryP &repo);
 		ALLIVAULTCOREP_API boost::filesystem::path getWorkDirPath();
 		ALLIVAULTCOREP_API void setUserName(const std::string &uname);
@@ -33,6 +39,9 @@ namespace ALLIVaultCore
 
 		bool createIdentityFile(const std::string &username);
 		virtual ALLIVAULTCOREP_API void setRepoEx(ALLIVaultCore::Engine::SimpleRepositoryP &repo);
+		bool commitStagedFilesLocallyWithMessage(const std::vector<std::string> &messages);
+		std::string buildCommitMessage(const std::vector<std::string> &messages);
+		std::vector<std::shared_ptr<libgit2cpp::commit>> createParentsVector(libgit2cpp::repository &repo);
 	};
 }
 

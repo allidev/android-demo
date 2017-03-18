@@ -10,12 +10,10 @@ namespace ALLIVaultCore
 	public:
 		bool hasSharing;
 		std::string(*uri_fn_ptr)(const std::string &repo, const std::string &host);
-		//void(*fav_fn_ptr)();
-		//bool(*update_db_fn_ptr)(const std::string &hostUserName, const std::string &groupName, const std::string &guestUserName, const std::string &connStr);
 
 		ALLISharingToP(ALLIVaultCore::Engine::NetworkStatus(*chkHost)());
 		ALLISharingToP();
-		~ALLISharingToP();
+		virtual ~ALLISharingToP();
 
 		ALLIVAULTCOREP_API void setupSharingRepo(const std::string &hostUserName, const std::string &guestUserName, const std::string &groupName);
 		bool createRemoteSharingRepo(const std::string &groupName, const std::string &guestUserName, const std::string &repoType);

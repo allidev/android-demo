@@ -9,6 +9,6 @@ namespace ALLIVaultCore
 	public:
 		ALLINURepoP();
 		ALLINURepoP(const ALLIVaultCore::ALLINURepoP &src);
-		~ALLINURepoP();
+		virtual ~ALLINURepoP();
 	};
 }

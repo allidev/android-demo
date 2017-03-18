@@ -47,7 +47,6 @@ namespace ALLIVaultCore
 			 * @param dest a boost filesystem path object identifying the destination of the file
 			 * @param a void pointer to the calling object
 			 */
-			bool(*downloadOneFileExPtr) (const std::string &src, const boost::filesystem::path &dest, void *caller);
 			ALLIVAULTCOREP_API void connectDownloadOneFileEx(DownloadOneFileExCallback cb);
 			/**
 			 * Function pointer to report new machine sync progress.

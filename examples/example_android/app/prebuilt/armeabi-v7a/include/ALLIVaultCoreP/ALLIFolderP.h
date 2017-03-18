@@ -27,7 +27,6 @@ namespace ALLIVaultCore
 	public:
 		typedef std::function<bool(const std::string &, const boost::filesystem::path &, void *)> DownloadOneFileExCallback;
 		typedef std::function<bool(const std::string &, const boost::filesystem::path &, const std::string &, const boost::filesystem::path &, void *)> DownloadOneFilePairExCallback;
-		bool(*downloadOneFileExPtr) (const std::string &src, const boost::filesystem::path &dest, void *caller);
 		bool(*downloadOneFilePairExPtr) (const std::string &src, const boost::filesystem::path &dest, const std::string &src_key, const boost::filesystem::path &dest_key, void *caller);
 		std::string(*retrieveGlobalResourcePtr) (const std::string &key);
 
@@ -37,7 +36,7 @@ namespace ALLIVaultCore
 		// set public scope due to template specialization issue when
 		// running this member function in a separate thread.
 		void deleteTempFile(const boost::filesystem::path &tempFile);
-		ALLIVAULTCOREP_API boost::filesystem::path *getFileURL();
+		ALLIVAULTCOREP_API boost::filesystem::path *getFileURL() const;
 		ALLIVAULTCOREP_API void updateDownloadStatus(std::string &tempFile, long long bytesReceived);
 		ALLIVAULTCOREP_API void setUserName(std::string &uname);
 		void connectDownloadOneFileEx(DownloadOneFileExCallback cb);

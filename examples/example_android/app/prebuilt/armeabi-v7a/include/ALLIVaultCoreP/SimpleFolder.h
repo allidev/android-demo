@@ -39,6 +39,7 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API SimpleFolder(const ALLIVaultCore::Engine::SimpleFolder &src);
 			ALLIVAULTCOREP_API ~SimpleFolder();
 			ALLIVAULTCOREP_API std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> *trackWorkingDirectoryChanges(void);
+			std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> *createWorkingDirectoryChanges(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory);
 			/**
 			 ** load the folder index into memory.
 			 ** return 0 if the sqlite db op is successful, and -1 otherwise.
@@ -52,6 +53,7 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API bool retrieveServerPathForFile(const std::string &localSha1, std::string &svrPath);
 			ALLIVAULTCOREP_API bool retrieveServerPathForFileUsingFilePath(const std::string &localPath, std::string &svrPath);
 			ALLIVaultCore::Engine::ALLIFolderIndex retrieveFolderIndexRow(const std::string &localPath);
+			std::string getShaFromIndex(const std::string &localPath);
 			/**
 			 ** return true if the sqlite db op is successful, and false otherwise.
 			 ** The out param anAESKeyPath contains the aes key path if it exists, and
@@ -107,8 +109,10 @@ namespace ALLIVaultCore
 			void init_part2(const std::string &folderType, const std::string &storeDir, const boost::filesystem::path &folderIndexURL, const boost::filesystem::path &serverInventoryURL, bool shouldCreateDB);
 			void folder_init(const boost::filesystem::path &folderURL, bool isMailbox, bool isSharing, const std::string &groupName, const std::string &hostUserName, bool shouldCreateDB);
 			std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> *alli_diff_p();
+			std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> *alli_diff_p(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory);
 			void walk_thru_folder(const boost::filesystem::path &curFolder, std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> **files, std::unordered_set<std::string> *matchedFiles);
 			void walk_thru_index(const boost::filesystem::path &curFolder, std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> *files, std::unordered_set<std::string> *matchedFiles);
+			void walk_thru_index(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> *files, bool isDirectory = false);
 			int comp_wd_index(const boost::filesystem::path &aFile, std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> *files, std::unordered_set<std::string> *matchedFiles);
 			int comp_entry_workdir(const ALLIVaultCore::Engine::ALLIFolderIndex *aRow, const boost::filesystem::path &curFolder, std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> *files);
 			int sf_query_callback(sqlite3_stmt *sqlstmt);

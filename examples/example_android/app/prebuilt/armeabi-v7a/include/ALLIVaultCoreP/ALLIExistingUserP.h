@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <array>
 
+class ALLINewUserPTest;
+
 namespace ALLIVaultCore
 {
 	class ALLIEXTSecEncryptRepoP;
@@ -57,8 +59,17 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API bool downloadOneFileForSyncFolder(const std::string &localPath, std::string &dest);
 			ALLIVAULTCOREP_API bool downloadOneFileForMailbox(const std::string &localPath, std::string &dest);
 			ALLIVAULTCOREP_API bool downloadOneFileForSharingGroup(const std::string &hostUserName, const std::string groupName, const std::string &localPath, std::string &dest);
+            void createRootGitIgnoreFileForPlainRepo();
+			void createRootGitIgnoreFileForMBPlainRepo();
+			void createSharingGroupDBForPlainRepo();
+			void passUserName(const std::string &userName);
+			bool deleteFileForSyncFolder(const std::string &filePath, bool isDirectory = false);
+			bool deleteFileForMailbox(const std::string &filePath, bool isDirectory = false);
+			bool deleteFileForSharingGroup(const std::string &hostUserName, const std::string &groupName, const std::string &filePath, bool isDirectory = false);
+			bool renameFileForSyncFolder(const std::string &old_path, const std::string &new_path, bool isDirectory = false);
 
 		private:
+			friend class ::ALLINewUserPTest;
 			int shSyncCounter;
 			int shSyncTotal;
 			typedef std::vector<void *> current_group_t;
@@ -118,6 +129,7 @@ namespace ALLIVaultCore
 			boost::signals2::connection attachToEventHandlerForRepoUpdated(ALLIVaultCore::ALLIEXTRepoP *src);
 			void secEncryptRepoUpdated(void *sender, ALLIVaultCore::repo_event_args &e);
 			void EncryptRepoUpdatedEx(void *sender, ALLIVaultCore::repo_event_args &e);
+			ALLIVAULTCOREP_API boost::filesystem::path getPlainFolderRootFolder() const;
 		};
 	}
 }

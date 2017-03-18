@@ -16,6 +16,8 @@ namespace ALLIVaultCore
 
 	private:
 		ALLIVaultCore::ALLIEXTSharingEncryptRepoP *shEncryptRepo;
+
+		bool trackFolderImpl() override;
 	};
 }
 

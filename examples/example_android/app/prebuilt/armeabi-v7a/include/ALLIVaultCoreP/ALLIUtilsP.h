@@ -162,6 +162,10 @@ namespace ALLIVaultCore
 			static void updateSyncNewMachineSharingGroupsFlag(bool status);
 			static boost::filesystem::path validateRootFolderForSharingWorkDirs();
 			static void updateFilesPermissions(const boost::filesystem::path &dir);
+			static bool isTempExcelFile(const boost::filesystem::path &filePath);
+			static std::string getEncryptTempPath(const std::string &filePath);
+			static bool readFileContentIntoUTF8String(const boost::filesystem::path &src, std::string &dest, int &size);
+			static bool readFileContentIntoUTF8String(const boost::filesystem::path &src, std::string &dest);
 
 		private:
 			static std::string mysqlPassword;

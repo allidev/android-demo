@@ -3,6 +3,7 @@
 
 namespace ALLIVaultCore
 {
+	class ALLISFEncryptedRepoP;
 	class ALLISFPlainRepoP :
 		public ALLISharingFromP
 	{
@@ -18,6 +19,9 @@ namespace ALLIVaultCore
 
 	protected:
 		virtual void moveRepositoryToURLImpl(const boost::filesystem::path &localURL, bool checkRemoteRef) override;
+
+	private:
+		friend class ALLISFEncryptedRepoP;
 	};
 }
 

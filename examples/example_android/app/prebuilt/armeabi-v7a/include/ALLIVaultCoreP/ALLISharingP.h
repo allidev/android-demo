@@ -28,7 +28,7 @@ namespace ALLIVaultCore
 
 		ALLISharingP();
 		ALLISharingP(const ALLIVaultCore::ALLISharingP &src);
-		~ALLISharingP();
+		virtual ~ALLISharingP();
 
 	protected:
 		std::string *connStr;

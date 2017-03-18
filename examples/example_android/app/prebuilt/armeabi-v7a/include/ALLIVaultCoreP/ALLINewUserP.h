@@ -19,6 +19,7 @@ namespace ALLIVaultCore
 	}
 	namespace FrontEnd
 	{
+        class ALLIExistingUserP;
 		/**
 		 * Class ALLINewUserP. It handles all operations related to
 		 * new user registration.
@@ -110,6 +111,7 @@ namespace ALLIVaultCore
 			 * @return true if the operation is successful, false otherwise
 			 */
 			ALLIVAULTCOREP_API bool activateRegistrationCode(const std::string &regcode, const std::string &uname);
+            ALLIVAULTCOREP_API void setExistingUser(ALLIVaultCore::FrontEnd::ALLIExistingUserP &eu);
 
 		private:
 			class ALLINewUserP_impl;

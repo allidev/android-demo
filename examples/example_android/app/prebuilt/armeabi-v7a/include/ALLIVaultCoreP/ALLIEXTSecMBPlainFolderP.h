@@ -11,7 +11,11 @@ namespace ALLIVaultCore
 		~ALLIEXTSecMBPlainFolderP();
 
 	private:
+		ALLIVaultCore::ALLIEXTSecMBPlainRepoP *mbPlainRepo;
+
 		bool downloadOneFileJsonImpl(const std::string &localPath, std::string &dest) override;
+		void monitorPlainFolderImpl(const boost::filesystem::path &plainURL) override;
+        bool trackFolderImpl() override;
 	};
 }
 

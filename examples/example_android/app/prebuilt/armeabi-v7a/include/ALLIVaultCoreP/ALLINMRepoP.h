@@ -36,7 +36,7 @@ namespace ALLIVaultCore
 
 		ALLINMRepoP();
 		ALLINMRepoP(const ALLIVaultCore::ALLINMRepoP &src);
-		~ALLINMRepoP();
+		virtual ~ALLINMRepoP();
 		ALLIVAULTCOREP_API void openServerRepository(const std::string &remoteURL);
 		ALLIVAULTCOREP_API std::unordered_map<std::string, git_status_t> *trackWorkingDirectoryChanges();
 		ALLIVAULTCOREP_API bool cloneFromRemoteRepo(const boost::filesystem::path &localURL, ALLIVaultCore::Engine::NetworkStatus(*chkHost)());

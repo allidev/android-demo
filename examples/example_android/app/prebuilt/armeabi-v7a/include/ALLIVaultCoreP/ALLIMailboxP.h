@@ -1,4 +1,5 @@
 #pragma once
+#include "alli_common.h"
 #include "alli_event.h"
 #include "ALLINetworkStatus.h"
 
@@ -27,11 +28,9 @@ namespace ALLIVaultCore
 			void(*filePermPtr) (const boost::filesystem::path &);
 			void(*registry_fn_ptr)();
 			typedef std::function<void(const boost::filesystem::path &)> OpenCallback;
-			void(*open_plain_repo_fn_ptr)(const boost::filesystem::path &);
-			void connectOpenPlainRepo(OpenCallback cb);
-			void(*open_encrypt_repo_fn_ptr)(const boost::filesystem::path &);
-			void connectOpenEncryptRepo(OpenCallback cb);
-			void(*monitor_plain_folder_fn_ptr)(const boost::filesystem::path &);
+			ALLIVAULTCOREP_API void connectOpenPlainRepo(OpenCallback cb);
+			ALLIVAULTCOREP_API void connectOpenEncryptRepo(OpenCallback cb);
+			ALLIVAULTCOREP_API void connectMonitorPlainFolder(OpenCallback cb);
 			std::string(*uri_fn_ptr)(const std::string &repo, const std::string &host);
 			std::string(*retrieveGlobalResourcePtr) (const std::string &key);
 			typedef std::function<void()> UpdateTotalBytesCallback;
@@ -67,7 +66,7 @@ namespace ALLIVaultCore
 			ALLIVaultCore::ALLINMMBPlainFolderP *nmMBPlainFolder;
 			void(*slot_callback)(void *, ALLIVaultCore::Helpers::transfer_progress_event_args &);
 			UpdateTotalBytesCallback m_update_total_bytes_cb;
-			OpenCallback m_open_plain_repo_cb, m_open_crypt_repo_cb;
+			OpenCallback m_open_plain_repo_cb, m_open_crypt_repo_cb, m_monitor_plain_folder_cb;
 
 			void initRepoesandFolder();
 			bool createRemoteMBEncryptedRepo(std::string userName);
