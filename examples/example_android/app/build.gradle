@@ -80,6 +80,7 @@ model {
                         library "libgit2cpp" linkage "static"
                         library "libALLIVaultCommon" linkage "static"
                         library "libgit2" linkage "static"
+                        library "libfswatch" linkage "shared"
                         library "libosssdkcpp" linkage "static"
                         library "libtinyxml" linkage "static"
                         library "libcpprest" linkage "static"
@@ -131,6 +132,14 @@ model {
                     staticLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libgit2.a")
                 }
             }
+
+            libfswatch {
+                //headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
+                binaries.withType(SharedLibraryBinary) {
+                    sharedLibraryFile = file("${prebuiltHome}/${targetPlatform.getName()}/lib/libfswatch.so")
+                }
+            }
+
             libALLIVaultCoreP {
                 headers.srcDir "${prebuiltHome}/armeabi-v7a/include"
                 binaries.withType(StaticLibraryBinary) {
@@ -465,6 +474,7 @@ class SampleMigrationRuleSource extends RuleSource {
                     "-l${myStaticLibHome}/${arch}/lib/libALLIVaultCoreP.a".toString(),
                     "-l${myStaticLibHome}/${arch}/lib/libgit2cpp.a".toString(),
                     "-l${myStaticLibHome}/${arch}/lib/libgit2.a".toString(),
+                    "-l${myStaticLibHome}/${arch}/lib/libfswatch.so".toString(),
                     "-l${myStaticLibHome}/${arch}/lib/libosssdkcpp.a".toString(),
                     "-l${myStaticLibHome}/${arch}/lib/libtinyxml.a".toString(),
                     "-l${myStaticLibHome}/${arch}/lib/libcpprest.a".toString(),

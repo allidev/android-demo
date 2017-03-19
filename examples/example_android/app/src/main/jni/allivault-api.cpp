@@ -393,11 +393,13 @@ JNIEXPORT void JNICALL
     time_t mtime = meta.get_col7();
     __android_log_print(ANDROID_LOG_INFO, "Apis", "The file is %s, with %llu bytes.\n", fullpath.c_str(), fsize);
     std::string dest;
-    existUser.downloadOneFileForSyncFolder(fpath, dest);
+    //existUser.downloadOneFileForSyncFolder(fpath, dest);
     __android_log_print(ANDROID_LOG_INFO, "Apis", "The dest file absolute path is %s.\n", dest.c_str());
   }
   std::string json = plainFolder->getFolderContentListJson();
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>The file list contains %s.", json.c_str());
+  existUser.deleteFileForSyncFolder("folder1/test2.txt");
+  existUser.renameFileForSyncFolder("ALLINewUserP.h", "ALLINewUserP-1.h");
   ALLIVaultCore::ALLIEXTSecMBPlainFolderP *mbPlainFolder = existUser.getMBPlainFolder();
   list = mbPlainFolder->getFolderContentList();
   printf("The number of files is %lu.\n", list.size());
