@@ -1,15 +1,9 @@
 #pragma once
 
-#include <string>
+#include "alli_common.h"
 
-namespace ALLIVaultCore
-{
-	namespace Helpers
-	{
-		class ALLIDebugP
-		{
-		public:
-			static void WriteLine(const std::string &message);
-		};
-	}
-}
+#ifdef ALLI_WIN32
+#include "win32/ALLIDebugP.h"
+#else
+#include "unix/ALLIDebugP.h"
+#endif

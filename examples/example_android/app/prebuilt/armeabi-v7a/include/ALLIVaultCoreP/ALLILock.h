@@ -1,20 +1,9 @@
-#include "../alli_common.h"
-#include <mutex>          // std::mutex
+#pragma once
 
-namespace ALLIVaultCore
-{
-	namespace Engine
-	{
-		class ALLILock
-		{
-			std::mutex mtx;
-		public:
-			ALLIVAULTCOREP_API ALLILock();
-			ALLIVAULTCOREP_API ~ALLILock();
-			ALLIVAULTCOREP_API void enter();
-			ALLIVAULTCOREP_API bool try_enter();
-			ALLIVAULTCOREP_API void exit();
-		};
-	}
-}
+#include "alli_common.h"
 
+#ifdef ALLI_WIN32
+#include "win32\ALLILock.h"
+#else
+#include "unix/ALLILock.h"
+#endif

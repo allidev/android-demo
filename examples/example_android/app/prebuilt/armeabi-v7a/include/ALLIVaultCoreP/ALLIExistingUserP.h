@@ -63,10 +63,10 @@ namespace ALLIVaultCore
 			void createRootGitIgnoreFileForMBPlainRepo();
 			void createSharingGroupDBForPlainRepo();
 			void passUserName(const std::string &userName);
-			bool deleteFileForSyncFolder(const std::string &filePath, bool isDirectory = false);
+			ALLIVAULTCOREP_API bool deleteFileForSyncFolder(const std::string &filePath, bool isDirectory = false);
 			bool deleteFileForMailbox(const std::string &filePath, bool isDirectory = false);
 			bool deleteFileForSharingGroup(const std::string &hostUserName, const std::string &groupName, const std::string &filePath, bool isDirectory = false);
-			bool renameFileForSyncFolder(const std::string &old_path, const std::string &new_path, bool isDirectory = false);
+			ALLIVAULTCOREP_API bool renameFileForSyncFolder(const std::string &old_path, const std::string &new_path, bool isDirectory = false);
 
 		private:
 			friend class ::ALLINewUserPTest;
