@@ -338,6 +338,8 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_processNewUser(JNIEnv *env,
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>processNewUser");
   ALLIVaultCore::FrontEnd::ALLINewUserP *alliNewUserP = new ALLIVaultCore::FrontEnd::ALLINewUserP(&repo_path);
   std::string uname(userName);
+  ALLIVaultCore::FrontEnd::ALLIExistingUserP existUser;
+  alliNewUserP->setExistingUser(existUser);
   alliNewUserP->processNewUser(uname);
   delete alliNewUserP;
 
