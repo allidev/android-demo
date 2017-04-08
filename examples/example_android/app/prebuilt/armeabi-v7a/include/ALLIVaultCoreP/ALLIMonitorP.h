@@ -20,6 +20,8 @@ namespace ALLIVaultCore
         void process_events(const std::vector<fsw::event>& events, void *context);
 		void process_events_folder(const std::vector<fsw::event>& events, void *context);
 #endif
+		void remote_repo_timer_wrapper(void *payload);
+		class ALLIReachabilityP;
 		class ALLIMonitorP
 		{
 		public:
@@ -41,7 +43,9 @@ namespace ALLIVaultCore
 			fsw::monitor *active_monitor;
 			fsw::monitor *active_monitor_folder;
 #endif
-			std::atomic_uchar repoQueue, folderQueue;
+			std::atomic_uchar repoQueue, folderQueue, timerCount;
+			void *encryptTimer;
+			ALLIVaultCore::Engine::ALLIReachabilityP *hostReach;
 
 #ifndef ALLI_WIN32
             friend void process_events(const std::vector<fsw::event>& events, void *context);
@@ -51,10 +55,14 @@ namespace ALLIVaultCore
 			void localRepoCallback_init(const std::vector<fsw::event>& events);
 			void localFolderCallback_init(const std::vector<fsw::event>& events);
 #endif
+			friend void remote_repo_timer_wrapper(void *payload);
 			void monitorLocalRepo();
+			void monitorRemoteRepo(void *obj);
 			void monitorLocalFolder();
 			void startLocalRepoCallbackEx(void *obj);
 			void startLocalFolderCallbackEx(void *obj);
+			void remoteRepoTimer(void *obj);
+			void runOnRemoteTimer(void *obj);
 		};
 	}
 }

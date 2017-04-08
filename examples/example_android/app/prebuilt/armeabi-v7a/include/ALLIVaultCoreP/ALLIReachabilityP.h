@@ -23,6 +23,7 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API ALLIReachabilityP(void);
 			ALLIVAULTCOREP_API ~ALLIReachabilityP(void);
 			ALLIVAULTCOREP_API NetworkStatus currentReachabilityStatus();
+			ALLIVAULTCOREP_API NetworkStatus currentReachabilityStatus(bool &causeUnknown);
 			/**
 			 * Static member function to check the network status to
 			 * the servers

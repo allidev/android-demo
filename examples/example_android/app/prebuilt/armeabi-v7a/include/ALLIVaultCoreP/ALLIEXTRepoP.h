@@ -44,6 +44,8 @@ namespace ALLIVaultCore
 	public:
 		typedef ALLIVaultCore::Helpers::alli_event::slot_type RepoFatalErrorSlotType;
 		typedef ALLIVaultCore::repo_updated_event::slot_type RepoUpdatedSlotType;
+		typedef ALLIVaultCore::Helpers::alli_event::slot_type IndexDBDeletedSlotType;
+		typedef ALLIVaultCore::Helpers::alli_event::slot_type ServerInventoryDBDeletedSlotType;
 
 		ALLIEXTRepoP();
 		ALLIEXTRepoP(const ALLIVaultCore::ALLIEXTRepoP &src);
@@ -61,11 +63,19 @@ namespace ALLIVaultCore
 		bool trackFolder();
 		void createSharingGroupDB();
 		ALLIVaultCore::Engine::ALLIMonitorP *getMonitor() const;
+		bool shouldTrackRemoteRepo() const;
+		void trackRemoteRepo();
 
 	protected:
 		unsigned long long totalBytesUsed;
 		bool hasInitialCommit;
 		ALLIVaultCore::Engine::ALLIMonitorP *monitor;
+		bool m_trackRemoteRepo;
+		bool has_verification_done;
+		bool localRepoInAction;
+		ALLIVaultCore::Helpers::alli_mutex *commit_remote_mutex;
+		ALLIVaultCore::Helpers::alli_mutex *reloadingLock;
+		ALLIVaultCore::Helpers::alli_mutex *mutDelete;
 
 		/**
 		** Copy changed files to the encrypted repo.
@@ -110,20 +120,31 @@ namespace ALLIVaultCore
 		bool trackEncryptFolder();
 		std::map<std::string, std::string> importFilesBridge(ALLIVaultCore::Engine::SimpleRepositoryP *theRepo);
 		bool saveBridgeDictionaryImplEx(int *fd, std::map<std::string, std::string> &filesBridge);
+		bool safe_runOnRemoteTimerEx();
+		void attachToEventHandlerForRepoFatalError();
+		void detachEventHandlerForRepoFatalError();
+		void reset_native_index();
+		bool setIndexFile();
+		libgit2cpp::index *get_native_index();
+		void createCacheForServer(const std::string &headSHA1);
+		void OnIndexDBDeleted(ALLIVaultCore::Helpers::alli_event_args &e);
+		void OnServerInventoryDBDeleted(ALLIVaultCore::Helpers::alli_event_args &e);
 
 	private:
 		boost::filesystem::path *groupDBURL;
 		bool switching;
 		ALLIVaultCore::Helpers::alli_event RepoFatalError;
+		ALLIVaultCore::Helpers::alli_event IndexDBDeleted;
+		ALLIVaultCore::Helpers::alli_event ServerInventoryDBDeleted;
 		ALLIVaultCore::repo_updated_event RepoUpdated;
 		std::unordered_set<group_t> sharingGroups;
-		ALLIVaultCore::Helpers::alli_mutex *mutDelete;
+		bool is_finish_uploading;
+		libgit2cpp::index *native_index;
 
 		bool getLockForChangedFile(const boost::filesystem::path &fileName, int *fd);
 		bool releaseLockForChangedFile(int *fd);
 		std::string buildCommitMessage(std::vector<std::string> &messages);
 		std::vector<std::shared_ptr<libgit2cpp::commit>> createParentsVector(libgit2cpp::repository &repo);
-		void attachToEventHandlerForRepoFatalError();
 		void processRepoFatalError(void *sender, ALLIVaultCore::Helpers::alli_event_args &e);
 		std::unordered_set<group_t> load_group_db(const boost::filesystem::path &groupDBURL);
 		int extrepo_query_callback(sqlite3_stmt *sqlstmt);
@@ -148,6 +169,16 @@ namespace ALLIVaultCore
 		void safe_pushCommitToServer();
 		bool pushCommitToServer();
 		bool doRollback();
+		virtual void trackRemoteRepoImpl();
+		bool runOnRemoteTimerEx();
+		bool runOnRemoteTimerEx_setJobStartFlag(bool &jobCounterSet, bool &aLoop);
+		bool fetchFromServer();
+		bool mergeFastForward();
+		virtual bool mergeFastForwardImpl();
+		bool runOnRemoteTimerEx_encryptRepoFailed(bool &isSecureFolderSuccessful);
+		virtual bool runOnRemoteTimerEx_encryptRepoFailedImpl(bool &isSecureFolderSuccessful);
+		bool runOnRemoteTimerEx_encryptRepoBridgeSuccess(bool &aLoop);
+		virtual bool runOnRemoteTimerEx_encryptRepoBridgeSuccessImpl(bool &aLoop);
 	};
 }
 

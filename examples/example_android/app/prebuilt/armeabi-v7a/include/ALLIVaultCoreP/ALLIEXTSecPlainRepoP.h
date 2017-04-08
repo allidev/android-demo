@@ -27,6 +27,8 @@ namespace ALLIVaultCore
 		// init here and used for remote repo monitoring
 		// paired with secEncryptRepo
 		ALLIVaultCore::Helpers::alli_mutex *mutex_plain_repo;
+		ALLIVaultCore::Helpers::alli_mutex *checkSharingLock;
+		ALLIVaultCore::Helpers::alli_mutex *trackMutex;
 
 		bool trackPlainFolderImpl() override;
 		std::unordered_map<std::string, std::string> getSha1ForPlainRepogit_odbChangedFilesImpl(const std::unordered_map<std::string, git_status_t> &files) override;
@@ -37,6 +39,8 @@ namespace ALLIVaultCore
 		bool insertFilePair(const boost::filesystem::path &srcFile, const boost::filesystem::path &destFile);
 		virtual bool insertFilePairImpl(const boost::filesystem::path &srcFile, const boost::filesystem::path &destFile);
 		void terminateThread();
+		void deleteFile(const boost::filesystem::path &fileName);
+		virtual void deleteFileImpl(const boost::filesystem::path &fileName);
 	};
 }
 

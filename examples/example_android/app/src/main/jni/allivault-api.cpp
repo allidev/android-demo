@@ -40,7 +40,7 @@
 
 static boost::filesystem::path *homePath, pub_key_path;
 
-static std::string repo_path(const std::string &host, const std::string &path) {
+static std::string repo_path(const std::string &path, const std::string &host) {
   return std::string("ssh://") + host + path;
 }
 
@@ -342,6 +342,7 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_processNewUser(JNIEnv *env,
   alliNewUserP->setExistingUser(existUser);
   alliNewUserP->processNewUser(uname);
   delete alliNewUserP;
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "==>processNewUser completed.");
 
   env->ReleaseStringUTFChars(userName_, userName);
 }
