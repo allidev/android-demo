@@ -403,6 +403,7 @@ JNIEXPORT void JNICALL
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>The file list contains %s.", json.c_str());
   existUser.deleteFileForSyncFolder("folder1/test2.txt");
   existUser.renameFileForSyncFolder("ALLINewUserP.h", "ALLINewUserP-1.h");
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "==>Start to process mailbox folder.\n");
   ALLIVaultCore::ALLIEXTSecMBPlainFolderP *mbPlainFolder = existUser.getMBPlainFolder();
   list = mbPlainFolder->getFolderContentList();
   printf("The number of files is %lu.\n", list.size());
