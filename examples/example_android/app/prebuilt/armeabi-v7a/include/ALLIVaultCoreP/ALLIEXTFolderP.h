@@ -13,6 +13,7 @@ namespace ALLIVaultCore
 		class ALLIMonitorP;
 		enum class ALLIFileStatusP;
 	}
+	class ALLICacheP;
 	class ALLIEXTRepoP;
 	class ALLIEXTFolderP :
 		public ALLIFolderP
@@ -34,6 +35,7 @@ namespace ALLIVaultCore
 		ALLIVAULTCOREP_API bool downloadOneFileJson(const std::string &localPath, std::string &dest);
 		bool trackFolder();
 		bool trackFolder(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory = false);
+		bool trackRepoEx();
 
 	protected:
 		bool switching;
@@ -64,6 +66,12 @@ namespace ALLIVaultCore
 		bool hasFriendUserName;
 		std::unordered_set<std::string> server_inv_updated;
 		bool hasLocalSHA;
+		// used to coordinate multi-thread download threads
+		ALLIVaultCore::Helpers::alli_semaphore *mtdl_pool;
+		ALLIVaultCore::Helpers::alli_mutex *mt_count_mutex;
+		int mtdl_remaining;
+		std::unordered_map<std::string, std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex>> idxTable;
+		std::unordered_set<std::string> matchedIdxRows;
 
 		virtual void load_index_db_ex();
 		bool containsUserInFriendList(const std::string &uname);
@@ -107,6 +115,19 @@ namespace ALLIVaultCore
 		int server_query_callback(sqlite3_stmt *sqlstmt);
 		virtual bool trackFolderImpl(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory);
 		std::string getShaFromIndex(const std::string &fileName);
+		bool walk_thru_folderEx(const boost::filesystem::path &curFolder);
+		void walk_thru_index();
+		// return 0 on success and -1 on error.
+		int comp_wd_indexEx(const boost::filesystem::path &aFile);
+		void comp_wd_indexEx_IndexIterator(bool &findMatch, bool &isModified, ALLIVaultCore::Engine::ALLIFolderIndex &aRow, std::string &idx_path, const std::string &relativePath, const boost::filesystem::path &aFile, bool isDirectory);
+		bool matchFileLengthAndModifiedTime(const boost::filesystem::path &aFile, const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);
+		bool matchFileLengthAndModifiedTimeP(const boost::filesystem::path &aFile, const std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex> &aRow);
+		int comp_wd_indexEx_processResults(bool findMatch, bool isModified, const std::string &idx_path, const ALLIVaultCore::Engine::ALLIFolderIndex &aRow, const std::string &relativePath, ALLIVaultCore::ALLICacheP &syncCache, const boost::filesystem::path &aFile, bool isDirectory);
+		bool fileInLocalFolderIndex(const std::string &relativePath, ALLIVaultCore::ALLICacheP &syncCache);
+		void updateOneRowExMT(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);
+		void updateOneRowExMTP(const std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex> &aRow);
+		bool updateOneRowEx(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);
+		bool updateOneRowExP(const std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex> &aRow);
 	};
 }
 

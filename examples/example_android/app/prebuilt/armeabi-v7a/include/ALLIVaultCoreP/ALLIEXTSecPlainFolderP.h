@@ -46,6 +46,7 @@ namespace ALLIVaultCore
 		* returns true if the operation is successful and false otherwise.
 		*/
 		bool encryptFileForPlainRepo(const std::string &fileName);
+		bool downloadOneFileEx(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow) override;
 	};
 }
 

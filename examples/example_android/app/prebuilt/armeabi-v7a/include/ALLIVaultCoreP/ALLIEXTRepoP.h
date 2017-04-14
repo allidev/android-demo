@@ -129,6 +129,7 @@ namespace ALLIVaultCore
 		void createCacheForServer(const std::string &headSHA1);
 		void OnIndexDBDeleted(ALLIVaultCore::Helpers::alli_event_args &e);
 		void OnServerInventoryDBDeleted(ALLIVaultCore::Helpers::alli_event_args &e);
+		bool trackRepoEx();
 
 	private:
 		boost::filesystem::path *groupDBURL;
@@ -179,6 +180,7 @@ namespace ALLIVaultCore
 		virtual bool runOnRemoteTimerEx_encryptRepoFailedImpl(bool &isSecureFolderSuccessful);
 		bool runOnRemoteTimerEx_encryptRepoBridgeSuccess(bool &aLoop);
 		virtual bool runOnRemoteTimerEx_encryptRepoBridgeSuccessImpl(bool &aLoop);
+		virtual bool trackRepoExImpl();
 	};
 }
 

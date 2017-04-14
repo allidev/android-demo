@@ -2,7 +2,8 @@
 #include "ALLIEXTRepoP.h"
 
 namespace ALLIVaultCore
-{ 
+{
+	class ALLIEXTSecPlainFolderP;
 	class ALLIEXTSecPlainRepoP;
 	class ALLIEXTSecEncryptRepoP :
 		public ALLIVaultCore::ALLIEXTRepoP
@@ -17,6 +18,7 @@ namespace ALLIVaultCore
 		void linkSecPlainRepo(ALLIVaultCore::ALLIEXTSecPlainRepoP *src);
 
 	private:
+		friend class ALLIEXTSecPlainFolderP;
 		friend class ALLIEXTSecPlainRepoP;
 		ALLIVaultCore::ALLIEXTSecPlainRepoP *secPlainRepo;
 		ALLIVaultCore::Engine::SimpleRepositoryP *encryptedRepoP;
@@ -24,6 +26,8 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::alli_mutex *mutex_encrypt_plain_repo;
 		// init here and used alone and unpaired
 		ALLIVaultCore::Helpers::alli_mutex *mutex_local_encrypt_repo;
+		// not init here
+		ALLIVaultCore::Helpers::alli_mutex *mutex_encrypt_plain_folder;
 		bool isFinishUploading;
 		std::map<std::string, std::string> filesBridge;
 		ALLIVaultCore::Helpers::alli_mutex *trackMutex;
@@ -57,6 +61,9 @@ namespace ALLIVaultCore
 		bool copyFileToPlainFolder(const boost::filesystem::path &fileName);
 		virtual bool copyFileToPlainFolderImpl(const boost::filesystem::path &fileName);
 		bool copyFileToPlainFolderEx(const boost::filesystem::path &fileName);
+		bool runOnRemoteTimerEx_encryptRepoBridgeSuccessImpl(bool &aLoop) override;
+		bool trackPlainRepo();
+		bool trackRepoExImpl() override;
 	};
 }
 
