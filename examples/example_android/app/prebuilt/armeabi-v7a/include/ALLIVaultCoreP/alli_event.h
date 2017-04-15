@@ -11,6 +11,8 @@ namespace ALLIVaultCore
 		class new_machine_event_args;
 		typedef boost::signals2::signal<void(void *, ALLIVaultCore::FrontEnd::new_machine_event_args &)> files_to_download_update_event;
 		typedef boost::signals2::signal<void(void *, ALLIVaultCore::FrontEnd::new_machine_event_args &)> mach_new_status_updated_event;
+		class exist_user_event_args;
+		typedef boost::signals2::signal<void(void *, ALLIVaultCore::FrontEnd::exist_user_event_args &)> app_status_update_event;
 	}
 	namespace Helpers
 	{

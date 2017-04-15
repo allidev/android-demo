@@ -1,6 +1,7 @@
 #pragma once
 #include "ALLIFolderP.h"
 #include "alli_types.h"
+#include "alli_event.h"
 #include <unordered_map>
 #include <unordered_set>
 
@@ -19,6 +20,8 @@ namespace ALLIVaultCore
 		public ALLIFolderP
 	{
 	public:
+		typedef ALLIVaultCore::FrontEnd::app_status_update_event::slot_type AppStatusUpdatedSlotType;
+
 		ALLIEXTFolderP();
 		ALLIEXTFolderP(const ALLIVaultCore::ALLIEXTFolderP &src);
 		virtual ~ALLIEXTFolderP();
@@ -36,6 +39,7 @@ namespace ALLIVaultCore
 		bool trackFolder();
 		bool trackFolder(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory = false);
 		bool trackRepoEx();
+		boost::signals2::connection connectAppStatusUpdated(const AppStatusUpdatedSlotType &slot);
 
 	protected:
 		bool switching;
@@ -72,6 +76,7 @@ namespace ALLIVaultCore
 		int mtdl_remaining;
 		std::unordered_map<std::string, std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex>> idxTable;
 		std::unordered_set<std::string> matchedIdxRows;
+		ALLIVaultCore::FrontEnd::app_status_update_event appStatusUpdated;
 
 		virtual void load_index_db_ex();
 		bool containsUserInFriendList(const std::string &uname);
@@ -128,6 +133,7 @@ namespace ALLIVaultCore
 		void updateOneRowExMTP(const std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex> &aRow);
 		bool updateOneRowEx(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);
 		bool updateOneRowExP(const std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex> &aRow);
+		void OnAppStatusUpdated(ALLIVaultCore::FrontEnd::exist_user_event_args &e);
 	};
 }
 
