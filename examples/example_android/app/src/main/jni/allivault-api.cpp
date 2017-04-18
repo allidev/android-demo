@@ -385,6 +385,7 @@ void appStatusUpdatedCallback(void *sender, ALLIVaultCore::FrontEnd::exist_user_
   }
 
   g_env->CallStaticVoidMethod(g_clazz_appStatusUpdated, g_mid_appStatusUpdated);
+  g_vm->DetachCurrentThread();
 }
 
 JNIEXPORT void JNICALL
