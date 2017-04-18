@@ -61,6 +61,9 @@ JNIEXPORT void JNICALL
         Java_com_allivault_cloudsafe_playground_AllivaultApi_appInitialize(JNIEnv *env, jclass type,
                                                                             jstring rootPath);
 
+JNIEXPORT jboolean JNICALL
+        Java_com_allivault_cloudsafe_playground_AllivaultApi_registerAppStatusUpdated(JNIEnv *env, jclass clazz);
+
 #ifdef __cplusplus
 }
 #endif

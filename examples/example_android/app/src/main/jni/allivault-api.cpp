@@ -45,6 +45,11 @@ static std::string repo_path(const std::string &path, const std::string &host) {
 }
 
 
+JavaVM *g_vm;
+// cached refs for later callbacks
+jclass g_clazz_appStatusUpdated;
+jmethodID g_mid_appStatusUpdated;
+
 
 extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
 {
@@ -56,6 +61,7 @@ extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
 
   cpprest_init(vm);
   __android_log_print(ANDROID_LOG_INFO, "Apis", "%s", "we just init cpprest.");
+  g_vm = vm;
   return JNI_VERSION_1_6;
 }
 
@@ -357,6 +363,30 @@ static void machNewStatusUpdatedCallback(void *sender, ALLIVaultCore::FrontEnd::
   __android_log_print(ANDROID_LOG_INFO, "Apis", "New machine status is %d.\n", nms);
 }
 
+std::unique_ptr<ALLIVaultCore::FrontEnd::ALLIExistingUserP> existUser;
+
+void appStatusUpdatedCallback(void *sender, ALLIVaultCore::FrontEnd::exist_user_event_args &e)
+{
+  JNIEnv *g_env;
+  // double check it's all ok
+  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_6);
+  if (getEnvStat == JNI_EDETACHED)
+  {
+    if (g_vm->AttachCurrentThread(&g_env, NULL) != 0)
+    {
+      __android_log_print(ANDROID_LOG_INFO, "Apis", "==>Failed to attach.\n");
+      return;
+    }
+  }
+  else if (getEnvStat == JNI_EVERSION)
+  {
+    __android_log_print(ANDROID_LOG_INFO, "Apis", "==>Version not supported.\n");
+    return;
+  }
+
+  g_env->CallStaticVoidMethod(g_clazz_appStatusUpdated, g_mid_appStatusUpdated);
+}
+
 JNIEXPORT void JNICALL
         Java_com_allivault_cloudsafe_playground_AllivaultApi_batchActionsForNewMachine(JNIEnv *env, jclass type)
 {
@@ -373,8 +403,12 @@ JNIEXPORT void JNICALL
   keyPair->importKeyPair(currpath);
   machNew->nmState = new ALLIVaultCore::Helpers::ALLINewMachineStateP();
   machNew->nmState->isNewMachineInSession = true;
-  ALLIVaultCore::FrontEnd::ALLIExistingUserP existUser;
-  machNew->setExistingUser(existUser);
+  existUser = std::unique_ptr<ALLIVaultCore::FrontEnd::ALLIExistingUserP>{new ALLIVaultCore::FrontEnd::ALLIExistingUserP};
+  existUser->connectAppStatusUpdated([](void *sender, ALLIVaultCore::FrontEnd::exist_user_event_args &e)
+                                     {
+                                         appStatusUpdatedCallback(sender, e);
+                                     });
+  machNew->setExistingUser(*existUser);
 /*
   machNew->connectDownloadOneFileEx([=](const std::string &filePath, const boost::filesystem::path &localPath, void *)
                                     {
@@ -385,7 +419,7 @@ JNIEXPORT void JNICALL
   boost::signals2::connection connMachNew = machNew->connectMachNewStatusUpdated(&machNewStatusUpdatedCallback);
   machNew->batchActionsForNewMachine();
   connMachNew.disconnect();
-  ALLIVaultCore::ALLIEXTSecPlainFolderP *plainFolder = existUser.getPlainFolder();
+  ALLIVaultCore::ALLIEXTSecPlainFolderP *plainFolder = existUser->getPlainFolder();
   std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFolderIndex> list = plainFolder->getFolderContentList();
   for (const auto & rec : list)
   {
@@ -401,10 +435,10 @@ JNIEXPORT void JNICALL
   }
   std::string json = plainFolder->getFolderContentListJson();
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>The file list contains %s.", json.c_str());
-  existUser.deleteFileForSyncFolder("folder1/test2.txt");
-  existUser.renameFileForSyncFolder("ALLINewUserP.h", "ALLINewUserP-1.h");
+//  existUser.deleteFileForSyncFolder("folder1/test2.txt");
+//  existUser.renameFileForSyncFolder("ALLINewUserP.h", "ALLINewUserP-1.h");
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>Start to process mailbox folder.\n");
-  ALLIVaultCore::ALLIEXTSecMBPlainFolderP *mbPlainFolder = existUser.getMBPlainFolder();
+  ALLIVaultCore::ALLIEXTSecMBPlainFolderP *mbPlainFolder = existUser->getMBPlainFolder();
   list = mbPlainFolder->getFolderContentList();
   printf("The number of files is %lu.\n", list.size());
   for (const auto & rec : list)
@@ -416,36 +450,36 @@ JNIEXPORT void JNICALL
     time_t mtime = meta.get_col7();
     __android_log_print(ANDROID_LOG_INFO, "Apis", "The file is %s, with %llu bytes.\n", fullpath.c_str(), fsize);
     std::string dest;
-    existUser.downloadOneFileForMailbox(fpath, dest);
+    existUser->downloadOneFileForMailbox(fpath, dest);
     __android_log_print(ANDROID_LOG_INFO, "Apis", "The dest file absolute path is %s.\n", dest.c_str());
   }
-  existUser.checkSharingGroupsSync();
-  std::unordered_set<running_sharing_group_t> runningGroups = existUser.getSharingGroups();
-  for (auto const &oneRunning : runningGroups)
-  {
-    ALLIVaultCore::ALLIEXTFolderP *ptr = (ALLIVaultCore::ALLIEXTFolderP *)oneRunning[ALLIVaultCore::Helpers::SHARING_PLAIN_FOLDER_POS];
-    ALLIVaultCore::ALLIEXTSharingPlainFolderP *shPlainFolder = dynamic_cast<ALLIVaultCore::ALLIEXTSharingPlainFolderP *>(ptr);
-    list = shPlainFolder->getFolderContentList();
-    std::string list_str = shPlainFolder->getFolderContentListJson();
-    __android_log_print(ANDROID_LOG_INFO, "Apis", "The file list is %s.\n", list_str.c_str());
-    std::string huname = shPlainFolder->getHostUserName();
-    std::string gname = shPlainFolder->getGroupName();
-    __android_log_print(ANDROID_LOG_INFO, "Apis", "The host username is %s and the group name is %s.\n", huname.c_str(), gname.c_str());
-    list = shPlainFolder->getFolderContentList();
-    __android_log_print(ANDROID_LOG_INFO, "Apis", "The number of files is %lu.\n", list.size());
-    for (const auto & rec : list)
-    {
-      std::string fpath = rec.first;
-      ALLIVaultCore::Engine::ALLIFolderIndex meta = rec.second;
-      std::string fullpath = meta.get_col2();
-      unsigned long long fsize = meta.get_col6();
-      time_t mtime = meta.get_col7();
-      __android_log_print(ANDROID_LOG_INFO, "Apis", "The file is %s, with %llu bytes.\n", fullpath.c_str(), fsize);
-      std::string dest;
-      existUser.downloadOneFileForSharingGroup(huname, gname, fpath, dest);
-      __android_log_print(ANDROID_LOG_INFO, "Apis", "The dest file absolute path is %s.\n", dest.c_str());
-    }
-  }
+//  existUser->checkSharingGroupsSync();
+//  std::unordered_set<running_sharing_group_t> runningGroups = existUser->getSharingGroups();
+//  for (auto const &oneRunning : runningGroups)
+//  {
+//    ALLIVaultCore::ALLIEXTFolderP *ptr = (ALLIVaultCore::ALLIEXTFolderP *)oneRunning[ALLIVaultCore::Helpers::SHARING_PLAIN_FOLDER_POS];
+//    ALLIVaultCore::ALLIEXTSharingPlainFolderP *shPlainFolder = dynamic_cast<ALLIVaultCore::ALLIEXTSharingPlainFolderP *>(ptr);
+//    list = shPlainFolder->getFolderContentList();
+//    std::string list_str = shPlainFolder->getFolderContentListJson();
+//    __android_log_print(ANDROID_LOG_INFO, "Apis", "The file list is %s.\n", list_str.c_str());
+//    std::string huname = shPlainFolder->getHostUserName();
+//    std::string gname = shPlainFolder->getGroupName();
+//    __android_log_print(ANDROID_LOG_INFO, "Apis", "The host username is %s and the group name is %s.\n", huname.c_str(), gname.c_str());
+//    list = shPlainFolder->getFolderContentList();
+//    __android_log_print(ANDROID_LOG_INFO, "Apis", "The number of files is %lu.\n", list.size());
+//    for (const auto & rec : list)
+//    {
+//      std::string fpath = rec.first;
+//      ALLIVaultCore::Engine::ALLIFolderIndex meta = rec.second;
+//      std::string fullpath = meta.get_col2();
+//      unsigned long long fsize = meta.get_col6();
+//      time_t mtime = meta.get_col7();
+//      __android_log_print(ANDROID_LOG_INFO, "Apis", "The file is %s, with %llu bytes.\n", fullpath.c_str(), fsize);
+//      std::string dest;
+//      existUser->downloadOneFileForSharingGroup(huname, gname, fpath, dest);
+//      __android_log_print(ANDROID_LOG_INFO, "Apis", "The dest file absolute path is %s.\n", dest.c_str());
+//    }
+//  }
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>batchActionsForNewMachine done.");
 }
 
@@ -458,4 +492,28 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_appInitialize(JNIEnv *env, 
   ALLIVaultCore::Helpers::ALLIAppInit::appInitialize(rootDir);
 
   env->ReleaseStringUTFChars(rootPath, rp);
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_allivault_cloudsafe_playground_AllivaultApi_registerAppStatusUpdated(JNIEnv *env, jclass clazz)
+{
+  jboolean ret = true;
+  // convert local to global reference
+  // (local will die after this method call)
+//  g_obj_appStatusUpdated = env->NewGlobalRef(obj);
+
+  // save refs for callback
+  g_clazz_appStatusUpdated = clazz;
+  if (g_clazz_appStatusUpdated == NULL)
+  {
+    ret = false;
+    return ret;
+  }
+
+  g_mid_appStatusUpdated = env->GetStaticMethodID(g_clazz_appStatusUpdated, "appStatusUpdatedCallback", "()V");
+  if (g_mid_appStatusUpdated == NULL)
+  {
+    ret = false;
+  }
+  return ret;
 }

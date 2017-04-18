@@ -108,7 +108,11 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            AllivaultApi.batchActionsForNewMachine();
+            boolean ret = AllivaultApi.registerAppStatusUpdated();
+            if (ret)
+            {
+                AllivaultApi.batchActionsForNewMachine();
+            }
             return  "";
         }
 

@@ -1,9 +1,12 @@
 package com.allivault.cloudsafe.playground;
 
+import android.util.Log;
+
 /**
  * Wrapper of ALLIVaultCoreP library.
  */
 public class AllivaultApi {
+    private static final String TAG = "MainActivity";
     static {
         System.loadLibrary("gnustl_shared");
         System.loadLibrary("allivault-api");
@@ -20,4 +23,9 @@ public class AllivaultApi {
     public static native void processNewUser(String userName);
     public static native void batchActionsForNewMachine();
     public static native void appInitialize(String rootPath);
+    public static native boolean registerAppStatusUpdated();
+    public static void appStatusUpdatedCallback()
+    {
+        Log.v(TAG, "Java callback method invoked.");
+    }
 }
