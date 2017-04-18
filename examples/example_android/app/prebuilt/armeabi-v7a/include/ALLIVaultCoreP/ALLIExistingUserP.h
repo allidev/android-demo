@@ -17,6 +17,7 @@ namespace ALLIVaultCore
 	class ALLIEXTSecMBPlainFolderP;
 	class ALLIEXTSharingPlainRepoP;
 	class ALLIEXTRepoP;
+	class ALLIEXTFolderP;
 	class ALLISSClientRepoP;
 	class ALLISSEncryptedRepoP;
 	class ALLISSPlainRepoP;
@@ -34,6 +35,8 @@ namespace ALLIVaultCore
 			public ALLIUserP
 		{
 		public:
+			typedef ALLIVaultCore::FrontEnd::app_status_update_event::slot_type AppStatusUpdatedSlotType;
+
 			ALLIVAULTCOREP_API ALLIExistingUserP();
 			ALLIExistingUserP(const ALLIVaultCore::FrontEnd::ALLIExistingUserP &src);
 			ALLIVAULTCOREP_API ~ALLIExistingUserP();
@@ -67,6 +70,7 @@ namespace ALLIVaultCore
 			bool deleteFileForMailbox(const std::string &filePath, bool isDirectory = false);
 			bool deleteFileForSharingGroup(const std::string &hostUserName, const std::string &groupName, const std::string &filePath, bool isDirectory = false);
 			ALLIVAULTCOREP_API bool renameFileForSyncFolder(const std::string &old_path, const std::string &new_path, bool isDirectory = false);
+			boost::signals2::connection connectAppStatusUpdated(const AppStatusUpdatedSlotType &slot);
 
 		private:
 			friend class ::ALLINewUserPTest;
@@ -106,7 +110,8 @@ namespace ALLIVaultCore
 			ALLIVaultCore::ALLIEXTSharingPlainRepoP *sharingPlainRepo;
 			std::unordered_map<std::string, unsigned long long> totalBytesUsedSet;
 			unsigned long long totalBytesUsed;
-			boost::signals2::connection encrypt_conn;
+			boost::signals2::connection encrypt_conn, sync_folder_status;
+			ALLIVaultCore::FrontEnd::app_status_update_event appStatusUpdated;
 
 			std::unordered_set<group_t> checkSharingGroups();
 			bool createSharingGroupProgressFile();
@@ -127,9 +132,12 @@ namespace ALLIVaultCore
 			void addSharingFolderToFavorites();
 			void attachToEventHandlerForMachNewStatusUpdated(ALLIVaultCore::Helpers::ALLISharingGroupSyncNMP *src);
 			boost::signals2::connection attachToEventHandlerForRepoUpdated(ALLIVaultCore::ALLIEXTRepoP *src);
+			boost::signals2::connection attachToEventHandlerForAppStatusUpdated(ALLIVaultCore::ALLIEXTFolderP *src);
 			void secEncryptRepoUpdated(void *sender, ALLIVaultCore::repo_event_args &e);
 			void EncryptRepoUpdatedEx(void *sender, ALLIVaultCore::repo_event_args &e);
 			ALLIVAULTCOREP_API boost::filesystem::path getPlainFolderRootFolder() const;
+			void processAppStatusUpdates(void *sender, ALLIVaultCore::FrontEnd::exist_user_event_args &e);
+			void OnAppStatusUpdated(ALLIVaultCore::FrontEnd::exist_user_event_args &e);
 		};
 	}
 }
