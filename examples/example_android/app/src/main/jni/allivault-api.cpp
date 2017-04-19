@@ -377,6 +377,7 @@ void appStatusUpdatedCallback(void *sender, ALLIVaultCore::FrontEnd::exist_user_
       __android_log_print(ANDROID_LOG_INFO, "Apis", "==>Failed to attach.\n");
       return;
     }
+    __android_log_print(ANDROID_LOG_INFO, "Apis", "==>VM attached to current thread.\n");
   }
   else if (getEnvStat == JNI_EVERSION)
   {
@@ -384,7 +385,17 @@ void appStatusUpdatedCallback(void *sender, ALLIVaultCore::FrontEnd::exist_user_
     return;
   }
 
-  g_env->CallStaticVoidMethod(g_clazz_appStatusUpdated, g_mid_appStatusUpdated);
+  //g_env->CallStaticVoidMethod(g_clazz_appStatusUpdated, g_mid_appStatusUpdated);
+  jclass cls = g_env->FindClass("com/allivault/cloudsafe/playground/AllivaultApi");
+  if (!cls)
+  {
+    __android_log_print(ANDROID_LOG_INFO, "Apis", "==>class not found.\n");
+  }
+  else
+  {
+    jmethodID mid = g_env->GetStaticMethodID(cls, "appStatusUpdatedCallback", "()V");
+    g_env->CallStaticVoidMethod(cls, mid);
+  }
   g_vm->DetachCurrentThread();
 }
 
