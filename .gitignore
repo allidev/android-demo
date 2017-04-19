@@ -35,3 +35,6 @@ app/src/main/libs/
 app/src/main/obj/
 */bld
 */*/bld
+
+# big library file
+examples/example_android/app/prebuilt/armeabi-v7a/lib/libcpprest.a
