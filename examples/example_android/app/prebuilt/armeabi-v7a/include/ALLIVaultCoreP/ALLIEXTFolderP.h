@@ -77,6 +77,14 @@ namespace ALLIVaultCore
 		std::unordered_map<std::string, std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex>> idxTable;
 		std::unordered_set<std::string> matchedIdxRows;
 		ALLIVaultCore::FrontEnd::app_status_update_event appStatusUpdated;
+		// mutex to lock decrement of upload counter
+		ALLIVaultCore::Helpers::alli_mutex *ul_mutex;
+		// shared resource: upload counter
+		int ul_files_count;
+		// semaphore to control current uploading
+		ALLIVaultCore::Helpers::alli_semaphore *ul_pool;
+		// mutex to lock writing to the server inventory table
+		ALLIVaultCore::Helpers::alli_mutex *server_inv_mutex;
 
 		virtual void load_index_db_ex();
 		bool containsUserInFriendList(const std::string &uname);
@@ -134,6 +142,15 @@ namespace ALLIVaultCore
 		bool updateOneRowEx(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);
 		bool updateOneRowExP(const std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex> &aRow);
 		void OnAppStatusUpdated(ALLIVaultCore::FrontEnd::exist_user_event_args &e);
+		std::string uploadOneFile(const std::string &fileName);
+		std::string uploadOneFile(const std::string &fileName, bool &isUploaded);
+		std::string uploadOneFile_oss(const std::string &fileName, bool &isUploaded);
+		void partitionServerInventoryDB();
+		bool emptyServerInventoryDB(const boost::filesystem::path *origin);
+		void uploadOneFileMT(const std::pair<std::string, std::string> &obj);
+		std::string getServerURL(const std::string &fileName);
+		bool insertRowToServerInventory(const std::string &localSha1, const std::string &serverSha1, const std::string &serverURL);
+		bool insertRowToServerInventory(const std::string &localSha1, const std::string &serverSha1, const std::string &serverURL, const bool &isUploaded);
 	};
 }
 
