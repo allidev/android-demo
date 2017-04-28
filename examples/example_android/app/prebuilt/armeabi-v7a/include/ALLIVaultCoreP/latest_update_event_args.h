@@ -6,7 +6,7 @@ namespace ALLIVaultCore
 {
 	enum class ALLIRepoTypeP;
 	enum class ALLIActionDirectionP;
-	enum class ALLIChangeSetP;
+	enum class ALLIChangeStatusP;
 	class latest_update_event_args :
 		public Helpers::alli_event_args
 	{
@@ -18,7 +18,7 @@ namespace ALLIVaultCore
 		std::chrono::system_clock::time_point evtTime;
 		std::string sender;
 		std::string recipient;
-		std::unordered_map<std::string, ALLIVaultCore::ALLIChangeSetP> changeSet;
+		std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> changeSet;
 
 		latest_update_event_args();
 		~latest_update_event_args();

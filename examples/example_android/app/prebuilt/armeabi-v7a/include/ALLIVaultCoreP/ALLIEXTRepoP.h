@@ -28,6 +28,8 @@ namespace libgit2cpp
 
 namespace ALLIVaultCore
 {
+	enum class ALLIChangeStatusP;
+	class latest_update_event_args;
 	class repo_event_args;
 	namespace Engine
 	{
@@ -44,6 +46,7 @@ namespace ALLIVaultCore
 	public:
 		typedef ALLIVaultCore::Helpers::alli_event::slot_type RepoFatalErrorSlotType;
 		typedef ALLIVaultCore::repo_updated_event::slot_type RepoUpdatedSlotType;
+		typedef ALLIVaultCore::latest_update_event::slot_type LatestUpdateSlotType;
 		typedef ALLIVaultCore::Helpers::alli_event::slot_type IndexDBDeletedSlotType;
 		typedef ALLIVaultCore::Helpers::alli_event::slot_type ServerInventoryDBDeletedSlotType;
 
@@ -60,7 +63,7 @@ namespace ALLIVaultCore
 		unsigned long long getTotalBytesUsed() const;
 		void OnRepoUpdated(ALLIVaultCore::repo_event_args &e);
 		void createRootGitIgnoreFile();
-		bool trackFolder();
+		bool trackFolder(const std::string &fullPath);
 		void createSharingGroupDB();
 		ALLIVaultCore::Engine::ALLIMonitorP *getMonitor() const;
 		bool shouldTrackRemoteRepo() const;
@@ -76,6 +79,7 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::alli_mutex *commit_remote_mutex;
 		ALLIVaultCore::Helpers::alli_mutex *reloadingLock;
 		ALLIVaultCore::Helpers::alli_mutex *mutDelete;
+		std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> changeSet;
 
 		/**
 		** Copy changed files to the encrypted repo.
@@ -117,7 +121,7 @@ namespace ALLIVaultCore
 		bool isTempFile(const std::string &filePath);
 		bool deleteFileAtSecureEncryptedFolder(const std::string &fileName, const std::string &sha);
 		bool trackPlainFolder();
-		bool trackEncryptFolder();
+		bool trackEncryptFolder(const std::string &fullPath);
 		std::map<std::string, std::string> importFilesBridge(ALLIVaultCore::Engine::SimpleRepositoryP *theRepo);
 		bool saveBridgeDictionaryImplEx(int *fd, std::map<std::string, std::string> &filesBridge);
 		bool safe_runOnRemoteTimerEx();
@@ -130,6 +134,9 @@ namespace ALLIVaultCore
 		void OnIndexDBDeleted(ALLIVaultCore::Helpers::alli_event_args &e);
 		void OnServerInventoryDBDeleted(ALLIVaultCore::Helpers::alli_event_args &e);
 		bool trackRepoEx();
+		void localRepoCallbackEx_fire_update(bool git_op);
+		void OnRepoLatestUpdate(ALLIVaultCore::latest_update_event_args &e);
+		void localRepoCallbackEx_remote_timer(std::string &src, bool push_non_fastforward);
 
 	private:
 		boost::filesystem::path *groupDBURL;
@@ -138,6 +145,7 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::alli_event IndexDBDeleted;
 		ALLIVaultCore::Helpers::alli_event ServerInventoryDBDeleted;
 		ALLIVaultCore::repo_updated_event RepoUpdated;
+		ALLIVaultCore::latest_update_event RepoLatestUpdate;
 		std::unordered_set<group_t> sharingGroups;
 		bool is_finish_uploading;
 		libgit2cpp::index *native_index;
@@ -161,8 +169,8 @@ namespace ALLIVaultCore
 		virtual bool saveBridgeDictionaryImpl(int *fd);
 		bool encryptFileToSecureEncryptFolder(const std::string &fileName);
 		virtual bool encryptFileToSecureEncryptFolderImpl(const std::string &fileName);
-		virtual bool trackFolderImpl();
-		virtual bool trackEncryptFolderImpl();
+		virtual bool trackFolderImpl(const std::string &fullPath);
+		virtual bool trackEncryptFolderImpl(const std::string &fullPath);
 		virtual void processChangedFilesWithCommitMessageImpl(const std::unordered_map<std::string, git_status_t> &files, std::vector<std::string> &messages, bool(*indexContainsMinimumFiles) (libgit2cpp::index *), bool isFinishUploading, std::string &src);
 		bool commitStagedFilesWithMessage(std::vector<std::string> &messages, bool(*indexContainsMinimumFiles) (libgit2cpp::index *), bool isFinishUploading, std::string &src);
 		bool commitStagedFilesWithMessageImpl(std::vector<std::string> &messages, bool(*indexContainsMinimumFiles) (libgit2cpp::index *), bool isFinishUploading, std::string &src);
@@ -181,6 +189,8 @@ namespace ALLIVaultCore
 		bool runOnRemoteTimerEx_encryptRepoBridgeSuccess(bool &aLoop);
 		virtual bool runOnRemoteTimerEx_encryptRepoBridgeSuccessImpl(bool &aLoop);
 		virtual bool trackRepoExImpl();
+		virtual void localRepoCallbackEx_fire_updateImpl(bool git_op);
+		virtual void localRepoCallbackEx_remote_timerImpl(std::string &src, bool push_non_fastforward);
 	};
 }
 

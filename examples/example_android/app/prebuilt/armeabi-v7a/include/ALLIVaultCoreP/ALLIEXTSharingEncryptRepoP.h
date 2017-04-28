@@ -22,6 +22,8 @@ namespace ALLIVaultCore
 	private:
 		ALLIVaultCore::ALLIEXTSharingPlainRepoP *shPlainRepo;
 		ALLIVaultCore::Engine::SimpleRepositoryP *sharingEncryptedRepoP;
+
+		void trackRemoteRepoImpl() override;
 	};
 }
 

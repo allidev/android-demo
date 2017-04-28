@@ -31,11 +31,14 @@ namespace ALLIVaultCore
 		bool isFinishUploading;
 		std::map<std::string, std::string> filesBridge;
 		ALLIVaultCore::Helpers::alli_mutex *trackMutex;
+		std::unordered_map<std::string, std::string> *repoWatchList;
+		ALLIVaultCore::Helpers::alli_mutex *repoWatchList_mutex;
+		bool isEncryptRepoProcessingFiles;
 
 		void updateTotalBytesUsedImpl() override;
 		void openEncryptedRepositoryEx(const boost::filesystem::path &encryptedURL);
-		bool trackFolderImpl() override;
-		bool trackEncryptFolderImpl() override;
+		bool trackFolderImpl(const std::string &fullPath) override;
+		bool trackEncryptFolderImpl(const std::string &fullPath) override;
 		bool saveBridgeDictionaryImpl(int *fd) override;
 		void insertFilesBridge(const std::string &key, const std::string &val);
 		ALLIVaultCore::Helpers::alli_mutex *getMutexEncryptPlainRepo() const;
@@ -64,6 +67,10 @@ namespace ALLIVaultCore
 		bool runOnRemoteTimerEx_encryptRepoBridgeSuccessImpl(bool &aLoop) override;
 		bool trackPlainRepo();
 		bool trackRepoExImpl() override;
+		bool foundInRepoWatchList(const std::string &fullPath);
+		void addToRepoWatchList(const std::string &fullPath);
+		void localRepoCallbackEx_fire_updateImpl(bool git_op) override;
+		void localRepoCallbackEx_remote_timerImpl(std::string &src, bool push_non_fastforward) override;
 	};
 }
 

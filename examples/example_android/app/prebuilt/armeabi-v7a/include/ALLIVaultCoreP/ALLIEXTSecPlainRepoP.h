@@ -34,7 +34,7 @@ namespace ALLIVaultCore
 		std::unordered_map<std::string, std::string> getSha1ForPlainRepogit_odbChangedFilesImpl(const std::unordered_map<std::string, git_status_t> &files) override;
 		bool saveBridgeDictionaryImpl(int *fd) override;
 		bool encryptFileToSecureEncryptFolderImpl(const std::string &fileName) override;
-		bool trackFolderImpl() override;
+		bool trackFolderImpl(const std::string &fullPath) override;
 		bool fileExistsInFilesBridge(const std::string &fileName);
 		bool insertFilePair(const boost::filesystem::path &srcFile, const boost::filesystem::path &destFile);
 		virtual bool insertFilePairImpl(const boost::filesystem::path &srcFile, const boost::filesystem::path &destFile);

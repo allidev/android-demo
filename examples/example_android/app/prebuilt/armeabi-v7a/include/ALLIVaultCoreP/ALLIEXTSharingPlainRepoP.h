@@ -2,6 +2,10 @@
 #include "ALLIEXTSharingRepoP.h"
 namespace ALLIVaultCore
 {
+	namespace Helpers
+	{
+		class auto_reset_event;
+	}
 	class ALLIEXTSharingEncryptRepoP;
 	class ALLIEXTSharingPlainRepoP :
 		public ALLIEXTSharingRepoP
@@ -16,8 +20,9 @@ namespace ALLIVaultCore
 
 	private:
 		ALLIVaultCore::ALLIEXTSharingEncryptRepoP *shEncryptRepo;
+		ALLIVaultCore::Helpers::auto_reset_event *sharingPlainCondition;
 
-		bool trackFolderImpl() override;
+		bool trackFolderImpl(const std::string &fullPath) override;
 	};
 }
 

@@ -34,6 +34,8 @@ namespace ALLIVaultCore
 			void terminateThread();
 			void pairingWithExistingFolder(ALLIVaultCore::ALLIEXTFolderP &folder);
 			void monitorFolder();
+			void increaseTimerCount();
+			void decreaseTimerCount();
 
 		private:
 			ALLIVaultCore::ALLIEXTRepoP &curRepo;
