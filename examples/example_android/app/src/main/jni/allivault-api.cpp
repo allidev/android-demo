@@ -312,11 +312,6 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_createUserAccountOnServer(J
   account.set_emailAddress(email);
   account.set_publicKeyFile(boost::filesystem::path(pub_key_path));
 
-  std::chrono::time_point<std::chrono::system_clock> td = std::chrono::system_clock::from_time_t(curTime);
-  account.set_today(td);
-  account.set_expiration(td);
-  account.set_quotaSize(quotaSize);
-
   ALLIVaultCore::FrontEnd::ALLINewUserP *alliNewUserP = new ALLIVaultCore::FrontEnd::ALLINewUserP(&repo_path);
 //  alliNewUserP->processNewUser("a-user");
 
@@ -335,6 +330,8 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_createUserAccountOnServer(J
   //return false;
 }
 
+std::unique_ptr<ALLIVaultCore::FrontEnd::ALLIExistingUserP> existUser;
+
 JNIEXPORT void JNICALL
 Java_com_allivault_cloudsafe_playground_AllivaultApi_processNewUser(JNIEnv *env, jclass type,
                                                                     jstring userName_) {
@@ -344,8 +341,8 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_processNewUser(JNIEnv *env,
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>processNewUser");
   ALLIVaultCore::FrontEnd::ALLINewUserP *alliNewUserP = new ALLIVaultCore::FrontEnd::ALLINewUserP(&repo_path);
   std::string uname(userName);
-  ALLIVaultCore::FrontEnd::ALLIExistingUserP existUser;
-  alliNewUserP->setExistingUser(existUser);
+  existUser = std::unique_ptr<ALLIVaultCore::FrontEnd::ALLIExistingUserP>(new ALLIVaultCore::FrontEnd::ALLIExistingUserP);
+  alliNewUserP->setExistingUser(*existUser);
   alliNewUserP->processNewUser(uname);
   delete alliNewUserP;
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>processNewUser completed.");
@@ -362,8 +359,6 @@ static void machNewStatusUpdatedCallback(void *sender, ALLIVaultCore::FrontEnd::
   __android_log_print(ANDROID_LOG_INFO, "Apis", "Status Update is %s.\n", su.c_str());
   __android_log_print(ANDROID_LOG_INFO, "Apis", "New machine status is %d.\n", nms);
 }
-
-std::unique_ptr<ALLIVaultCore::FrontEnd::ALLIExistingUserP> existUser;
 
 void appStatusUpdatedCallback(void *sender, ALLIVaultCore::FrontEnd::exist_user_event_args &e)
 {
