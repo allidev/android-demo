@@ -36,9 +36,6 @@ namespace ALLIVaultCore
 		class ALLIFetch;
 		class ALLILock;
 		class IndexDBFileEntry;
-		class SimpleRepositoryP;
-		static int copyConfigurationFn(const boost::filesystem::path &src_path, const boost::filesystem::path &dest_path, ALLIVaultCore::Engine::SimpleRepositoryP *destRepo);
-		static int copyObjDatabaseFn(const boost::filesystem::path &src_path, const boost::filesystem::path &dest_path, ALLIVaultCore::Engine::SimpleRepositoryP *dest);
 		class SimpleRepositoryP :
 			public libgit2cpp::repository
 		{
@@ -109,5 +106,7 @@ namespace ALLIVaultCore
 			bool copyConfiguration(const git_config *src, git_config *dest);
 			bool copyObjectDatabase(const boost::filesystem::path &repoSrc, const boost::filesystem::path &repoDest);
 		};
+		int copyConfigurationFn(const boost::filesystem::path &src_path, const boost::filesystem::path &dest_path, ALLIVaultCore::Engine::SimpleRepositoryP *destRepo);
+		int copyObjDatabaseFn(const boost::filesystem::path &src_path, const boost::filesystem::path &dest_path, ALLIVaultCore::Engine::SimpleRepositoryP *dest);
 	}
 }

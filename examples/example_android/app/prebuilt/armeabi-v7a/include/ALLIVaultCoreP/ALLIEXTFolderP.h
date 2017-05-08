@@ -36,10 +36,13 @@ namespace ALLIVaultCore
 		bool addUserToFriendListDB(const std::string &uname, const std::string &fname);
 		void updateTotalBytesUsed();
 		ALLIVAULTCOREP_API bool downloadOneFileJson(const std::string &localPath, std::string &dest);
-		bool trackFolder();
+		bool trackFolder(const std::string &fullPath);
 		bool trackFolder(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory = false);
 		bool trackRepoEx();
 		boost::signals2::connection connectAppStatusUpdated(const AppStatusUpdatedSlotType &slot);
+		bool hasSimpleFolderObject() const;
+		void load_index_db();
+		std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> getIdxTable();
 
 	protected:
 		bool switching;
@@ -48,8 +51,9 @@ namespace ALLIVaultCore
 		unsigned long long totalBytesUsed;
 		ALLIVaultCore::ALLIEXTRepoP *extRepo;
 		bool hasSharingKeySet;
+		ALLIVaultCore::Helpers::alli_mutex *folderWatchList_mutex;
+		std::unordered_map<std::string, std::string> *folderWatchList;
 
-		void load_index_db();
 		bool setDataVersion(int ver);
 		bool isDataVersionSet(int ver);
 		int verctrl_query_callback(sqlite3_stmt *sqlstmt, int ver);
@@ -65,6 +69,10 @@ namespace ALLIVaultCore
 		std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> createWorkingDirectoryChanges(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory);
 		bool processChangedFilesWithCommitMessage(const std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &files, std::vector<std::string> &messages, std::string &src);
 		bool processChangedFilesWithCommitMessageManual(const std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> &files, std::vector<std::string> &messages, std::string &src);
+		bool foundInFolderWatchList(const std::string &fullPath);
+		void addToFolderWatchList(const std::string &fullPath);
+		void checkAESKeysForALLMembers(const std::string &localSHA1);
+		void displayFileHistory();
 
 	private:
 		bool hasFriendUserName;
@@ -85,12 +93,14 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::alli_semaphore *ul_pool;
 		// mutex to lock writing to the server inventory table
 		ALLIVaultCore::Helpers::alli_mutex *server_inv_mutex;
+		long long totalBytesSentOSS;
+		std::unordered_map<std::string, long long> totalBytesSentGroup;
 
 		virtual void load_index_db_ex();
 		bool containsUserInFriendList(const std::string &uname);
 		int friend_query_callback(sqlite3_stmt *sqlstmt);
 		virtual bool downloadOneFileJsonImpl(const std::string &localPath, std::string &dest);
-		virtual bool trackFolderImpl();
+		virtual bool trackFolderImpl(const std::string &fullPath);
 		void partitionALLIIndexDB();
 		bool stageChangedFiles(const std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &files, std::vector<std::string> &messages, void **deleteSet, void **insertSet);
 		bool stageChangedFilesManual(const std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> &files, std::vector<std::string> &messages, void **deleteSet, void **insertSet);
@@ -120,11 +130,9 @@ namespace ALLIVaultCore
 		bool expandInsertSet(void **payload, const std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> &files);
 		bool convertDeleteSet(void **payload);
 		virtual bool containsLocalSHAImpl(const std::string &localSHA1);
-		void checkAESKeysForALLMembers(const std::string &localSHA1);
 		virtual void checkAESKeysForALLMembersImpl(const std::string &localSHA1);
 		bool containsLocalSHAEx(const std::string &localSHA1, const boost::filesystem::path &dbURL);
 		virtual void uploadFilesImpl(const std::unordered_map<std::string, std::string> &filesToUpload);
-		virtual void displayFileHistory();
 		int server_query_callback(sqlite3_stmt *sqlstmt);
 		virtual bool trackFolderImpl(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory);
 		std::string getShaFromIndex(const std::string &fileName);
@@ -151,6 +159,10 @@ namespace ALLIVaultCore
 		std::string getServerURL(const std::string &fileName);
 		bool insertRowToServerInventory(const std::string &localSha1, const std::string &serverSha1, const std::string &serverURL);
 		bool insertRowToServerInventory(const std::string &localSha1, const std::string &serverSha1, const std::string &serverURL, const bool &isUploaded);
+		std::string updateMessageWithBytesSentOSS();
+		virtual std::string updateMessageWithBytesSentOSSImpl();
+		void uploadFilesImpl_fire_event();
+		virtual void displayFileHistoryImpl();
 	};
 }
 

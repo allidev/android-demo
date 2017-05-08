@@ -58,6 +58,7 @@ namespace ALLIVaultCore
 		std::unordered_set<group_t> checkSharingGroupsForNM();
 		boost::signals2::connection connectFatalError(const RepoFatalErrorSlotType &slot);
 		boost::signals2::connection connectRepoUpdated(const RepoUpdatedSlotType &slot);
+		boost::signals2::connection connectLatestUpdate(const LatestUpdateSlotType &slot);
 		void updateTotalBytesUsed();
 		void setTotalBytesUsed(unsigned long long totbytes);
 		unsigned long long getTotalBytesUsed() const;
@@ -68,6 +69,8 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Engine::ALLIMonitorP *getMonitor() const;
 		bool shouldTrackRemoteRepo() const;
 		void trackRemoteRepo();
+		std::string getCacheType();
+		std::string getRepoHeadCommitSha1();
 
 	protected:
 		unsigned long long totalBytesUsed;
@@ -80,6 +83,9 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::alli_mutex *reloadingLock;
 		ALLIVaultCore::Helpers::alli_mutex *mutDelete;
 		std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> changeSet;
+		std::map<std::string, std::string> filesBridge;
+		bool isEncryptRepoProcessingFiles;
+		bool isFinishUploading;
 
 		/**
 		** Copy changed files to the encrypted repo.
@@ -107,6 +113,7 @@ namespace ALLIVaultCore
 		void validate_dest(const boost::filesystem::path &dest);
 		void open_public_key_file(FILE **pubKeyFile, const std::string &uname);
 		void open_public_key_file(FILE **pubKeyFile);
+		FILE *open_public_key_file(const std::string &uname, int _ShFlag);
 		FILE *open_private_key_file(char **priKeyPath, int _ShFlag);
 		boost::filesystem::path generateAESKeyFileName(const boost::filesystem::path &fileName, std::string &username);
 		void monitorRepositoryP(const boost::filesystem::path &repoURL);
@@ -137,6 +144,15 @@ namespace ALLIVaultCore
 		void localRepoCallbackEx_fire_update(bool git_op);
 		void OnRepoLatestUpdate(ALLIVaultCore::latest_update_event_args &e);
 		void localRepoCallbackEx_remote_timer(std::string &src, bool push_non_fastforward);
+		void attachToEventHandlerForHeartBeat();
+		void detachEventHandlerForHeartBeat();
+		bool fileExistsInFilesBridge(const std::string &fileName);
+		bool insertFilePair(const boost::filesystem::path &srcFile, const boost::filesystem::path &destFile);
+		bool fileExistsInFilesBridgeEx(const std::string &fileName, const boost::filesystem::path &baseDir,
+			const boost::filesystem::path &destDir, boost::filesystem::path &repoPath);
+		std::string findKeyShaForValueShaEx(const std::string &valueSha, const std::map<std::string, std::string> &fb);
+		void addToFilesBridge(const std::string &key, const std::string &value);
+		bool trackEncryptFolderImplEx(const std::string &fullPath, bool &git_op);
 
 	private:
 		boost::filesystem::path *groupDBURL;
@@ -149,6 +165,8 @@ namespace ALLIVaultCore
 		std::unordered_set<group_t> sharingGroups;
 		bool is_finish_uploading;
 		libgit2cpp::index *native_index;
+		ALLIVaultCore::Helpers::alli_mutex *repoWatchList_mutex;
+		std::unordered_map<std::string, std::string> *repoWatchList;
 
 		bool getLockForChangedFile(const boost::filesystem::path &fileName, int *fd);
 		bool releaseLockForChangedFile(int *fd);
@@ -191,6 +209,16 @@ namespace ALLIVaultCore
 		virtual bool trackRepoExImpl();
 		virtual void localRepoCallbackEx_fire_updateImpl(bool git_op);
 		virtual void localRepoCallbackEx_remote_timerImpl(std::string &src, bool push_non_fastforward);
+		virtual bool insertFilePairImpl(const boost::filesystem::path &srcFile, const boost::filesystem::path &destFile);
+		std::string findKeyShaForValueSha(const std::string &valueSha);
+		std::string findKeyShaForValueShaImpl(const std::string &valueSha);
+		bool foundInRepoWatchList(const std::string &fullPath);
+		void addToRepoWatchList(const std::string &fullPath);
+		bool indexContainsMinimumFiles(libgit2cpp::index *idx);
+		virtual bool indexContainsMinimumFilesImpl(libgit2cpp::index *idx);
+		virtual void createCacheForLastCommitImpl(const std::string &lastCommitSha1);
+		virtual std::string getCacheTypeImpl();
+		virtual std::string getRepoHeadCommitSha1Impl();
 	};
 }
 

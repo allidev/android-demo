@@ -3,6 +3,7 @@
 
 namespace ALLIVaultCore
 {
+	class ALLICacheP;
 	class ALLIEXTSecPlainFolderP;
 	class ALLIEXTSecPlainRepoP;
 	class ALLIEXTSecEncryptRepoP :
@@ -29,11 +30,12 @@ namespace ALLIVaultCore
 		// not init here
 		ALLIVaultCore::Helpers::alli_mutex *mutex_encrypt_plain_folder;
 		bool isFinishUploading;
-		std::map<std::string, std::string> filesBridge;
 		ALLIVaultCore::Helpers::alli_mutex *trackMutex;
 		std::unordered_map<std::string, std::string> *repoWatchList;
 		ALLIVaultCore::Helpers::alli_mutex *repoWatchList_mutex;
 		bool isEncryptRepoProcessingFiles;
+		// not init here, to be paired with plainrepo and plainfolder
+		ALLIVaultCore::ALLICacheP *syncCache;
 
 		void updateTotalBytesUsedImpl() override;
 		void openEncryptedRepositoryEx(const boost::filesystem::path &encryptedURL);
@@ -51,8 +53,6 @@ namespace ALLIVaultCore
 		bool trackSecureEncryptFolder();
 		bool trackSecureEncryptFolder(bool isVerify);
 		void reloadEncryptedRepository(const boost::filesystem::path &encryptedRepo);
-		void attachToEventHandlerForHeartBeat();
-		void detachEventHandlerForHeartBeat();
 		bool walkThroughPlainIndex(libgit2cpp::index &plainIndex, libgit2cpp::index &encryptIndex);
 		bool walkThroughEncryptedIndex(libgit2cpp::index &encryptIndex, libgit2cpp::index &plainIndex);
 		std::string getRepoHeadCommitSha1();
@@ -71,6 +71,9 @@ namespace ALLIVaultCore
 		void addToRepoWatchList(const std::string &fullPath);
 		void localRepoCallbackEx_fire_updateImpl(bool git_op) override;
 		void localRepoCallbackEx_remote_timerImpl(std::string &src, bool push_non_fastforward) override;
+		bool indexContainsMinimumFilesImpl(libgit2cpp::index *idx) override;
+		void createCacheForLastCommitImpl(const std::string &lastCommitSha1) override;
+		std::string getCacheTypeImpl() override;
 	};
 }
 

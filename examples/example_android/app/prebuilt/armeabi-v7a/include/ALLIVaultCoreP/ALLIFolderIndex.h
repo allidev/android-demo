@@ -54,5 +54,6 @@ namespace ALLIVaultCore
 			time_t idx_st_ctime;				// Column 8
 			int file_state;                     // Column 9
 		};
+		bool operator<(const ALLIVaultCore::Engine::ALLIFolderIndex &lhs, const ALLIVaultCore::Engine::ALLIFolderIndex &rhs);
 	}
 }

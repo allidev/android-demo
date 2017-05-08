@@ -36,6 +36,7 @@ namespace ALLIVaultCore
 		{
 		public:
 			typedef ALLIVaultCore::FrontEnd::app_status_update_event::slot_type AppStatusUpdatedSlotType;
+			typedef ALLIVaultCore::latest_update_event::slot_type RepoLatestUpdateSlotType;
 
 			ALLIVAULTCOREP_API ALLIExistingUserP();
 			ALLIExistingUserP(const ALLIVaultCore::FrontEnd::ALLIExistingUserP &src);
@@ -68,9 +69,10 @@ namespace ALLIVaultCore
 			void passUserName(const std::string &userName);
 			ALLIVAULTCOREP_API bool deleteFileForSyncFolder(const std::string &filePath, bool isDirectory = false);
 			bool deleteFileForMailbox(const std::string &filePath, bool isDirectory = false);
-			bool deleteFileForSharingGroup(const std::string &hostUserName, const std::string &groupName, const std::string &filePath, bool isDirectory = false);
+			ALLIVAULTCOREP_API bool deleteFileForSharingGroup(const std::string &hostUserName, const std::string &groupName, const std::string &filePath, bool isDirectory = false);
 			ALLIVAULTCOREP_API bool renameFileForSyncFolder(const std::string &old_path, const std::string &new_path, bool isDirectory = false);
 			boost::signals2::connection connectAppStatusUpdated(const AppStatusUpdatedSlotType &slot);
+			ALLIVAULTCOREP_API boost::signals2::connection connectRepoLatestUpdate(RepoLatestUpdateSlotType const &slot);
 			ALLIVAULTCOREP_API std::string SyncFolderGetRootURL();
 
 		private:
@@ -111,8 +113,9 @@ namespace ALLIVaultCore
 			ALLIVaultCore::ALLIEXTSharingPlainRepoP *sharingPlainRepo;
 			std::unordered_map<std::string, unsigned long long> totalBytesUsedSet;
 			unsigned long long totalBytesUsed;
-			boost::signals2::connection encrypt_conn, sync_folder_status;
+			boost::signals2::connection encrypt_conn, enc_latest_conn, sync_folder_status;
 			ALLIVaultCore::FrontEnd::app_status_update_event appStatusUpdated;
+			ALLIVaultCore::latest_update_event repoLatestUpdate;
 
 			std::unordered_set<group_t> checkSharingGroups();
 			bool createSharingGroupProgressFile();
@@ -133,12 +136,15 @@ namespace ALLIVaultCore
 			void addSharingFolderToFavorites();
 			void attachToEventHandlerForMachNewStatusUpdated(ALLIVaultCore::Helpers::ALLISharingGroupSyncNMP *src);
 			boost::signals2::connection attachToEventHandlerForRepoUpdated(ALLIVaultCore::ALLIEXTRepoP *src);
+			boost::signals2::connection attachToEventHandlerForLatestUpdate(ALLIVaultCore::ALLIEXTRepoP *src);
 			boost::signals2::connection attachToEventHandlerForAppStatusUpdated(ALLIVaultCore::ALLIEXTFolderP *src);
 			void secEncryptRepoUpdated(void *sender, ALLIVaultCore::repo_event_args &e);
 			void EncryptRepoUpdatedEx(void *sender, ALLIVaultCore::repo_event_args &e);
 			ALLIVAULTCOREP_API boost::filesystem::path getPlainFolderRootFolder() const;
 			void processAppStatusUpdates(void *sender, ALLIVaultCore::FrontEnd::exist_user_event_args &e);
 			void OnAppStatusUpdated(ALLIVaultCore::FrontEnd::exist_user_event_args &e);
+			void processLatestUpdate(void *sender, ALLIVaultCore::latest_update_event_args &e);
+			void OnRepoLatestUpdate(ALLIVaultCore::latest_update_event_args &e);
 		};
 	}
 }

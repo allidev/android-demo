@@ -15,7 +15,7 @@ namespace ALLIVaultCore
 
 		bool downloadOneFileJsonImpl(const std::string &localPath, std::string &dest) override;
 		void monitorPlainFolderImpl(const boost::filesystem::path &plainURL) override;
-        bool trackFolderImpl() override;
+        bool trackFolderImpl(const std::string &fullPath) override;
 	};
 }
 

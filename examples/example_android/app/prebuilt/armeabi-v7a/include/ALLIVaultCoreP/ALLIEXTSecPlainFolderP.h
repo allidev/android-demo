@@ -24,6 +24,8 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::alli_mutex *mutex_plain_repo;
 		// init here
 		ALLIVaultCore::Helpers::alli_mutex *mutex_encrypt_plain_folder;
+		// init here
+		ALLIVaultCore::ALLICacheP *syncCache;
 
 		virtual void monitorPlainFolderImpl(const boost::filesystem::path &plainURL);
 		void downloadPublicKeysForContacts(void *obj);
@@ -32,11 +34,11 @@ namespace ALLIVaultCore
 		bool downloadOneFileJsonImpl(const std::string &localPath, std::string &dest) override;
 		bool decryptFileToPlainFolder(const std::string &src);
 		bool decryptFileToPlainFolder(const std::string &src, const boost::filesystem::path &dest);
-		bool trackFolderImpl() override;
+		bool trackFolderImpl(const std::string &fullPath) override;
 		bool trackFolderImpl(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory) override;
 		bool commitStagedFiles(const std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &files, std::vector<std::string> &messages, std::string &src) override;
 		bool commitStagedFilesManual(const std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> &files, std::vector<std::string> &messages, std::string &src) override;
-		void displayFileHistory() override;
+		void displayFileHistoryImpl() override;
 		void commitStagedFile_impl(const std::string &relativePath, const boost::filesystem::path &filePath, std::unordered_map<std::string, std::string> &filesToUpload);
 		void commitStagedFileManual_impl(const std::string &relativePath, const boost::filesystem::path &filePath, const std::string &orig, std::unordered_map<std::string, std::string> &filesToUpload);
 		void deleteUploadedFiles(const std::unordered_map<std::string, std::string> &filesToUpload);
