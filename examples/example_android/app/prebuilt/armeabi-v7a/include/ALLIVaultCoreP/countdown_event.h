@@ -12,6 +12,8 @@ namespace ALLIVaultCore
 		{
 		public:
 			ALLIVAULTCOREP_API explicit countdown_event(unsigned int count);
+			countdown_event(ALLIVaultCore::Helpers::countdown_event const &src) = delete;
+			countdown_event &operator=(ALLIVaultCore::Helpers::countdown_event const &src) = delete;
 			ALLIVAULTCOREP_API ~countdown_event(void);
 			ALLIVAULTCOREP_API bool Signal();
 			ALLIVAULTCOREP_API bool Wait();

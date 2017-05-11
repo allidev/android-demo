@@ -32,7 +32,8 @@ namespace ALLIVaultCore
 
 		ALLIFolderP();
 		ALLIFolderP(const ALLIVaultCore::ALLIFolderP &src);
-		~ALLIFolderP();
+		ALLIFolderP &operator=(ALLIVaultCore::ALLIFolderP const &src) = delete;
+		virtual ~ALLIFolderP();
 		// set public scope due to template specialization issue when
 		// running this member function in a separate thread.
 		void deleteTempFile(const boost::filesystem::path &tempFile);

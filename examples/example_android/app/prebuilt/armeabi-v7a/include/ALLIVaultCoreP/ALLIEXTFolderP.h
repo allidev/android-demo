@@ -16,6 +16,7 @@ namespace ALLIVaultCore
 	}
 	class ALLICacheP;
 	class ALLIEXTRepoP;
+	enum class ALLIChangeStatusP;
 	class ALLIEXTFolderP :
 		public ALLIFolderP
 	{
@@ -24,6 +25,7 @@ namespace ALLIVaultCore
 
 		ALLIEXTFolderP();
 		ALLIEXTFolderP(const ALLIVaultCore::ALLIEXTFolderP &src);
+		ALLIEXTFolderP &operator=(ALLIVaultCore::ALLIEXTFolderP const &src) = delete;
 		virtual ~ALLIEXTFolderP();
 
 		/**
@@ -43,6 +45,7 @@ namespace ALLIVaultCore
 		bool hasSimpleFolderObject() const;
 		void load_index_db();
 		std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> getIdxTable();
+		void createCacheForServer(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet);
 
 	protected:
 		bool switching;
@@ -163,6 +166,7 @@ namespace ALLIVaultCore
 		virtual std::string updateMessageWithBytesSentOSSImpl();
 		void uploadFilesImpl_fire_event();
 		virtual void displayFileHistoryImpl();
+		virtual void createCacheForServerImpl(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet);
 	};
 }
 

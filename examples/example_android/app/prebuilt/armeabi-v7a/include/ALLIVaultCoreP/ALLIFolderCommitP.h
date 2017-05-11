@@ -42,6 +42,8 @@ namespace ALLIVaultCore
 		boost::filesystem::path *m_srcRootURL;
 
 		void compareTwoCommitsEx(void *payload);
+		friend bool operator==(ALLIVaultCore::ALLIFolderCommitP const &lhs, ALLIVaultCore::ALLIFolderCommitP const &rhs);
 	};
+	bool operator==(ALLIVaultCore::ALLIFolderCommitP const &lhs, ALLIVaultCore::ALLIFolderCommitP const &rhs);
 }
 

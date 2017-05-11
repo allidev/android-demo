@@ -74,6 +74,7 @@ namespace ALLIVaultCore
 		bool indexContainsMinimumFilesImpl(libgit2cpp::index *idx) override;
 		void createCacheForLastCommitImpl(const std::string &lastCommitSha1) override;
 		std::string getCacheTypeImpl() override;
+		void createCacheForServerImpl(std::string const &headSHA1) override;
 	};
 }
 

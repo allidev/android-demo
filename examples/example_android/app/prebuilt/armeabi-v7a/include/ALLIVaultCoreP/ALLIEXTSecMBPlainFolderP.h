@@ -8,6 +8,10 @@ namespace ALLIVaultCore
 	{
 	public:
 		ALLIEXTSecMBPlainFolderP(ALLIVaultCore::ALLIEXTSecMBPlainRepoP &plainRepo);
+		ALLIEXTSecMBPlainFolderP(ALLIVaultCore::ALLIEXTSecMBPlainFolderP const &src) = delete;
+		ALLIEXTSecMBPlainFolderP &operator=(ALLIVaultCore::ALLIEXTSecMBPlainFolderP const &src) = delete;
+		ALLIEXTSecMBPlainFolderP(ALLIVaultCore::ALLIEXTSecMBPlainFolderP &&src) = delete;
+		ALLIEXTSecMBPlainFolderP &operator=(ALLIVaultCore::ALLIEXTSecMBPlainFolderP &&src) = delete;
 		~ALLIEXTSecMBPlainFolderP();
 
 	private:

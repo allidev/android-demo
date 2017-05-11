@@ -40,7 +40,7 @@ namespace ALLIVaultCore
 	private:
 		std::stack<ALLIVaultCore::ALLIFolderCommitP> *m_commitCache;
 		// weak pointer, no need to release resources.
-		ALLIVaultCore::ALLIFolderCommitP *m_tmpCache;
+		ALLIVaultCore::ALLIFolderCommitP *m_tmpCache, *m_lastCache;
 		ALLIVaultCore::ALLIEXTFolderP *m_plainFolder;
 		ALLIVaultCore::ALLIEXTRepoP *m_plainRepo, *m_encryptRepo;
 		boost::filesystem::path *m_cacheDBURL;

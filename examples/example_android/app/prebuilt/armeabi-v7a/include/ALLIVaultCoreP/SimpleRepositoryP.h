@@ -48,6 +48,9 @@ namespace ALLIVaultCore
 
 			ALLIVAULTCOREP_API SimpleRepositoryP(const boost::filesystem::path &src_path);
 			ALLIVAULTCOREP_API SimpleRepositoryP(const ALLIVaultCore::Engine::SimpleRepositoryP &src);
+			SimpleRepositoryP &operator=(ALLIVaultCore::Engine::SimpleRepositoryP const &src) = delete;
+			SimpleRepositoryP(ALLIVaultCore::Engine::SimpleRepositoryP &&src) = delete;
+			SimpleRepositoryP &operator=(ALLIVaultCore::Engine::SimpleRepositoryP &&src) = delete;
 			ALLIVAULTCOREP_API ~SimpleRepositoryP(void);
 
 			ALLIVAULTCOREP_API bool fetchFromServer();

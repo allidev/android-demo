@@ -145,6 +145,7 @@ namespace ALLIVaultCore
 			void OnAppStatusUpdated(ALLIVaultCore::FrontEnd::exist_user_event_args &e);
 			void processLatestUpdate(void *sender, ALLIVaultCore::latest_update_event_args &e);
 			void OnRepoLatestUpdate(ALLIVaultCore::latest_update_event_args &e);
+			void releaseResourcesForSharingGroups();
 		};
 	}
 }

@@ -8,6 +8,10 @@ namespace ALLIVaultCore
 	{
 	public:
 		ALLIEXTSecPlainFolderP(ALLIVaultCore::ALLIEXTSecPlainRepoP &plainRepo);
+		ALLIEXTSecPlainFolderP(ALLIVaultCore::ALLIEXTSecPlainFolderP const &src);
+		ALLIEXTSecPlainFolderP &operator=(ALLIVaultCore::ALLIEXTSecPlainFolderP const &src) = delete;
+		ALLIEXTSecPlainFolderP(ALLIVaultCore::ALLIEXTSecPlainFolderP &&src) = delete;
+		ALLIEXTSecPlainFolderP &operator=(ALLIVaultCore::ALLIEXTSecPlainFolderP &&src) = delete;
 		virtual ~ALLIEXTSecPlainFolderP();
 
 		void monitorPlainFolder(const boost::filesystem::path &plainURL);
@@ -49,6 +53,7 @@ namespace ALLIVaultCore
 		*/
 		bool encryptFileForPlainRepo(const std::string &fileName);
 		bool downloadOneFileEx(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow) override;
+		void createCacheForServerImpl(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet) override;
 	};
 }
 

@@ -219,6 +219,7 @@ namespace ALLIVaultCore
 		virtual void createCacheForLastCommitImpl(const std::string &lastCommitSha1);
 		virtual std::string getCacheTypeImpl();
 		virtual std::string getRepoHeadCommitSha1Impl();
+		virtual void createCacheForServerImpl(const std::string &headSHA1);
 	};
 }
 

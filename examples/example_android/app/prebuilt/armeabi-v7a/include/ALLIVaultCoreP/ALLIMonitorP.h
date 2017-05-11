@@ -29,6 +29,8 @@ namespace ALLIVaultCore
 			~ALLIMonitorP();
 			ALLIMonitorP(const ALLIVaultCore::Engine::ALLIMonitorP& orig) = delete;
 			ALLIMonitorP& operator=(const ALLIVaultCore::Engine::ALLIMonitorP& that) = delete;
+			ALLIMonitorP(ALLIVaultCore::Engine::ALLIMonitorP &&orig) = delete;
+			ALLIMonitorP &operator=(ALLIVaultCore::Engine::ALLIMonitorP &&that) = delete;
 
 			void monitorRepo();
 			void terminateThread();

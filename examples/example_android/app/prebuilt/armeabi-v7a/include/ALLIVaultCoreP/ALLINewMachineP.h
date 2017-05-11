@@ -29,6 +29,8 @@ namespace ALLIVaultCore
 			 * Function pointer for init DB for sync folder.
 			 */
 			void(*init_db_fn_ptr)();
+			typedef std::function<void()> InitializeDBForSyncFolderCallback;
+			void connectInitializeDBForSyncFolder(InitializeDBForSyncFolderCallback cb);
 			/**
 			 * Function pointer for init DB for mainbox.
 			 */

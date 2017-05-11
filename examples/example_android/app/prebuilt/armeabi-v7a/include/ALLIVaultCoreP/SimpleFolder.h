@@ -37,6 +37,7 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API SimpleFolder(const boost::filesystem::path &folderURL, bool isSharing, const std::string &groupName, const std::string &hostUserName, bool shouldCreateDB = false);
 			ALLIVAULTCOREP_API SimpleFolder(const boost::filesystem::path &folderURL, bool isMailbox, bool isSharing, const std::string &groupName, const std::string &hostUserName, bool shouldCreateDB = false);
 			ALLIVAULTCOREP_API SimpleFolder(const ALLIVaultCore::Engine::SimpleFolder &src);
+			SimpleFolder &operator=(ALLIVaultCore::Engine::SimpleFolder const &src) = delete;
 			ALLIVAULTCOREP_API ~SimpleFolder();
 			ALLIVAULTCOREP_API std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> *trackWorkingDirectoryChanges(void);
 			std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> *createWorkingDirectoryChanges(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory);

@@ -37,6 +37,7 @@ namespace ALLIVaultCore
 		bool insertFilePairImpl(const boost::filesystem::path &srcFile, const boost::filesystem::path &destFile) override;
 		bool encryptAESKeyImpl(const std::string &keyUser, const boost::filesystem::path &filePath) override;
 		bool saveBridgeDictionaryImpl(int *fd) override;
+		void terminateThread();
 	};
 }
 

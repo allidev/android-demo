@@ -12,6 +12,8 @@ namespace ALLIVaultCore
 		public:
 			ALLIVAULTCOREP_API auto_reset_event();
 			ALLIVAULTCOREP_API explicit auto_reset_event(bool signaled);
+			auto_reset_event(ALLIVaultCore::Helpers::auto_reset_event const &src) = delete;
+			auto_reset_event &operator=(ALLIVaultCore::Helpers::auto_reset_event const &src) = delete;
 			ALLIVAULTCOREP_API ~auto_reset_event(void);
 			ALLIVAULTCOREP_API bool Reset();
 			ALLIVAULTCOREP_API bool Set();

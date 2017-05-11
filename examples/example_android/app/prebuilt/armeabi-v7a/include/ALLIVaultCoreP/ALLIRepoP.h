@@ -27,6 +27,9 @@ namespace ALLIVaultCore
 	public:
 		ALLIRepoP();
 		ALLIRepoP(const ALLIVaultCore::ALLIRepoP &src);
+		ALLIRepoP &operator=(ALLIVaultCore::ALLIRepoP const &src) = delete;
+		ALLIRepoP(ALLIVaultCore::ALLIRepoP &&src) = delete;
+		ALLIRepoP &operator=(ALLIVaultCore::ALLIRepoP &&src) = delete;
 		virtual ~ALLIRepoP();
 		ALLIVAULTCOREP_API void setRepo(ALLIVaultCore::Engine::SimpleRepositoryP &repo);
 		ALLIVAULTCOREP_API boost::filesystem::path getWorkDirPath();
