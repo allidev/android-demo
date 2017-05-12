@@ -15,8 +15,10 @@ namespace ALLIVaultCore
 			alli_mutex &operator=(ALLIVaultCore::Helpers::alli_mutex const &src) = delete;
 			ALLIVAULTCOREP_API ~alli_mutex(void);
 			ALLIVAULTCOREP_API bool WaitOne();
+			void lock();
 			ALLIVAULTCOREP_API bool TryWaitOne();
 			ALLIVAULTCOREP_API void ReleaseMutex();
+			void unlock();
 
 		private:
 			class alli_mutex_impl;
