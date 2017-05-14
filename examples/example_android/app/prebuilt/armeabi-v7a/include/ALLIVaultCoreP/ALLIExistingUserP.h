@@ -40,6 +40,7 @@ namespace ALLIVaultCore
 
 			ALLIVAULTCOREP_API ALLIExistingUserP();
 			ALLIExistingUserP(const ALLIVaultCore::FrontEnd::ALLIExistingUserP &src);
+			ALLIExistingUserP &operator=(ALLIVaultCore::FrontEnd::ALLIExistingUserP const &src) = delete;
 			ALLIVAULTCOREP_API ~ALLIExistingUserP();
 
 			ALLIVAULTCOREP_API void openEncryptedRepository(const boost::filesystem::path &encryptedURL, bool hasInitialCommit);
