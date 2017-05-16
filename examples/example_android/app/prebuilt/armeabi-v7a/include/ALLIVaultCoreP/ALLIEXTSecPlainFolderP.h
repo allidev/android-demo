@@ -54,6 +54,7 @@ namespace ALLIVaultCore
 		bool encryptFileForPlainRepo(const std::string &fileName);
 		bool downloadOneFileEx(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow) override;
 		void createCacheForServerImpl(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet) override;
+		std::string trackFolderImpl_processLocalFile(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory);
 	};
 }
 
