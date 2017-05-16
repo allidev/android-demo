@@ -58,7 +58,6 @@ namespace ALLIVaultCore
 		std::string getRepoHeadCommitSha1();
 		bool updateFilesBridge();
 		bool isEntrySymlinkInOtherRepo(const boost::filesystem::path &fileName, libgit2cpp::index &encryptIndex);
-		std::vector<std::string> allKeysForObject(const std::string &value, const std::map<std::string, std::string> &bridge);
 		bool isEntryInOtherRepo(const std::string &sha, const boost::filesystem::path &fileName, libgit2cpp::index &index);
 		bool copyFileToPlainFolder(const boost::filesystem::path &fileName);
 		virtual bool copyFileToPlainFolderImpl(const boost::filesystem::path &fileName);

@@ -154,6 +154,8 @@ namespace ALLIVaultCore
 		void addToFilesBridge(const std::string &key, const std::string &value);
 		bool trackEncryptFolderImplEx(const std::string &fullPath, bool &git_op);
 		bool isGitIgnoreInOtherRepo(const boost::filesystem::path &fileName, libgit2cpp::index &index);
+		std::string findKeyShaForValueSha(const std::string &valueSha);
+		std::vector<std::string> allKeysForObject(const std::string &value, const std::map<std::string, std::string> &bridge);
 
 	private:
 		boost::filesystem::path *groupDBURL;
@@ -211,8 +213,7 @@ namespace ALLIVaultCore
 		virtual void localRepoCallbackEx_fire_updateImpl(bool git_op);
 		virtual void localRepoCallbackEx_remote_timerImpl(std::string &src, bool push_non_fastforward);
 		virtual bool insertFilePairImpl(const boost::filesystem::path &srcFile, const boost::filesystem::path &destFile);
-		std::string findKeyShaForValueSha(const std::string &valueSha);
-		std::string findKeyShaForValueShaImpl(const std::string &valueSha);
+		virtual std::string findKeyShaForValueShaImpl(const std::string &valueSha);
 		bool foundInRepoWatchList(const std::string &fullPath);
 		void addToRepoWatchList(const std::string &fullPath);
 		bool indexContainsMinimumFiles(libgit2cpp::index *idx);
@@ -221,6 +222,7 @@ namespace ALLIVaultCore
 		virtual std::string getCacheTypeImpl();
 		virtual std::string getRepoHeadCommitSha1Impl();
 		virtual void createCacheForServerImpl(const std::string &headSHA1);
+		virtual bool fileExistsInFilesBridgeImpl(const std::string &fileName);
 	};
 }
 

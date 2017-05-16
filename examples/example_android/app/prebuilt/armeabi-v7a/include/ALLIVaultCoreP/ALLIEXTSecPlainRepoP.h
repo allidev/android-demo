@@ -38,15 +38,15 @@ namespace ALLIVaultCore
 		bool saveBridgeDictionaryImpl(int *fd) override;
 		bool encryptFileToSecureEncryptFolderImpl(const std::string &fileName) override;
 		bool trackFolderImpl(const std::string &fullPath) override;
-		bool fileExistsInFilesBridge(const std::string &fileName);
-		bool insertFilePair(const boost::filesystem::path &srcFile, const boost::filesystem::path &destFile);
-		virtual bool insertFilePairImpl(const boost::filesystem::path &srcFile, const boost::filesystem::path &destFile);
+		bool fileExistsInFilesBridgeImpl(const std::string &fileName) override;
+		bool insertFilePairImpl(const boost::filesystem::path &srcFile, const boost::filesystem::path &destFile) override;
 		void terminateThread();
 		void deleteFile(const boost::filesystem::path &fileName);
 		virtual void deleteFileImpl(const boost::filesystem::path &fileName);
 		bool createCacheForRepoHead();
 		void populateSyncCache(ALLIVaultCore::ALLICacheP &aCache);
 		virtual void populateSyncCacheImpl(ALLIVaultCore::ALLICacheP &aCache);
+		std::string findKeyShaForValueShaImpl(const std::string &valueSha) override;
 	};
 }
 
