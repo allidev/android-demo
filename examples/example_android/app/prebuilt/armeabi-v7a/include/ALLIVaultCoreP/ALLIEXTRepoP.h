@@ -153,6 +153,7 @@ namespace ALLIVaultCore
 		std::string findKeyShaForValueShaEx(const std::string &valueSha, const std::map<std::string, std::string> &fb);
 		void addToFilesBridge(const std::string &key, const std::string &value);
 		bool trackEncryptFolderImplEx(const std::string &fullPath, bool &git_op);
+		bool isGitIgnoreInOtherRepo(const boost::filesystem::path &fileName, libgit2cpp::index &index);
 
 	private:
 		boost::filesystem::path *groupDBURL;

@@ -105,7 +105,7 @@ namespace ALLIVaultCore
 			** On failure, the db file will be automatically deleted.
 			**/
 			static ALLIVAULTCOREP_API bool createSqliteDB(const boost::filesystem::path &dbURL, const std::string &tableName, const std::string &colDef);
-			static ALLIVAULTCOREP_API std::string *getRelativePath(const boost::filesystem::path &filePath, const boost::filesystem::path &rootFolder);
+			static ALLIVAULTCOREP_API std::unique_ptr<std::string> getRelativePath(const boost::filesystem::path &filePath, const boost::filesystem::path &rootFolder);
 			/// <summary>
 			///   return value needs to be freed or otherwise wrapped in a unique_ptr object.
 			/// </summary>
