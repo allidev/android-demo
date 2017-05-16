@@ -22,6 +22,9 @@ namespace ALLIVaultCore
 
 		latest_update_event_args();
 		~latest_update_event_args();
+
+	private:
+		std::string to_string_impl() const override;
 	};
 }
 
