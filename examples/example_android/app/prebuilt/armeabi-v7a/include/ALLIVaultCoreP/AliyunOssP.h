@@ -8,6 +8,10 @@ class AliyunOssPTest;
 
 namespace ALLIVaultCore
 {
+	namespace Helpers
+	{
+		class alli_semaphore;
+	}
 	namespace Engine
 	{
 		class AliyunOssP
@@ -38,6 +42,8 @@ namespace ALLIVaultCore
 			void Trace(const oss::Status& status, const std::string& funciton_name);
 			bool uploadFileImpl(const std::string &filePath, const std::string &serverPath);
 			bool multiPartUpload(const std::string &filePath, const std::string &serverPath);
+			void uploadOneMultiPartMT(std::list<oss::PartEtag> &part_etags, std::ifstream *stream, const std::string &filePath, int i, const int64_t &file_size, const long long &part_count, const std::string &upload_id, const std::string &serverPath, ALLIVaultCore::Helpers::alli_semaphore &mpu_pool);
+			bool uploadOneMultiPartMTImpl(oss::PartEtag &etag, std::ifstream *stream, const std::string &filePath, int i, const int64_t &file_size, const long long &part_count, const std::string &upload_id, const std::string &serverPath);
 		};
 	}
 }
