@@ -19,22 +19,6 @@ JNIEXPORT jstring JNICALL Java_com_allivault_cloudsafe_playground_AllivaultApi_g
 JNIEXPORT jstring JNICALL Java_com_allivault_cloudsafe_playground_AllivaultApi_getLibGit2Version
         (JNIEnv *env, jclass cls);
 
-/*
- * Class:     com_allivault_cloudsafe_playground_Apis
- * Method:    aesEncrypt
- * Signature: ([BI)[B
- */
-JNIEXPORT jbyteArray JNICALL Java_com_allivault_cloudsafe_playground_AllivaultApi_aesEncrypt
-        (JNIEnv *, jclass, jbyteArray, jint);
-
-/*
- * Class:     com_allivault_cloudsafe_playground_Apis
- * Method:    aesDecrypt
- * Signature: ([BI)[B
- */
-JNIEXPORT jbyteArray JNICALL Java_com_allivault_cloudsafe_playground_AllivaultApi_aesDecrypt
-        (JNIEnv *, jclass, jbyteArray, jint);
-
 JNIEXPORT jboolean JNICALL Java_com_allivault_cloudsafe_playground_AllivaultApi_createRSAKeyPair
         (JNIEnv *, jclass, jstring);
 

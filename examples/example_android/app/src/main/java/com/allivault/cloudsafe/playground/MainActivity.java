@@ -35,50 +35,9 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = (TextView)findViewById(R.id.textView);
         textView.setText("hello example, git2 version -" + AllivaultApi.getLibGit2Version());
 
-        // task 3: call AllivaultApi.aesEncrypt() and aesDecrypt()
-        byte[] input = "a string".getBytes();
-        byte[] outpout;
-        byte[] plain;
-
-        outpout = AllivaultApi.aesEncrypt(input, input.length);
-        plain = AllivaultApi.aesDecrypt(outpout, outpout.length);
-        Log.v(TAG, "original :" + new String(input));
-        Log.v(TAG, "decrypted :" + new String(plain));
-
         // task 4: call AllivaultApi.createRSAKeyPair()
         String uname = "test574";
         AllivaultApi.createRSAKeyPair(uname);
-
-        String allFiles = "\n";
-        try {
-            String libSourcePath = "lib/" + DBYXSCQ_SO;
-            InputStream in = getAssets().open(libSourcePath);
-            String filename = DBYXSCQ_SO;
-            FileOutputStream out;
-            byte[] buffer = new byte[1024];
-            out = openFileOutput(filename, Context.MODE_PRIVATE);
-            int len = in.read(buffer);
-            while (len != -1) {
-                out.write(buffer, 0, len);
-                len = in.read(buffer);
-            }
-            out.close();
-
-            // Debugging
-            String md5 = Utils.md5(openFileInput(filename));
-            allFiles += "fileName :" + filename + " \nmd5sum :" + md5;
-            allFiles += " \noriginal    :" + Utils.md5(getAssets().open(libSourcePath));
-            allFiles += "\n";
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        File dir = getFilesDir();
-        for (String fileName : dir.list()) {
-            allFiles += fileName;
-            allFiles += "\n";
-        }
-        textView.setText("hello example, files in home dir:" + allFiles);
 
         // task 5: call AllivaultApi.createUserAccountOnServer()
         String fullname = uname;
