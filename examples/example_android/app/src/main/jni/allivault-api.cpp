@@ -194,13 +194,11 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_createUserAccountOnServer(J
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>password is %s", passwdSha1.c_str());
   account.set_fullName(fullName);
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>fullname is %s", fullName);
-  const std::string e("hello");
   std::string email(emailAddress);
   account.set_emailAddress(email);
   account.set_publicKeyFile(boost::filesystem::path(pub_key_path));
 
   ALLIVaultCore::FrontEnd::ALLINewUserP *alliNewUserP = new ALLIVaultCore::FrontEnd::ALLINewUserP(&repo_path);
-//  alliNewUserP->processNewUser("a-user");
 
   ret = alliNewUserP->createUserAccount(account);
 
@@ -214,7 +212,6 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_createUserAccountOnServer(J
   env->ReleaseStringUTFChars(publicKeyFile_, publicKeyFile);
 
   return ret;
-  //return false;
 }
 
 JNIEXPORT void JNICALL
