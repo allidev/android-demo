@@ -37,22 +37,22 @@ public class MainActivity extends AppCompatActivity {
 
         // task 4: call AllivaultApi.createRSAKeyPair()
         String uname = "test574";
-        AllivaultApi.createRSAKeyPair(uname);
+//        AllivaultApi.createRSAKeyPair(uname);
 
         // task 5: call AllivaultApi.createUserAccountOnServer()
         String fullname = uname;
         String email = uname + "@gmail.com";
         String passwd = "12345678";
-        AllivaultApi.createUserAccountOnServer(
-                uname, passwd, fullname, email, "path-to-publickey", 1234, 1456,
-                5678);
+//        AllivaultApi.createUserAccountOnServer(
+//                uname, passwd, fullname, email, "path-to-publickey", 1234, 1456,
+//                5678);
 
         // task 6: call AllivaultApi.processNewUser()
-        AllivaultApi.processNewUser(uname);
+//        AllivaultApi.processNewUser(uname);
 
         // task 7: call AllivaultApi.batchActionsForNewMachine()
         //AllivaultApi.batchActionsForNewMachine();
-        //new SyncFileTask().execute();
+        new SyncFileTask().execute();
     }
     class SyncFileTask extends ThreadTask<String> {
 
