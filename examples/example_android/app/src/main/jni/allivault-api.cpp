@@ -44,11 +44,47 @@ static std::string repo_path(const std::string &path, const std::string &host) {
   return std::string("ssh://") + host + path;
 }
 
+static void machNewStatusUpdatedCallback(void *sender, ALLIVaultCore::FrontEnd::new_machine_event_args &args)
+{
+  std::string fu = args.filesUpdate;
+  std::string su = args.statusUpdate;
+  ALLIVaultCore::Helpers::ALLINMStatusP nms = args.nmstatus;
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "Files udpate is %s.\n", fu.c_str());
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "Status Update is %s.\n", su.c_str());
+  __android_log_print(ANDROID_LOG_INFO, "Apis", "New machine status is %d.\n", nms);
+}
 
 JavaVM *g_vm;
 // cached refs for later callbacks
 jclass g_clazz_appStatusUpdated;
 jmethodID g_mid_appStatusUpdated;
+std::unique_ptr<ALLIVaultCore::FrontEnd::ALLIExistingUserP> existUser;
+
+void appStatusUpdatedCallback(void *sender, ALLIVaultCore::FrontEnd::exist_user_event_args &e)
+{
+  JNIEnv *g_env;
+  // double check it's all ok
+  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_6);
+  if (getEnvStat == JNI_EDETACHED)
+  {
+    if (g_vm->AttachCurrentThread(&g_env, NULL) != 0)
+    {
+      __android_log_print(ANDROID_LOG_INFO, "Apis", "==>Failed to attach.\n");
+      return;
+    }
+    __android_log_print(ANDROID_LOG_INFO, "Apis", "==>VM attached to current thread.\n");
+  }
+  else if (getEnvStat == JNI_EVERSION)
+  {
+    __android_log_print(ANDROID_LOG_INFO, "Apis", "==>Version not supported.\n");
+    return;
+  }
+
+  g_env->CallStaticVoidMethod(g_clazz_appStatusUpdated, g_mid_appStatusUpdated);
+  g_vm->DetachCurrentThread();
+}
+
+
 
 
 extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
@@ -108,7 +144,7 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_getLibGit2Version
 
 
 JNIEXPORT jboolean JNICALL
-        Java_com_allivault_cloudsafe_playground_AllivaultApi_createRSAKeyPair(JNIEnv *env, jclass cls,
+Java_com_allivault_cloudsafe_playground_AllivaultApi_createRSAKeyPair(JNIEnv *env, jclass cls,
                                                                         jstring uname) {
   const char *userName = env->GetStringUTFChars(uname, 0);
   ALLIVaultCore::FrontEnd::ALLINewUserP *alliNewUserP = new ALLIVaultCore::FrontEnd::ALLINewUserP(&repo_path);
@@ -181,8 +217,6 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_createUserAccountOnServer(J
   //return false;
 }
 
-std::unique_ptr<ALLIVaultCore::FrontEnd::ALLIExistingUserP> existUser;
-
 JNIEXPORT void JNICALL
 Java_com_allivault_cloudsafe_playground_AllivaultApi_processNewUser(JNIEnv *env, jclass type,
                                                                     jstring userName_) {
@@ -201,42 +235,8 @@ Java_com_allivault_cloudsafe_playground_AllivaultApi_processNewUser(JNIEnv *env,
   env->ReleaseStringUTFChars(userName_, userName);
 }
 
-static void machNewStatusUpdatedCallback(void *sender, ALLIVaultCore::FrontEnd::new_machine_event_args &args)
-{
-  std::string fu = args.filesUpdate;
-  std::string su = args.statusUpdate;
-  ALLIVaultCore::Helpers::ALLINMStatusP nms = args.nmstatus;
-  __android_log_print(ANDROID_LOG_INFO, "Apis", "Files udpate is %s.\n", fu.c_str());
-  __android_log_print(ANDROID_LOG_INFO, "Apis", "Status Update is %s.\n", su.c_str());
-  __android_log_print(ANDROID_LOG_INFO, "Apis", "New machine status is %d.\n", nms);
-}
-
-void appStatusUpdatedCallback(void *sender, ALLIVaultCore::FrontEnd::exist_user_event_args &e)
-{
-  JNIEnv *g_env;
-  // double check it's all ok
-  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_6);
-  if (getEnvStat == JNI_EDETACHED)
-  {
-    if (g_vm->AttachCurrentThread(&g_env, NULL) != 0)
-    {
-      __android_log_print(ANDROID_LOG_INFO, "Apis", "==>Failed to attach.\n");
-      return;
-    }
-    __android_log_print(ANDROID_LOG_INFO, "Apis", "==>VM attached to current thread.\n");
-  }
-  else if (getEnvStat == JNI_EVERSION)
-  {
-    __android_log_print(ANDROID_LOG_INFO, "Apis", "==>Version not supported.\n");
-    return;
-  }
-
-  g_env->CallStaticVoidMethod(g_clazz_appStatusUpdated, g_mid_appStatusUpdated);
-  g_vm->DetachCurrentThread();
-}
-
 JNIEXPORT void JNICALL
-        Java_com_allivault_cloudsafe_playground_AllivaultApi_batchActionsForNewMachine(JNIEnv *env, jclass type)
+Java_com_allivault_cloudsafe_playground_AllivaultApi_batchActionsForNewMachine(JNIEnv *env, jclass type)
 {
   // TODO
   __android_log_print(ANDROID_LOG_INFO, "Apis", "==>batchActionsForNewMachine started");
