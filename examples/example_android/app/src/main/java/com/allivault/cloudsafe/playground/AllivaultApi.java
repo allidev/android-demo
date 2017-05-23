@@ -14,8 +14,6 @@ public class AllivaultApi {
 
     public static native String getMessage();
     public static native String getLibGit2Version();
-    public static native byte[] aesEncrypt(byte[] input, int len);
-    public static native byte[] aesDecrypt(byte[] input, int len);
     public static native boolean createRSAKeyPair(String uname);
     public static native boolean createUserAccountOnServer(
             String userName, String passWord, String fullName, String emailAddress,
