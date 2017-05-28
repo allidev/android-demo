@@ -11,7 +11,9 @@ namespace ALLIVaultCore
 		~ALLIEXTSharingRepoP();
 
 		void setHostUserName(const std::string &huname);
+		std::string getHostUserName() const;
 		void setGroupName(const std::string &gname);
+		std::string getGroupName() const;
 		void setGuestListURL(const boost::filesystem::path &glu);
 		void setGuestList(const std::unordered_set<std::string> &src);
 		std::unordered_set<std::string> getGuestList() const;

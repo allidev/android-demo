@@ -9,8 +9,8 @@ namespace ALLIVaultCore
 		public:
 			ALLIVaultCore::ALLIErrorCodeP err_code;
 
-			ALLIErrorP();
-			~ALLIErrorP();
+			ALLIVAULTCOREP_API ALLIErrorP();
+			ALLIVAULTCOREP_API ~ALLIErrorP();
 		};
 	}
 }

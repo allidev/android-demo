@@ -1,9 +1,11 @@
 #pragma once
 #include "alli_hash.h"
+#include "alli_event.h"
 #include <unordered_map>
 #include <unordered_set>
 namespace ALLIVaultCore
 {
+	class ALLIEXTRepoP;
 	class ALLIEXTSharingPlainRepoP;
 	class ALLIEXTSharingEncryptRepoP;
 	class ALLIEXTSharingPlainFolderP;
@@ -59,6 +61,9 @@ namespace ALLIVaultCore
 			void copyFilesFromServerToSharingPlainFolderImpl_2(const std::string &hostUserName, const std::string &groupName);
 			void copyFilesFromServerToSharingPlainFolderEx(const boost::filesystem::path &sharingPlainFolderURL);
 			void monitorSharingEncryptedRepository(const boost::filesystem::path &sharingEncryptedURL, bool hasInitialCommit);
+			void loadMemberList(const std::string &hostUserName, const std::string &groupName);
+			boost::signals2::connection attachToEventHandlerForRepoUpdated(ALLIVaultCore::ALLIEXTRepoP *src);
+			boost::signals2::connection attachToEventHandlerForLatestUpdate(ALLIVaultCore::ALLIEXTRepoP *src);
 
 		private:
 			virtual void moveSharingPlainRepositoryImpl(const boost::filesystem::path &plainURL);

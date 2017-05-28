@@ -39,7 +39,8 @@ namespace ALLIVaultCore
 		void deleteTempFile(const boost::filesystem::path &tempFile);
 		ALLIVAULTCOREP_API boost::filesystem::path *getFileURL() const;
 		ALLIVAULTCOREP_API void updateDownloadStatus(std::string &tempFile, long long bytesReceived);
-		ALLIVAULTCOREP_API void setUserName(std::string &uname);
+		ALLIVAULTCOREP_API void setUserName(const std::string &uname);
+		ALLIVAULTCOREP_API void setUserName(std::string &&uname);
 		void connectDownloadOneFileEx(DownloadOneFileExCallback cb);
 		void connectDownloadOneFilePairEx(DownloadOneFilePairExCallback cb);
 

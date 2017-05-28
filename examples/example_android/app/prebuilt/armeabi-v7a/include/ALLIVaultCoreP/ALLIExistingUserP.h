@@ -28,6 +28,8 @@ namespace ALLIVaultCore
 		class ALLIGroupP;
 		class alli_semaphore;
 		class ALLISharingGroupSyncNMP;
+		class ALLISharingGroupToP;
+		class ALLISharingGroupBaseP;
 	}
 	namespace FrontEnd
 	{
@@ -57,9 +59,11 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API void updateTotalBytesUsedForSecMBPlainFolder();
 			std::unordered_map<std::string, std::unordered_set<std::string> > &getDictGroupMembers();
 			ALLIVAULTCOREP_API std::string getDictGroupMembersJson() const;
+			ALLIVAULTCOREP_API bool groupNameExists(const std::string &gname) const;
 			ALLIVAULTCOREP_API std::vector<ALLIVaultCore::Helpers::ALLIGroupP> getSharingALLIGroupList() const;
 			ALLIVAULTCOREP_API std::string getSharingALLIGroupListJson() const;
 			ALLIVAULTCOREP_API std::unordered_set<running_sharing_group_t> getSharingGroups() const;
+			ALLIVAULTCOREP_API running_sharing_group_t getRunningSharingGroup(const std::string &huname, const std::string &gname) const;
 			ALLIVAULTCOREP_API unsigned long long getTotalBytesUsed() const;
 			ALLIVAULTCOREP_API bool downloadOneFileForSyncFolder(const std::string &localPath, std::string &dest);
 			ALLIVAULTCOREP_API bool downloadOneFileForMailbox(const std::string &localPath, std::string &dest);
@@ -75,9 +79,12 @@ namespace ALLIVaultCore
 			boost::signals2::connection connectAppStatusUpdated(const AppStatusUpdatedSlotType &slot);
 			ALLIVAULTCOREP_API boost::signals2::connection connectRepoLatestUpdate(RepoLatestUpdateSlotType const &slot);
 			ALLIVAULTCOREP_API std::string SyncFolderGetRootURL();
+			ALLIVAULTCOREP_API void processSharingToWrapper(const std::string &groupName, const std::string &hostUserName, const std::string &guestUserName, const std::string &guestFullName);
 
 		private:
 			friend class ::ALLINewUserPTest;
+			friend class ALLIVaultCore::Helpers::ALLISharingGroupToP;
+			friend class ALLIVaultCore::Helpers::ALLISharingGroupBaseP;
 			int shSyncCounter;
 			int shSyncTotal;
 			typedef std::vector<void *> current_group_t;
@@ -95,6 +102,10 @@ namespace ALLIVaultCore
 			* a collection of groups of which the user is a member
 			*/
 			std::vector<ALLIVaultCore::Helpers::ALLIGroupP> sharingALLIGroupList;
+			/*
+			* the list of group members corresponding to a certain group
+			*/
+			std::vector<std::string> sgMemberList;
 			std::unordered_map<std::string, std::unordered_set<std::string> > dictGroupMembers;
 			ALLIVaultCore::ALLIEXTSecEncryptRepoP *encryptedRepo;
 			ALLIVaultCore::ALLIEXTSecPlainRepoP *plainRepo;
@@ -140,6 +151,7 @@ namespace ALLIVaultCore
 			boost::signals2::connection attachToEventHandlerForLatestUpdate(ALLIVaultCore::ALLIEXTRepoP *src);
 			boost::signals2::connection attachToEventHandlerForAppStatusUpdated(ALLIVaultCore::ALLIEXTFolderP *src);
 			void secEncryptRepoUpdated(void *sender, ALLIVaultCore::repo_event_args &e);
+			void sharingEncryptRepoUpdated(void *sender, ALLIVaultCore::repo_event_args &e);
 			void EncryptRepoUpdatedEx(void *sender, ALLIVaultCore::repo_event_args &e);
 			ALLIVAULTCOREP_API boost::filesystem::path getPlainFolderRootFolder() const;
 			void processAppStatusUpdates(void *sender, ALLIVaultCore::FrontEnd::exist_user_event_args &e);
@@ -147,6 +159,7 @@ namespace ALLIVaultCore
 			void processLatestUpdate(void *sender, ALLIVaultCore::latest_update_event_args &e);
 			void OnRepoLatestUpdate(ALLIVaultCore::latest_update_event_args &e);
 			void releaseResourcesForSharingGroups();
+			std::string addNewGroupToSharingGroupDB(const std::string &groupName, const std::string &hostUserName, bool &hasGroup);
 		};
 	}
 }

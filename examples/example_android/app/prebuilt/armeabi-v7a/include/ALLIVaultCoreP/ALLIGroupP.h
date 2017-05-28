@@ -28,6 +28,7 @@ namespace ALLIVaultCore
 
 			void getSharingPlainFolder(const std::unordered_set<running_sharing_group_t> &runningGroups);
 		};
+		bool operator==(ALLIVaultCore::Helpers::ALLIGroupP const &lhs, ALLIVaultCore::Helpers::ALLIGroupP const &rhs);
 	}
 }
 

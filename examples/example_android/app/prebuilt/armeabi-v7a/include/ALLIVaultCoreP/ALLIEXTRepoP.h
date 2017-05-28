@@ -71,6 +71,7 @@ namespace ALLIVaultCore
 		void trackRemoteRepo();
 		std::string getCacheType();
 		std::string getRepoHeadCommitSha1();
+		bool addNewGroupToSharingGroupDB(const std::string &groupName, const std::string &hostUserName, std::string &groupSHA1, bool &hasGroup);
 
 	protected:
 		unsigned long long totalBytesUsed;
@@ -223,6 +224,7 @@ namespace ALLIVaultCore
 		virtual std::string getRepoHeadCommitSha1Impl();
 		virtual void createCacheForServerImpl(const std::string &headSHA1);
 		virtual bool fileExistsInFilesBridgeImpl(const std::string &fileName);
+		bool groupExists(const std::string &hostUserName, const std::string &groupName);
 	};
 }
 

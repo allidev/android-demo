@@ -80,7 +80,7 @@ namespace ALLIVaultCore
 			ALLIUserP(const ALLIVaultCore::FrontEnd::ALLIUserP &src);
 			virtual ~ALLIUserP();
 
-			bool userNameExists(const std::string &userName, std::string &fullName, ALLIVaultCore::Helpers::ALLIErrorP &error);
+			ALLIVAULTCOREP_API bool userNameExists(const std::string &userName, std::string &fullName, ALLIVaultCore::Helpers::ALLIErrorP &error);
 			bool userNameExists(const std::string &userName, std::string &fullName, bool &timedOut);
 			void passOnNewMachineUpdate(void *sender, ALLIVaultCore::FrontEnd::new_machine_event_args &e);
 			ALLIVAULTCOREP_API boost::signals2::connection connectMachNewStatusUpdated(machNewStatusUpdatedSlotType cb);

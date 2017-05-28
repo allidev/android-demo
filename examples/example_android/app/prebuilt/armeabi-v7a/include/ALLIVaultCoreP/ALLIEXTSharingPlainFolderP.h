@@ -11,6 +11,7 @@ namespace ALLIVaultCore
 		~ALLIEXTSharingPlainFolderP();
 
 		void monitorSharingPlainFolderAtURL(const boost::filesystem::path &sharingPlainFolderURL);
+		void expandAESKeysForNewGuestUser(const std::string &groupName, const std::string &guestUserName);
 
 	private:
 		ALLIVaultCore::ALLIEXTSharingPlainRepoP *sharingPlainRepo;

@@ -25,6 +25,8 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Engine::SimpleRepositoryP *encryptedRepoP;
 		// init here and paired with secPlainRepo
 		ALLIVaultCore::Helpers::alli_mutex *mutex_encrypt_plain_repo;
+		// not init here
+		ALLIVaultCore::Helpers::alli_mutex *mutex_plain_repo;
 		// init here and used alone and unpaired
 		ALLIVaultCore::Helpers::alli_mutex *mutex_local_encrypt_repo;
 		// not init here

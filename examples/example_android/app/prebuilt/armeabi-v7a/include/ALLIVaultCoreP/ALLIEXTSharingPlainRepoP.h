@@ -28,6 +28,8 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::alli_mutex *mutex_sharing_plain_repo;
 		// not init here and paired from secEncryptRepo
 		ALLIVaultCore::Helpers::alli_mutex *mutex_sharing_encrypt_plain_repo;
+		// not init here and paired from secPlainFolder
+		ALLIVaultCore::Helpers::alli_mutex *mutex_local_sharing_plain_folder;
 		ALLIVaultCore::Engine::SimpleRepositoryP *sharingPlainRepoP;
 
 		bool trackFolderImpl(const std::string &fullPath) override;
