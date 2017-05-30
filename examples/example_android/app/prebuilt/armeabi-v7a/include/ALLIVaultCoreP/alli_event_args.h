@@ -10,7 +10,7 @@ namespace ALLIVaultCore
 			alli_event_args(void);
 			~alli_event_args(void);
 
-			std::string to_string() const;
+			ALLIVAULTCOREP_API std::string to_string() const;
 
 		private:
 			virtual std::string to_string_impl() const;

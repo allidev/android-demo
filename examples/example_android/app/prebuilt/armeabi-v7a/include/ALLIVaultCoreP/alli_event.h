@@ -4,6 +4,8 @@
 
 namespace ALLIVaultCore
 {
+	class group_event_args;
+	typedef boost::signals2::signal<void(void *, ALLIVaultCore::group_event_args &)> group_invites_downloaded_event;
 	class repo_event_args;
 	typedef boost::signals2::signal<void(void *, ALLIVaultCore::repo_event_args &)> repo_updated_event;
 	class latest_update_event_args;

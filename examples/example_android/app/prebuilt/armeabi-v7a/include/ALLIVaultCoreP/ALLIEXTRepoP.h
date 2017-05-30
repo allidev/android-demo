@@ -72,6 +72,7 @@ namespace ALLIVaultCore
 		std::string getCacheType();
 		std::string getRepoHeadCommitSha1();
 		bool addNewGroupToSharingGroupDB(const std::string &groupName, const std::string &hostUserName, std::string &groupSHA1, bool &hasGroup);
+		bool deleteGroupFromSharingGroupDB(const std::string &hostUserName, const std::string &groupName);
 
 	protected:
 		unsigned long long totalBytesUsed;

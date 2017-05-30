@@ -26,8 +26,6 @@ namespace ALLIVaultCore
 			* the list of group members corresponding to a certain group
 			*/
 			std::vector<std::string> *sgMemberList;
-			// represent the instance of a currently running sharing group
-			//property System::Collections::ArrayList ^sharingCurGroup;
 			/*
 			* a collection of groups of which the user is a member
 			*/

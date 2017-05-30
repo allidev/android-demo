@@ -46,6 +46,10 @@ namespace ALLIVaultCore
 			// represent the instance of a currently running sharing group
 			running_sharing_group_t *sharingCurGroup;
 			std::unordered_map<std::string, std::unordered_set<std::string> > &dictGroupMembers;
+			/*
+			* a collection of groups of which the user is a member
+			*/
+			std::vector<ALLIVaultCore::Helpers::ALLIGroupP> *sharingALLIGroupList;
 
 			bool addUserToFriendListDB(const std::string &uname, const std::string &fname);
 			bool cloneFromRemoteSharingEncryptedRepo(const boost::filesystem::path &encryptedURL, const std::string &hostUserName, const std::string &groupName, ALLIVaultCore::Helpers::ALLIStatusP &alli_status);

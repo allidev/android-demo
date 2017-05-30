@@ -23,6 +23,7 @@ namespace ALLIVaultCore
 	class ALLISSPlainRepoP;
 	class ALLISSClientFolderP;
 	class ALLISSPlainFolderP;
+	class ALLIGroupInvitesP;
 	namespace Helpers
 	{
 		class ALLIGroupP;
@@ -30,15 +31,18 @@ namespace ALLIVaultCore
 		class ALLISharingGroupSyncNMP;
 		class ALLISharingGroupToP;
 		class ALLISharingGroupBaseP;
+		class ALLIStatusP;
 	}
 	namespace FrontEnd
 	{
+		void group_invites_timer_wrapper(void *payload);
 		class ALLIExistingUserP :
 			public ALLIUserP
 		{
 		public:
 			typedef ALLIVaultCore::FrontEnd::app_status_update_event::slot_type AppStatusUpdatedSlotType;
 			typedef ALLIVaultCore::latest_update_event::slot_type RepoLatestUpdateSlotType;
+			typedef ALLIVaultCore::group_invites_downloaded_event::slot_type GroupInvitesDownloadedSlotType;
 
 			ALLIVAULTCOREP_API ALLIExistingUserP();
 			ALLIExistingUserP(const ALLIVaultCore::FrontEnd::ALLIExistingUserP &src);
@@ -80,11 +84,15 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API boost::signals2::connection connectRepoLatestUpdate(RepoLatestUpdateSlotType const &slot);
 			ALLIVAULTCOREP_API std::string SyncFolderGetRootURL();
 			ALLIVAULTCOREP_API void processSharingToWrapper(const std::string &groupName, const std::string &hostUserName, const std::string &guestUserName, const std::string &guestFullName);
+			void processSharingFromWrapper(const std::string &groupName, const std::string &hostUserName, const std::string &guestUserName, const std::string &hostFullName);
+			void transitionToExistUser();
+			ALLIVAULTCOREP_API boost::signals2::connection connectGroupInvitesDownloaded(GroupInvitesDownloadedSlotType const &slot);
 
 		private:
 			friend class ::ALLINewUserPTest;
 			friend class ALLIVaultCore::Helpers::ALLISharingGroupToP;
 			friend class ALLIVaultCore::Helpers::ALLISharingGroupBaseP;
+			friend void group_invites_timer_wrapper(void *payload);
 			int shSyncCounter;
 			int shSyncTotal;
 			typedef std::vector<void *> current_group_t;
@@ -128,6 +136,9 @@ namespace ALLIVaultCore
 			boost::signals2::connection encrypt_conn, enc_latest_conn, sync_folder_status;
 			ALLIVaultCore::FrontEnd::app_status_update_event appStatusUpdated;
 			ALLIVaultCore::latest_update_event repoLatestUpdate;
+			ALLIVaultCore::ALLIGroupInvitesP *groupInvites;
+			void *groupInvites_timer;
+			ALLIVaultCore::group_invites_downloaded_event groupInvitesDownloaded;
 
 			std::unordered_set<group_t> checkSharingGroups();
 			bool createSharingGroupProgressFile();
@@ -150,6 +161,7 @@ namespace ALLIVaultCore
 			boost::signals2::connection attachToEventHandlerForRepoUpdated(ALLIVaultCore::ALLIEXTRepoP *src);
 			boost::signals2::connection attachToEventHandlerForLatestUpdate(ALLIVaultCore::ALLIEXTRepoP *src);
 			boost::signals2::connection attachToEventHandlerForAppStatusUpdated(ALLIVaultCore::ALLIEXTFolderP *src);
+			boost::signals2::connection attachToEventHandlerForGroupInvitesReceived();
 			void secEncryptRepoUpdated(void *sender, ALLIVaultCore::repo_event_args &e);
 			void sharingEncryptRepoUpdated(void *sender, ALLIVaultCore::repo_event_args &e);
 			void EncryptRepoUpdatedEx(void *sender, ALLIVaultCore::repo_event_args &e);
@@ -160,6 +172,12 @@ namespace ALLIVaultCore
 			void OnRepoLatestUpdate(ALLIVaultCore::latest_update_event_args &e);
 			void releaseResourcesForSharingGroups();
 			std::string addNewGroupToSharingGroupDB(const std::string &groupName, const std::string &hostUserName, bool &hasGroup);
+			std::string addNewGroupToSharingGroupDB(const std::string &groupName, const std::string &hostUserName, ALLIVaultCore::Helpers::ALLIStatusP &alli_status);
+			bool deleteGroupFromSharingGroupDB(const std::string &hostUserName, const std::string &groupName);
+			void setupGroupInvitesSentinel(const std::string &guestUserName);
+			void processGroupInvitesReceived(void *sender, ALLIVaultCore::Helpers::alli_event_args &e);
+			bool isInviteAlreadyACurrentGroup(const ALLIVaultCore::Helpers::ALLIGroupP &src);
+			void OnGroupInvitesDownloaded(ALLIVaultCore::group_event_args &e);
 		};
 	}
 }

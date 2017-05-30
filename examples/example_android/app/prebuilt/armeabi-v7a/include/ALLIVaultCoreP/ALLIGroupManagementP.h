@@ -9,6 +9,7 @@ namespace ALLIVaultCore
 		~ALLIGroupManagementP();
 
 		bool addGroupMemberToServer();
+		bool updateServerGroupDB();
 
 	private:
 		std::string hostUserName;
