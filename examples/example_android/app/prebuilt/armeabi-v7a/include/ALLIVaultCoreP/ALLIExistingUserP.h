@@ -87,6 +87,7 @@ namespace ALLIVaultCore
 			void processSharingFromWrapper(const std::string &groupName, const std::string &hostUserName, const std::string &guestUserName, const std::string &hostFullName);
 			void transitionToExistUser();
 			ALLIVAULTCOREP_API boost::signals2::connection connectGroupInvitesDownloaded(GroupInvitesDownloadedSlotType const &slot);
+			ALLIVAULTCOREP_API void MBSendFiles(const std::vector<std::string> &fList, const std::unordered_set<std::string> &recList);
 
 		private:
 			friend class ::ALLINewUserPTest;

@@ -56,6 +56,10 @@ namespace ALLIVaultCore
 		bool hasSharingKeySet;
 		ALLIVaultCore::Helpers::alli_mutex *folderWatchList_mutex;
 		std::unordered_map<std::string, std::string> *folderWatchList;
+		long long totalBytesSentOSS;
+		std::unordered_map<std::string, long long> totalBytesSentGroup;
+		// mutex to lock writing to the server inventory table
+		ALLIVaultCore::Helpers::alli_mutex *server_inv_mutex;
 
 		bool setDataVersion(int ver);
 		bool isDataVersionSet(int ver);
@@ -76,6 +80,14 @@ namespace ALLIVaultCore
 		void addToFolderWatchList(const std::string &fullPath);
 		void checkAESKeysForALLMembers(const std::string &localSHA1);
 		void displayFileHistory();
+		void OnAppStatusUpdated(ALLIVaultCore::FrontEnd::exist_user_event_args &e);
+		void partitionServerInventoryDB();
+		std::string updateMessageWithBytesSentOSS();
+		std::string uploadOneFile(const std::string &fileName);
+		std::string getServerURL(const std::string &fileName);
+		bool insertRowToServerInventory(const std::string &localSha1, const std::string &serverSha1, const std::string &serverURL);
+		bool insertRowToKeySey(const std::string &serverSha1, const std::string &keyUser, const std::string &aesKeyURL);
+		bool publicKeyExists(const std::string &userName);
 
 	private:
 		bool hasFriendUserName;
@@ -94,10 +106,6 @@ namespace ALLIVaultCore
 		int ul_files_count;
 		// semaphore to control current uploading
 		ALLIVaultCore::Helpers::alli_semaphore *ul_pool;
-		// mutex to lock writing to the server inventory table
-		ALLIVaultCore::Helpers::alli_mutex *server_inv_mutex;
-		long long totalBytesSentOSS;
-		std::unordered_map<std::string, long long> totalBytesSentGroup;
 
 		virtual void load_index_db_ex();
 		bool containsUserInFriendList(const std::string &uname);
@@ -152,17 +160,11 @@ namespace ALLIVaultCore
 		void updateOneRowExMTP(const std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex> &aRow);
 		bool updateOneRowEx(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);
 		bool updateOneRowExP(const std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex> &aRow);
-		void OnAppStatusUpdated(ALLIVaultCore::FrontEnd::exist_user_event_args &e);
-		std::string uploadOneFile(const std::string &fileName);
 		std::string uploadOneFile(const std::string &fileName, bool &isUploaded);
 		std::string uploadOneFile_oss(const std::string &fileName, bool &isUploaded);
-		void partitionServerInventoryDB();
 		bool emptyServerInventoryDB(const boost::filesystem::path *origin);
 		void uploadOneFileMT(const std::pair<std::string, std::string> &obj);
-		std::string getServerURL(const std::string &fileName);
-		bool insertRowToServerInventory(const std::string &localSha1, const std::string &serverSha1, const std::string &serverURL);
 		bool insertRowToServerInventory(const std::string &localSha1, const std::string &serverSha1, const std::string &serverURL, const bool &isUploaded);
-		std::string updateMessageWithBytesSentOSS();
 		virtual std::string updateMessageWithBytesSentOSSImpl();
 		void uploadFilesImpl_fire_event();
 		virtual void displayFileHistoryImpl();

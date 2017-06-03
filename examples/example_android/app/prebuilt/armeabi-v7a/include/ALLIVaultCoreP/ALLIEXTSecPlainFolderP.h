@@ -19,6 +19,8 @@ namespace ALLIVaultCore
 	protected:
 		ALLIVaultCore::Engine::SimpleFolder *plainFolder;
 
+		void downloadContactPublicKey(const std::string &contactUserName, bool &dbTimedout);
+
 	private:
 		friend class ALLIEXTSecPlainRepoP;
 		ALLIVaultCore::ALLIEXTSecPlainRepoP *plainRepo;

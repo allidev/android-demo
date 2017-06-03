@@ -168,6 +168,8 @@ namespace ALLIVaultCore
 			static std::string getEncryptTempPath(const std::string &filePath);
 			static bool readFileContentIntoUTF8String(const boost::filesystem::path &src, std::string &dest, int &size);
 			static bool readFileContentIntoUTF8String(const boost::filesystem::path &src, std::string &dest);
+			static std::string getALLIMailboxTempDBPath();
+			static std::string generateAESKeyFileName(const std::string &fileName, const std::string &username);
 
 		private:
 			static std::string mysqlPassword;
@@ -185,6 +187,7 @@ namespace ALLIVaultCore
 			static ::FILETIME *convert_time_t_2_FILETIME(time_t src_time);
 #endif
 			static void addSharingFolderToFavorites();
+			static std::string getALLITempPath(const std::string &subFolder);
 		};
 	}
 }
