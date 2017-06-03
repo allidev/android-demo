@@ -88,6 +88,7 @@ namespace ALLIVaultCore
 		bool insertRowToServerInventory(const std::string &localSha1, const std::string &serverSha1, const std::string &serverURL);
 		bool insertRowToKeySey(const std::string &serverSha1, const std::string &keyUser, const std::string &aesKeyURL);
 		bool publicKeyExists(const std::string &userName);
+		const std::vector<std::string> *getFriendList();
 
 	private:
 		bool hasFriendUserName;

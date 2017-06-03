@@ -57,6 +57,7 @@ namespace ALLIVaultCore
 		void createCacheForServerImpl(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet) override;
 		std::string trackFolderImpl_processLocalFile(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory);
 		void downloadContactPublicKey(const std::string &contactUserName, std::string &contactFullName, bool &dbTimedout);
+		std::string convertContact(const std::string &contact);
 	};
 }
 
