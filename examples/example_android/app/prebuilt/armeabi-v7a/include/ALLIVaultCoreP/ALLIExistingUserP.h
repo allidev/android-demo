@@ -88,6 +88,7 @@ namespace ALLIVaultCore
 			void transitionToExistUser();
 			ALLIVAULTCOREP_API boost::signals2::connection connectGroupInvitesDownloaded(GroupInvitesDownloadedSlotType const &slot);
 			ALLIVAULTCOREP_API void MBSendFiles(const std::vector<std::string> &fList, const std::unordered_set<std::string> &recList);
+			ALLIVAULTCOREP_API void dlMailroomContactPublicKey(const std::string &contactUserName);
 
 		private:
 			friend class ::ALLINewUserPTest;

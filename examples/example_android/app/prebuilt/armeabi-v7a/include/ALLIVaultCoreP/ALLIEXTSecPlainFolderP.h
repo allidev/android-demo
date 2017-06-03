@@ -15,11 +15,10 @@ namespace ALLIVaultCore
 		virtual ~ALLIEXTSecPlainFolderP();
 
 		void monitorPlainFolder(const boost::filesystem::path &plainURL);
+		void downloadContactPublicKey(const std::string &contactUserName, bool &dbTimedout);
 
 	protected:
 		ALLIVaultCore::Engine::SimpleFolder *plainFolder;
-
-		void downloadContactPublicKey(const std::string &contactUserName, bool &dbTimedout);
 
 	private:
 		friend class ALLIEXTSecPlainRepoP;
