@@ -1,34 +1,6 @@
 #pragma once
 #include "ALLIEXTSecPlainFolderP.h"
 #include "alli_event.h"
-#include <boost/functional/hash_fwd.hpp>
-
-// inspired by https://stackoverflow.com/questions/37007307/fast-hash-function-for-stdvector
-//using boost::hash_combine
-template <class T>
-inline void hash_combine(std::size_t& seed, T const& v)
-{
-    seed ^= std::hash<T>()(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
-}
-
-namespace std
-{
-	template<typename T>
-	struct hash <std::vector<T>>
-	{
-		typedef std::vector<T> argument_type;
-		typedef std::size_t result_type;
-		result_type operator()(argument_type const& g) const
-		{
-			size_t size = g.size();
-			size_t seed = 0;
-			for (size_t i = 0; i < size; i++)
-				//Combine the hash of the current vector with the hashes of the previous ones
-				hash_combine(seed, g[i]);
-			return seed;
-		}
-	};
-}
 
 namespace ALLIVaultCore
 {
@@ -65,8 +37,14 @@ namespace ALLIVaultCore
 		int mb_ul_files_count;
 		// semaphore to control current uploading
 		ALLIVaultCore::Helpers::alli_semaphore *mb_ul_pool;
-		std::unordered_set<std::vector<std::string>> tempIdxDBAESKeys, tempServerDBAESKeys;
+		std::unordered_set<std::vector<std::string>> *tempIdxDBAESKeys, *tempServerDBAESKeys;
 		std::string tempIdxDBSeverURL, tempInventoryDBServerURL;
+		// init here and paired with plainRepo
+		ALLIVaultCore::Helpers::alli_mutex *mutex_mb_local_plain_folder;
+		// not init here
+		ALLIVaultCore::Helpers::alli_mutex *mutex_mb_plain_repo;
+		// init here
+		ALLIVaultCore::Helpers::alli_mutex *mutex_mb_encrypt_plain_folder;
 
 		bool downloadOneFileJsonImpl(const std::string &localPath, std::string &dest) override;
 		void monitorPlainFolderImpl(const boost::filesystem::path &plainURL) override;
@@ -104,6 +82,9 @@ namespace ALLIVaultCore
 		bool insertRowToKeySetTemp(const std::string &serverSha1, const std::string &keyUser, const std::string &aesKeyURL);
 		std::string encryptAESKey(const std::string &keyUser, const std::string &aesKeyPath, const std::string &filePath);
 		ALLIVaultCore::Helpers::ALLIMailMessage convertMailMessageForInsert(const std::tuple<std::string, std::string, std::vector<unsigned char>, int> &aRecord);
+		void setupMailboxSentinel();
+		bool isMailListDBFileMissing();
+		void load_mail_list();
 	};
 }
 

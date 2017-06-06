@@ -18,6 +18,9 @@ namespace ALLIVaultCore
 		void initializeDBForSyncFolder();
 		void linkSecPlainRepo(ALLIVaultCore::ALLIEXTSecPlainRepoP *src);
 
+	protected:
+		ALLIVaultCore::Helpers::alli_mutex *getMutexEncryptPlainRepo() const;
+
 	private:
 		friend class ALLIEXTSecPlainFolderP;
 		friend class ALLIEXTSecPlainRepoP;
@@ -45,7 +48,6 @@ namespace ALLIVaultCore
 		bool trackEncryptFolderImpl(const std::string &fullPath) override;
 		bool saveBridgeDictionaryImpl(int *fd) override;
 		void insertFilesBridge(const std::string &key, const std::string &val);
-		ALLIVaultCore::Helpers::alli_mutex *getMutexEncryptPlainRepo() const;
 		void trackRemoteRepoImpl() override;
 		bool runOnRemoteTimerEx_encryptRepoFailedImpl(bool &isSecureFolderSuccessful) override;
 		/**
@@ -75,6 +77,8 @@ namespace ALLIVaultCore
 		void createCacheForLastCommitImpl(const std::string &lastCommitSha1) override;
 		std::string getCacheTypeImpl() override;
 		void createCacheForServerImpl(std::string const &headSHA1) override;
+		virtual void linkSecPlainRepoImpl(ALLIVaultCore::ALLIEXTSecPlainRepoP *src);
+		virtual ALLIVaultCore::Helpers::alli_mutex *getMutexEncryptPlainRepoImpl() const;
 	};
 }
 

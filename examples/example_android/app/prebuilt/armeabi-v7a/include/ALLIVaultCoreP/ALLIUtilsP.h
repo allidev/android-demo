@@ -12,6 +12,8 @@
 #include <memory>
 #include <vector>
 #include <chrono>
+#include <unordered_set>
+#include <unordered_map>
 
 typedef struct _FILETIME FILETIME;
 
@@ -170,6 +172,7 @@ namespace ALLIVaultCore
 			static bool readFileContentIntoUTF8String(const boost::filesystem::path &src, std::string &dest);
 			static std::string getALLIMailboxTempDBPath();
 			static std::string generateAESKeyFileName(const std::string &fileName, const std::string &username);
+			static std::unordered_set<std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex>> convertIdxTableUnorderedSet(const std::unordered_map<std::string, std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex>> &idxDictP);
 
 		private:
 			static std::string mysqlPassword;

@@ -5,6 +5,33 @@
 typedef std::tuple<int, std::string, std::string> group_t;
 typedef std::array<void *, 3> running_sharing_group_t;
 
+// inspired by https://stackoverflow.com/questions/37007307/fast-hash-function-for-stdvector
+//using boost::hash_combine
+template <class T>
+inline void hash_combine(std::size_t& seed, T const& v)
+{
+	seed ^= std::hash<T>()(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+}
+
+namespace std
+{
+	template<typename T>
+	struct hash <std::vector<T>>
+	{
+		typedef std::vector<T> argument_type;
+		typedef std::size_t result_type;
+		result_type operator()(argument_type const& g) const
+		{
+			size_t size = g.size();
+			size_t seed = 0;
+			for (size_t i = 0; i < size; i++)
+				//Combine the hash of the current vector with the hashes of the previous ones
+				hash_combine(seed, g[i]);
+			return seed;
+		}
+	};
+}
+
 // specialization of std::hash for group_t
 namespace std
 {

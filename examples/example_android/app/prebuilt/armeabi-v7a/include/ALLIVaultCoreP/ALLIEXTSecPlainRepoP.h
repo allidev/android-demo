@@ -47,6 +47,7 @@ namespace ALLIVaultCore
 		void populateSyncCache(ALLIVaultCore::ALLICacheP &aCache);
 		virtual void populateSyncCacheImpl(ALLIVaultCore::ALLICacheP &aCache);
 		std::string findKeyShaForValueShaImpl(const std::string &valueSha) override;
+		virtual void setEncryptRepoImpl(ALLIVaultCore::ALLIEXTSecEncryptRepoP *src);
 	};
 }
 

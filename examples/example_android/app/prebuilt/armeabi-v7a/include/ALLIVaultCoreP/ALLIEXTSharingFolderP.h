@@ -20,9 +20,9 @@ namespace ALLIVaultCore
 	protected:
 		std::string hostUserName;
 		std::string groupName;
+		std::unordered_set<std::string> guestList;
 
 	private:
-		std::unordered_set<std::string> guestList;
 		boost::filesystem::path *guestListURL;
 		boost::filesystem::path *sharingURL;
 	};

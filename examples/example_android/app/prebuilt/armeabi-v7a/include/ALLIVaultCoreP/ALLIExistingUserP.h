@@ -83,12 +83,15 @@ namespace ALLIVaultCore
 			boost::signals2::connection connectAppStatusUpdated(const AppStatusUpdatedSlotType &slot);
 			ALLIVAULTCOREP_API boost::signals2::connection connectRepoLatestUpdate(RepoLatestUpdateSlotType const &slot);
 			ALLIVAULTCOREP_API std::string SyncFolderGetRootURL();
+			ALLIVAULTCOREP_API std::string SharingGroupGetRootURL(const std::string &huname, const std::string &gname);
 			ALLIVAULTCOREP_API void processSharingToWrapper(const std::string &groupName, const std::string &hostUserName, const std::string &guestUserName, const std::string &guestFullName);
 			void processSharingFromWrapper(const std::string &groupName, const std::string &hostUserName, const std::string &guestUserName, const std::string &hostFullName);
 			void transitionToExistUser();
 			ALLIVAULTCOREP_API boost::signals2::connection connectGroupInvitesDownloaded(GroupInvitesDownloadedSlotType const &slot);
 			ALLIVAULTCOREP_API void MBSendFiles(const std::vector<std::string> &fList, const std::unordered_set<std::string> &recList);
-			ALLIVAULTCOREP_API void dlMailroomContactPublicKey(const std::string &contactUserName);
+			ALLIVAULTCOREP_API bool addUserToFriendListDB(const std::string &uname, const std::string &fname);
+			std::vector<std::string> getFriendList();
+			ALLIVAULTCOREP_API std::string getFriendListJson();
 
 		private:
 			friend class ::ALLINewUserPTest;
@@ -180,6 +183,7 @@ namespace ALLIVaultCore
 			void processGroupInvitesReceived(void *sender, ALLIVaultCore::Helpers::alli_event_args &e);
 			bool isInviteAlreadyACurrentGroup(const ALLIVaultCore::Helpers::ALLIGroupP &src);
 			void OnGroupInvitesDownloaded(ALLIVaultCore::group_event_args &e);
+			void dlMailroomContactPublicKey(const std::string &contactUserName);
 		};
 	}
 }

@@ -46,6 +46,7 @@ namespace ALLIVaultCore
 		void load_index_db();
 		std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> getIdxTable();
 		void createCacheForServer(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet);
+		const std::vector<std::string> *getFriendList();
 
 	protected:
 		bool switching;
@@ -60,6 +61,13 @@ namespace ALLIVaultCore
 		std::unordered_map<std::string, long long> totalBytesSentGroup;
 		// mutex to lock writing to the server inventory table
 		ALLIVaultCore::Helpers::alli_mutex *server_inv_mutex;
+		// mutex to lock decrement of upload counter
+		ALLIVaultCore::Helpers::alli_mutex *ul_mutex;
+		// shared resource: upload counter
+		int ul_files_count;
+		// semaphore to control current uploading
+		ALLIVaultCore::Helpers::alli_semaphore *ul_pool;
+		std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> *sharing_key_set;
 
 		bool setDataVersion(int ver);
 		bool isDataVersionSet(int ver);
@@ -88,7 +96,10 @@ namespace ALLIVaultCore
 		bool insertRowToServerInventory(const std::string &localSha1, const std::string &serverSha1, const std::string &serverURL);
 		bool insertRowToKeySey(const std::string &serverSha1, const std::string &keyUser, const std::string &aesKeyURL);
 		bool publicKeyExists(const std::string &userName);
-		const std::vector<std::string> *getFriendList();
+		bool uploadAESKeys(const std::unordered_set<std::vector<std::string>> &aesKeys);
+		void deleteAESKeys(const std::unordered_set<std::vector<std::string>> &aesKeys);
+		std::string encryptAESKey(const std::string &keyUser, const std::string &aesKeyPath, const std::string &filePath);
+		bool writeToSharingKeySet(std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> &payload);
 
 	private:
 		bool hasFriendUserName;
@@ -101,12 +112,6 @@ namespace ALLIVaultCore
 		std::unordered_map<std::string, std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex>> idxTable;
 		std::unordered_set<std::string> matchedIdxRows;
 		ALLIVaultCore::FrontEnd::app_status_update_event appStatusUpdated;
-		// mutex to lock decrement of upload counter
-		ALLIVaultCore::Helpers::alli_mutex *ul_mutex;
-		// shared resource: upload counter
-		int ul_files_count;
-		// semaphore to control current uploading
-		ALLIVaultCore::Helpers::alli_semaphore *ul_pool;
 
 		virtual void load_index_db_ex();
 		bool containsUserInFriendList(const std::string &uname);
