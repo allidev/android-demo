@@ -173,6 +173,7 @@ namespace ALLIVaultCore
 			static std::string getALLIMailboxTempDBPath();
 			static std::string generateAESKeyFileName(const std::string &fileName, const std::string &username);
 			static std::unordered_set<std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex>> convertIdxTableUnorderedSet(const std::unordered_map<std::string, std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex>> &idxDictP);
+			static std::string getALLITempPath(const std::string &subFolder);
 
 		private:
 			static std::string mysqlPassword;
@@ -190,7 +191,6 @@ namespace ALLIVaultCore
 			static ::FILETIME *convert_time_t_2_FILETIME(time_t src_time);
 #endif
 			static void addSharingFolderToFavorites();
-			static std::string getALLITempPath(const std::string &subFolder);
 		};
 	}
 }

@@ -8,12 +8,16 @@ namespace ALLIVaultCore
 	{
 		class ALLIMailMessage;
 	}
+	class ALLIMailP;
 	class ALLIEXTSecMBPlainRepoP;
+	void mailbox_timer_wrapper(void *obj);
+	void mb_heart_beat_timer_wrapper(void *obj);
 	class ALLIEXTSecMBPlainFolderP :
 		public ALLIEXTSecPlainFolderP
 	{
 	public:
 		typedef ALLIVaultCore::latest_update_event::slot_type MBLatestUpdateSlotType;
+		typedef ALLIVaultCore::Helpers::alli_event::slot_type MailListDBUpdatedSlotType;
 
 		ALLIEXTSecMBPlainFolderP(ALLIVaultCore::ALLIEXTSecMBPlainRepoP &plainRepo);
 		ALLIEXTSecMBPlainFolderP(ALLIVaultCore::ALLIEXTSecMBPlainFolderP const &src) = delete;
@@ -26,6 +30,9 @@ namespace ALLIVaultCore
 		boost::signals2::connection connectMBLatestUpdate(const MBLatestUpdateSlotType &slot);
 
 	private:
+		friend void mailbox_timer_wrapper(void *obj);
+		friend void mb_heart_beat_timer_wrapper(void *obj);
+		typedef std::tuple<ALLIVaultCore::Engine::ALLIFolderIndex, std::string, std::chrono::time_point<std::chrono::system_clock>> temp_index_download_t;
 		ALLIVaultCore::ALLIEXTSecMBPlainRepoP *mbPlainRepo;
 		boost::filesystem::path *outboxURL;
 		ALLIVaultCore::latest_update_event m_mbLatestUpdate;
@@ -45,6 +52,18 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::alli_mutex *mutex_mb_plain_repo;
 		// init here
 		ALLIVaultCore::Helpers::alli_mutex *mutex_mb_encrypt_plain_folder;
+		void *mailboxTimer, *mbLockTimer;
+		int mb_sentinel_count, mb_lock_sentinel_count, mb_heart_beat_counter;
+		ALLIVaultCore::Helpers::alli_mutex *mb_sentinel_mutex;
+		boost::filesystem::path *inboxURL;
+		ALLIVaultCore::ALLIEXTSecPlainFolderP *extPlainFolder;
+		std::unique_ptr<boost::filesystem::path> tempInboxIndexDBURL;
+		std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> *tmpIdxTable;
+		std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFolderIndex> *tmpIdxDict;
+		std::unique_ptr<boost::filesystem::path> tempInboxServerDBURL;
+		std::vector<ALLIVaultCore::ALLIMailP> mailList;
+		ALLIVaultCore::Helpers::alli_mutex *mb_lock_sentinel_mutex;
+		ALLIVaultCore::Helpers::alli_event m_MailListDBUpdated;
 
 		bool downloadOneFileJsonImpl(const std::string &localPath, std::string &dest) override;
 		void monitorPlainFolderImpl(const boost::filesystem::path &plainURL) override;
@@ -83,8 +102,49 @@ namespace ALLIVaultCore
 		std::string encryptAESKey(const std::string &keyUser, const std::string &aesKeyPath, const std::string &filePath);
 		ALLIVaultCore::Helpers::ALLIMailMessage convertMailMessageForInsert(const std::tuple<std::string, std::string, std::vector<unsigned char>, int> &aRecord);
 		void setupMailboxSentinel();
+		void setupMailboxSentinelImpl();
 		bool isMailListDBFileMissing();
 		void load_mail_list();
+		void checkMailboxStatus(void *obj);
+		void increaseMBSentinelCount();
+		void decreaseMBSentinelCount();
+		bool checkMailboxStatusEx(std::unordered_map<std::string, ALLIVaultCore::Helpers::ALLIMailMessage> &newMails, bool &dbTimeout);
+		void setupMailboxLockHeartBeatSentinel();
+		void processNewMails(const std::unordered_map<std::string, ALLIVaultCore::Helpers::ALLIMailMessage> &newMails);
+		void deleteTempInboxFolder();
+		void closeMailboxLockHeartBeatSentinel();
+		void OnMailReceived(ALLIVaultCore::Helpers::alli_event_args &e);
+		bool isMaillistUpToDate(bool &dbTimedout);
+		bool getMailboxLock(bool &dbTimedout);
+		void mbLockHeartBeat(void *obj);
+		bool decryptMessage(const std::string &suname, const std::string rawData, int msize, std::string &originalMessage);
+		bool downloadTempDBFiles(const std::string &originalMessage, const std::string &suname, const std::chrono::time_point<std::chrono::system_clock> &sdate);
+		bool updateAMessageToRemoteMailroomDB(const ALLIVaultCore::Helpers::ALLIMailMessage &aRecord);
+		void processNewMails_safeUpdateLocalMaillistDB(const ALLIVaultCore::Helpers::ALLIMailMessage &aRecord);
+		bool releaseMailboxLock(bool &dbTimedout);
+		bool isRecordInMaillist(const std::string &suname, std::chrono::time_point<std::chrono::system_clock> &sdate);
+		bool isMailboxDeadlock(bool &dbTimedout);
+		void increaseMBLockSentinelCount();
+		void decreaseMBLockSentinelCount();
+		bool mbLockHeartBeatEx(bool &dbTimedout);
+		bool decryptMailboxFile(const boost::filesystem::path &src, const boost::filesystem::path &aesFile, const boost::filesystem::path &dest);
+		int load_tmp_index_db(const std::string &suname, const std::chrono::time_point<std::chrono::system_clock> &sdate);
+		bool addRecordToMailListDB(const ALLIVaultCore::Helpers::ALLIMailMessage &aRecord);
+		void OnMailListDBUpdated(ALLIVaultCore::Helpers::alli_event_args &e);
+		int load_tmp_index_db_ex(const boost::filesystem::path &dbURL);
+		void downloadOneFileTempMT(std::unique_ptr<temp_index_download_t> &&obj);
+		int sf_query_callback(sqlite3_stmt *sqlstmt);
+		bool downloadOneFileTemp(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow, const std::string &suname, const std::chrono::time_point<std::chrono::system_clock> &sdate);
+		bool downloadOneFileTemp_oss(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow, const std::string &suname, const std::chrono::time_point<std::chrono::system_clock> &sdate);
+		bool extractServerPathForFileTemp(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow, std::string &svrPath);
+		void listServerPathDBTemp(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);
+		bool createEmptyFolder(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow, const std::string &suname, const std::chrono::time_point<std::chrono::system_clock> &sdate);
+		bool retrieveAESKeypathForServerFileTemp(const std::string &serverSha1, const std::string &keyUser, std::string &anAESKeyPath);
+		bool retrieveServerPathForFileEx(const std::string &localSha1, std::string &svrPath, const boost::filesystem::path &dbURL);
+		bool retrieveAESKeypathForServerFileTempEx(const std::string &serverSha1, const std::string &keyUser, std::string &anAESKeyPath);
+		bool insertAESKeysToLocalKeySetEx(const std::string &serverSha1, const std::unordered_set<std::vector<std::string>> &aesKeys, bool isServerPath);
+		int load_mail_list_ex(const boost::filesystem::path *dbURL);
+		int ml_query_callback(sqlite3_stmt *sqlstmt);
 	};
 }
 

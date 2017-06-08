@@ -47,6 +47,7 @@ namespace ALLIVaultCore
 		std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> getIdxTable();
 		void createCacheForServer(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet);
 		const std::vector<std::string> *getFriendList();
+		bool renameFile(const std::string & old_path, const std::string & new_path, bool isDirectory);
 
 	protected:
 		bool switching;
@@ -68,6 +69,10 @@ namespace ALLIVaultCore
 		// semaphore to control current uploading
 		ALLIVaultCore::Helpers::alli_semaphore *ul_pool;
 		std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> *sharing_key_set;
+		// used to coordinate multi-thread download threads
+		ALLIVaultCore::Helpers::alli_semaphore *mtdl_pool;
+		ALLIVaultCore::Helpers::alli_mutex *mt_count_mutex;
+		int mtdl_remaining;
 
 		bool setDataVersion(int ver);
 		bool isDataVersionSet(int ver);
@@ -100,15 +105,12 @@ namespace ALLIVaultCore
 		void deleteAESKeys(const std::unordered_set<std::vector<std::string>> &aesKeys);
 		std::string encryptAESKey(const std::string &keyUser, const std::string &aesKeyPath, const std::string &filePath);
 		bool writeToSharingKeySet(std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> &payload);
+		void open_output_file_warning(FILE **output, const boost::filesystem::path &dest);
 
 	private:
 		bool hasFriendUserName;
 		std::unordered_set<std::string> server_inv_updated;
 		bool hasLocalSHA;
-		// used to coordinate multi-thread download threads
-		ALLIVaultCore::Helpers::alli_semaphore *mtdl_pool;
-		ALLIVaultCore::Helpers::alli_mutex *mt_count_mutex;
-		int mtdl_remaining;
 		std::unordered_map<std::string, std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex>> idxTable;
 		std::unordered_set<std::string> matchedIdxRows;
 		ALLIVaultCore::FrontEnd::app_status_update_event appStatusUpdated;

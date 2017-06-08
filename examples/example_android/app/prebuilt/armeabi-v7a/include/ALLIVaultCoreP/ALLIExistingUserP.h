@@ -80,6 +80,7 @@ namespace ALLIVaultCore
 			bool deleteFileForMailbox(const std::string &filePath, bool isDirectory = false);
 			ALLIVAULTCOREP_API bool deleteFileForSharingGroup(const std::string &hostUserName, const std::string &groupName, const std::string &filePath, bool isDirectory = false);
 			ALLIVAULTCOREP_API bool renameFileForSyncFolder(const std::string &old_path, const std::string &new_path, bool isDirectory = false);
+			ALLIVAULTCOREP_API bool renameFileForSharingGroup(const std::string &hostUserName, const std::string &groupName, const std::string &old_path, const std::string &new_path, bool isDirectory = false);
 			boost::signals2::connection connectAppStatusUpdated(const AppStatusUpdatedSlotType &slot);
 			ALLIVAULTCOREP_API boost::signals2::connection connectRepoLatestUpdate(RepoLatestUpdateSlotType const &slot);
 			ALLIVAULTCOREP_API std::string SyncFolderGetRootURL();
@@ -184,6 +185,7 @@ namespace ALLIVaultCore
 			bool isInviteAlreadyACurrentGroup(const ALLIVaultCore::Helpers::ALLIGroupP &src);
 			void OnGroupInvitesDownloaded(ALLIVaultCore::group_event_args &e);
 			void dlMailroomContactPublicKey(const std::string &contactUserName);
+			ALLIVaultCore::ALLIEXTSharingPlainFolderP *getSharingPlainFolder(const std::string &huname, const std::string &gname);
 		};
 	}
 }
