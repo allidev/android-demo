@@ -1,6 +1,7 @@
 #pragma once
 
 #include "alli_common.h"
+#include "alli_hash.h"
 #ifndef ALLI_HEADERS_ONLY
 #include "../ALLIVaultCore/git2/types.h"
 #include "../ALLIVaultCore/sqlite3.h"
@@ -173,7 +174,9 @@ namespace ALLIVaultCore
 			static std::string getALLIMailboxTempDBPath();
 			static std::string generateAESKeyFileName(const std::string &fileName, const std::string &username);
 			static std::unordered_set<std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex>> convertIdxTableUnorderedSet(const std::unordered_map<std::string, std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex>> &idxDictP);
+			static std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> convertIdxTableToRawUnorderedSet(const std::unordered_map<std::string, std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex>> &idxDictP);
 			static std::string getALLITempPath(const std::string &subFolder);
+			static bool isFileReadOnly(const boost::filesystem::path &src);
 
 		private:
 			static std::string mysqlPassword;

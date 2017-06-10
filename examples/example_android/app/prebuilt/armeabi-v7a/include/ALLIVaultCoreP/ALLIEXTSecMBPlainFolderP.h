@@ -110,6 +110,7 @@ namespace ALLIVaultCore
 		void decreaseMBSentinelCount();
 		bool checkMailboxStatusEx(std::unordered_map<std::string, ALLIVaultCore::Helpers::ALLIMailMessage> &newMails, bool &dbTimeout);
 		void setupMailboxLockHeartBeatSentinel();
+		void setupMailboxLockHeartBeatSentinelImpl();
 		void processNewMails(const std::unordered_map<std::string, ALLIVaultCore::Helpers::ALLIMailMessage> &newMails);
 		void deleteTempInboxFolder();
 		void closeMailboxLockHeartBeatSentinel();

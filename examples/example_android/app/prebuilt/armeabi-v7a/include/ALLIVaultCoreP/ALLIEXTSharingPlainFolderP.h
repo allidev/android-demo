@@ -2,6 +2,7 @@
 #include "ALLIEXTSharingFolderP.h"
 namespace ALLIVaultCore
 {
+	class ALLISharingCacheP;
 	class ALLIEXTSharingPlainRepoP;
 	class ALLIEXTSharingPlainFolderP :
 		public ALLIEXTSharingFolderP
@@ -14,6 +15,7 @@ namespace ALLIVaultCore
 		void expandAESKeysForNewGuestUser(const std::string &groupName, const std::string &guestUserName);
 
 	private:
+		friend class ALLISharingCacheP;
 		ALLIVaultCore::ALLIEXTSharingPlainRepoP *sharingPlainRepo;
 		ALLIVaultCore::Engine::SimpleFolder *sharingPlainFolder;
 		/*
@@ -31,6 +33,7 @@ namespace ALLIVaultCore
 		int aes_exp_files_count;
 		ALLIVaultCore::Helpers::alli_semaphore *aes_exp_pool;
 		typedef std::tuple<std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndex> &, std::string, std::unordered_set<std::vector<std::string>>> payload_t;
+		ALLIVaultCore::ALLISharingCacheP *sharingCache;
 
 		void load_index_db_ex() override;
 		bool downloadOneFileJsonImpl(const std::string &localPath, std::string &dest) override;

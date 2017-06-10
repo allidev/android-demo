@@ -6,6 +6,7 @@ namespace ALLIVaultCore
 	{
 		class auto_reset_event;
 	}
+	class ALLISharingCacheP;
 	class ALLIEXTSharingPlainFolderP;
 	class ALLIEXTSharingEncryptRepoP;
 	class ALLIEXTSharingPlainRepoP :
@@ -22,6 +23,7 @@ namespace ALLIVaultCore
 	private:
 		friend class ALLIEXTSharingPlainFolderP;
 		friend class ALLIEXTSharingEncryptRepoP;
+		friend class ALLISharingCacheP;
 		ALLIVaultCore::ALLIEXTSharingEncryptRepoP *shEncryptRepo;
 		ALLIVaultCore::Helpers::auto_reset_event *sharingPlainCondition;
 		// init'ed here and paired with ALLIEXTSharingPlainFolderP object
@@ -40,6 +42,8 @@ namespace ALLIVaultCore
 		bool encryptAESKeyImpl(const std::string &keyUser, const boost::filesystem::path &filePath) override;
 		bool saveBridgeDictionaryImpl(int *fd) override;
 		void terminateThread();
+		void populateSharingCache(ALLIVaultCore::ALLISharingCacheP *aCache);
+		bool createCacheForRepoHeadImpl() override;
 	};
 }
 

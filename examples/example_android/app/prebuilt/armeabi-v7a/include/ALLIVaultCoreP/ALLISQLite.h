@@ -31,6 +31,7 @@ namespace ALLIVaultCore
 				const std::string &sqlstmt,
 				int(*binding_callback) (sqlite3_stmt *, void *, std::vector<void *> *),
 				void *payload);
+			static int bind_text(sqlite3_stmt *sqlstmt, int pos, const std::string *param);
 
 		private:
 			static std::string mysqlPassword;

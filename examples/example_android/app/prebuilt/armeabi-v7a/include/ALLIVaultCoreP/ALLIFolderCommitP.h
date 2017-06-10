@@ -11,6 +11,7 @@ namespace ALLIVaultCore
 		class ALLIFolderIndex;
 	}
 	class ALLICacheP;
+	class ALLISharingCacheP;
 	class ALLIFolderCommitP
 	{
 	public:
@@ -34,6 +35,7 @@ namespace ALLIVaultCore
 
 	private:
 		friend class ALLIVaultCore::ALLICacheP;
+		friend class ALLIVaultCore::ALLISharingCacheP;
 		std::string m_encryptRepoCommit;
 		std::string m_plainRepoCommit;
 		std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> *m_idxTable_cur_commit;

@@ -3,6 +3,7 @@
 
 namespace ALLIVaultCore
 {
+	class ALLISharingCacheP;
 	class ALLIEXTSharingRepoP :
 		public ALLIEXTRepoP
 	{
@@ -21,14 +22,16 @@ namespace ALLIVaultCore
 
 	protected:
 		static ALLIVaultCore::Helpers::alli_mutex *trackSharingMutex;
+		std::string hostUserName;
+		std::string groupName;
+		// not init here
+		ALLIVaultCore::ALLISharingCacheP *sharingCache;
 
 		void downloadGroupMemberPublicKeys();
 		void copyAESKeyForGroupMembers(const boost::filesystem::path &aesKeyPath, const boost::filesystem::path &filePath);
 
 	private:
-		std::string hostUserName;
 		std::string guestUserName;
-		std::string groupName;
 		boost::filesystem::path *guestListURL;
 		std::unordered_set<std::string> guestList;
 

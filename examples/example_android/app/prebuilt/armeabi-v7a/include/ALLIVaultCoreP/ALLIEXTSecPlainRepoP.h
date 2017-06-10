@@ -43,7 +43,7 @@ namespace ALLIVaultCore
 		void terminateThread();
 		void deleteFile(const boost::filesystem::path &fileName);
 		virtual void deleteFileImpl(const boost::filesystem::path &fileName);
-		bool createCacheForRepoHead();
+		bool createCacheForRepoHeadImpl() override;
 		void populateSyncCache(ALLIVaultCore::ALLICacheP &aCache);
 		virtual void populateSyncCacheImpl(ALLIVaultCore::ALLICacheP &aCache);
 		std::string findKeyShaForValueShaImpl(const std::string &valueSha) override;

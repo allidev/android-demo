@@ -6,6 +6,10 @@ namespace ALLIVaultCore
 	{
 		class SimpleRepositoryP;
 	}
+	namespace Helpers
+	{
+		class auto_reset_event;
+	}
 	class ALLIEXTSharingPlainRepoP;
 	class ALLIEXTSharingEncryptRepoP :
 		public ALLIEXTSharingRepoP
@@ -31,6 +35,7 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::alli_mutex *mutex_sharing_plain_repo;
 		ALLIVaultCore::Helpers::alli_mutex *mutex_local_sharing_encrypt_repo;
 		boost::filesystem::path *sharingKeyFolder;
+		ALLIVaultCore::Helpers::auto_reset_event *encryp_folder_are;
 
 		void trackRemoteRepoImpl() override;
 		bool saveBridgeDictionaryImpl(int *fd) override;
@@ -38,6 +43,7 @@ namespace ALLIVaultCore
 		bool trackEncryptFolderImpl(const std::string &fullPath) override;
 		bool indexContainsMinimumFilesImpl(libgit2cpp::index *idx) override;
 		void localRepoCallbackEx_fire_updateImpl(bool git_op) override;
+		void createCacheForLastCommitImpl(const std::string &lastCommitSha1) override;
 	};
 }
 

@@ -158,6 +158,7 @@ namespace ALLIVaultCore
 		bool isGitIgnoreInOtherRepo(const boost::filesystem::path &fileName, libgit2cpp::index &index);
 		std::string findKeyShaForValueSha(const std::string &valueSha);
 		std::vector<std::string> allKeysForObject(const std::string &value, const std::map<std::string, std::string> &bridge);
+		bool createCacheForRepoHead();
 
 	private:
 		boost::filesystem::path *groupDBURL;
@@ -226,6 +227,7 @@ namespace ALLIVaultCore
 		virtual void createCacheForServerImpl(const std::string &headSHA1);
 		virtual bool fileExistsInFilesBridgeImpl(const std::string &fileName);
 		bool groupExists(const std::string &hostUserName, const std::string &groupName);
+		virtual bool createCacheForRepoHeadImpl();
 	};
 }
 
