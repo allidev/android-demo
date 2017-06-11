@@ -65,10 +65,8 @@ namespace ALLIVaultCore
                     if (!monitorFolder) break;
                     timer_guard.unlock();
                     
-					std::cout << "--working---!" << std::endl;
 					callback(args...);
 					std::this_thread::sleep_for(std::chrono::seconds(m_interval));
-					std::cout << "--waking up---" << std::endl;
 				}
 
 				std::cout << "monitor stopped!" << std::endl;
