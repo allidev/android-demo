@@ -28,6 +28,7 @@ namespace ALLIVaultCore
 
 		void sendFiles(const std::vector<std::string> &fList, const std::unordered_set<std::string> &recList);
 		boost::signals2::connection connectMBLatestUpdate(const MBLatestUpdateSlotType &slot);
+		void connectPlainFolder(ALLIVaultCore::ALLIEXTSecPlainFolderP *src);
 
 	private:
 		friend void mailbox_timer_wrapper(void *obj);
