@@ -25,6 +25,7 @@ namespace ALLIVaultCore
 			static ALLIVAULTCOREP_API void appTearDown();
 			static ALLIVAULTCOREP_API void increment_git_threads_counter();
 			static ALLIVAULTCOREP_API void decrement_git_threads_counter();
+			static void setTimeZoneDBPathForAndroid(const std::string &src);
 
 		private:
 			static alli_mutex *git_mutex;
