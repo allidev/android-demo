@@ -41,8 +41,7 @@ namespace ALLIVaultCore
 		bool fileExistsInFilesBridgeImpl(const std::string &fileName) override;
 		bool insertFilePairImpl(const boost::filesystem::path &srcFile, const boost::filesystem::path &destFile) override;
 		void terminateThread();
-		void deleteFile(const boost::filesystem::path &fileName);
-		virtual void deleteFileImpl(const boost::filesystem::path &fileName);
+		void deleteFileImpl(const boost::filesystem::path &fileName) override;
 		bool createCacheForRepoHeadImpl() override;
 		void populateSyncCache(ALLIVaultCore::ALLICacheP &aCache);
 		virtual void populateSyncCacheImpl(ALLIVaultCore::ALLICacheP &aCache);

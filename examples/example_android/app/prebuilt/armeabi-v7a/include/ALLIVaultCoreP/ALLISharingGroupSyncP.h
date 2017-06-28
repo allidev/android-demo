@@ -3,6 +3,8 @@
 #include "alli_hash.h"
 namespace ALLIVaultCore
 {
+	class ALLIEXTSecEncryptRepoP;
+	class ALLIEXTSecPlainRepoP;
 	class ALLISSClientRepoP;
 	class ALLISSEncryptedRepoP;
 	class ALLISSPlainRepoP;
@@ -16,7 +18,10 @@ namespace ALLIVaultCore
 		{
 		public:
 			ALLISharingGroupSyncP(ALLIVaultCore::FrontEnd::ALLIExistingUserP &eu);
+			ALLISharingGroupSyncP(ALLIVaultCore::ALLIEXTSecPlainRepoP *pl_repo, ALLIVaultCore::FrontEnd::ALLIExistingUserP &eu);
 			~ALLISharingGroupSyncP();
+
+			void batchActionsForSharingSync(const std::string &hostUserName, const std::string &groupName);
 
 		protected:
 			ALLIVaultCore::ALLISSClientRepoP *ssClientRepoP;
@@ -34,7 +39,10 @@ namespace ALLIVaultCore
 			virtual void monitorSharingSyncPlainRepoImpl(const std::string &hostUserName);
 
 		private:
+			friend class ALLIVaultCore::ALLIEXTSecEncryptRepoP;
 			ALLIVaultCore::Helpers::auto_reset_event *shSyncPlainFolder_are;
+			ALLIVaultCore::Helpers::auto_reset_event *syncGroup_are;
+			ALLIVaultCore::ALLIEXTSecPlainRepoP *plainRepo;
 
 			void moveSharingPlainRepositoryImpl(const boost::filesystem::path &plainURL) override;
 			void moveSharingEncryptedRepositoryImpl(const boost::filesystem::path &encryptedURL) override;
@@ -46,6 +54,11 @@ namespace ALLIVaultCore
 			void monitorSharingSyncEncryptedRepo(const std::string &hostUserName);
 			void monitorSharingSyncPlainFolderAtURL(const boost::filesystem::path &sharingPlainFolder, const std::string &hostUserName);
 			virtual void monitorSharingSyncPlainFolderAtURLImpl(const boost::filesystem::path &sharingPlainFolder, const std::string &hostUserName);
+			void setSharingHostUserName(const std::string &guestUserName, const std::string &groupName);
+			void setSharingGuestUserName(const std::string &hostUserName, const std::string &groupName);
+			void batchSetupSharingRepo(const std::string &hostUserName, const std::string &guestUserName, const std::string &groupName, const std::string &sharingType);
+			void copyFilesFromServerToSharingPlainFolderImpl(void *obj) override;
+			void copyFilesFromServerToSharingPlainFolderExImpl(const boost::filesystem::path &sharingPlainFolderURL) override;
 		};
 	}
 }

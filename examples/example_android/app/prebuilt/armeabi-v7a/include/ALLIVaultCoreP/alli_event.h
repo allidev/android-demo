@@ -10,6 +10,11 @@ namespace ALLIVaultCore
 	typedef boost::signals2::signal<void(void *, ALLIVaultCore::repo_event_args &)> repo_updated_event;
 	class latest_update_event_args;
 	typedef boost::signals2::signal<void(void *, ALLIVaultCore::latest_update_event_args &)> latest_update_event;
+	namespace Engine
+	{
+		class secure_folder_event_args;
+		typedef boost::signals2::signal<void(void *, ALLIVaultCore::Engine::secure_folder_event_args &)> secure_folder_event;
+	}
 	namespace FrontEnd
 	{
 		class new_machine_event_args;

@@ -14,6 +14,7 @@ namespace ALLIVaultCore
 		void setFolderKey(const std::string &fkey);
 		std::string getFolderKey() const;
 		bool isMembershipRevoked() const;
+		void setMembershipRevoked(bool status);
 		unsigned long long getTotalBytesUsed() const;
 
 	private:

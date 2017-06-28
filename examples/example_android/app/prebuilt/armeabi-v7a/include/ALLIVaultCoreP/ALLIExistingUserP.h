@@ -33,6 +33,10 @@ namespace ALLIVaultCore
 		class ALLISharingGroupBaseP;
 		class ALLIStatusP;
 	}
+	namespace Engine
+	{
+		class ALLIFolderIndexHistory;
+	}
 	namespace FrontEnd
 	{
 		void group_invites_timer_wrapper(void *payload);
@@ -93,11 +97,16 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API bool addUserToFriendListDB(const std::string &uname, const std::string &fname);
 			std::vector<std::string> getFriendList();
 			ALLIVAULTCOREP_API std::string getFriendListJson();
+			ALLIVAULTCOREP_API std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForSyncFolder(const boost::filesystem::path &src);
+			ALLIVAULTCOREP_API std::string retrieveFileHistoryForSyncFolderJson(const boost::filesystem::path &src);
+			std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForSyncFolderUsingRelativePath(const std::string &src);
+			std::string retrieveFileHistoryForSyncFolderUsingRelativePathJson(const std::string &src);
 
 		private:
 			friend class ::ALLINewUserPTest;
 			friend class ALLIVaultCore::Helpers::ALLISharingGroupToP;
 			friend class ALLIVaultCore::Helpers::ALLISharingGroupBaseP;
+			friend class ALLIVaultCore::ALLIEXTSecEncryptRepoP;
 			friend void group_invites_timer_wrapper(void *payload);
 			int shSyncCounter;
 			int shSyncTotal;
@@ -166,6 +175,8 @@ namespace ALLIVaultCore
 			void attachToEventHandlerForMachNewStatusUpdated(ALLIVaultCore::Helpers::ALLISharingGroupSyncNMP *src);
 			boost::signals2::connection attachToEventHandlerForRepoUpdated(ALLIVaultCore::ALLIEXTRepoP *src);
 			boost::signals2::connection attachToEventHandlerForLatestUpdate(ALLIVaultCore::ALLIEXTRepoP *src);
+			boost::signals2::connection attachToEventHandlerForSyncGroupAsHostStart(ALLIVaultCore::ALLIEXTSecEncryptRepoP *src);
+			boost::signals2::connection attachToEventHandlerForSyncGroupAsHostComplete(ALLIVaultCore::ALLIEXTSecEncryptRepoP *src);
 			boost::signals2::connection attachToEventHandlerForAppStatusUpdated(ALLIVaultCore::ALLIEXTFolderP *src);
 			boost::signals2::connection attachToEventHandlerForGroupInvitesReceived();
 			void secEncryptRepoUpdated(void *sender, ALLIVaultCore::repo_event_args &e);
@@ -186,6 +197,11 @@ namespace ALLIVaultCore
 			void OnGroupInvitesDownloaded(ALLIVaultCore::group_event_args &e);
 			void dlMailroomContactPublicKey(const std::string &contactUserName);
 			ALLIVaultCore::ALLIEXTSharingPlainFolderP *getSharingPlainFolder(const std::string &huname, const std::string &gname);
+			void processSyncGroupAsHostStart(void *sender, ALLIVaultCore::Engine::secure_folder_event_args &e);
+			void processSyncGroupAsHostComplete(void *sender, ALLIVaultCore::Engine::secure_folder_event_args &e);
+			std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForFolder(ALLIVaultCore::ALLIEXTFolderP *oneFolder, const boost::filesystem::path &src);
+			std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForFolderUsingRelativePath(ALLIVaultCore::ALLIEXTFolderP *oneFolder, const std::string &src);
+			std::string convertFileHistory2Json(const std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &src);
 		};
 	}
 }

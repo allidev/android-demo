@@ -11,6 +11,7 @@ namespace ALLIVaultCore
 		class auto_reset_event;
 	}
 	class ALLIEXTSharingPlainRepoP;
+	class ALLIEXTSharingPlainFolderP;
 	class ALLIEXTSharingEncryptRepoP :
 		public ALLIEXTSharingRepoP
 	{
@@ -27,6 +28,7 @@ namespace ALLIVaultCore
 
 	private:
 		friend class ALLIVaultCore::ALLIEXTSharingPlainRepoP;
+		friend class ALLIVaultCore::ALLIEXTSharingPlainFolderP;
 		ALLIVaultCore::ALLIEXTSharingPlainRepoP *shPlainRepo;
 		ALLIVaultCore::Engine::SimpleRepositoryP *sharingEncryptedRepoP;
 		// init here and paired with secPlainRepo
@@ -36,6 +38,9 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::alli_mutex *mutex_local_sharing_encrypt_repo;
 		boost::filesystem::path *sharingKeyFolder;
 		ALLIVaultCore::Helpers::auto_reset_event *encryp_folder_are;
+		bool membershipRevoked;
+		// not inited here
+		ALLIVaultCore::Helpers::alli_mutex *mutex_sharing_encrypt_plain_folder;
 
 		void trackRemoteRepoImpl() override;
 		bool saveBridgeDictionaryImpl(int *fd) override;
@@ -44,6 +49,31 @@ namespace ALLIVaultCore
 		bool indexContainsMinimumFilesImpl(libgit2cpp::index *idx) override;
 		void localRepoCallbackEx_fire_updateImpl(bool git_op) override;
 		void createCacheForLastCommitImpl(const std::string &lastCommitSha1) override;
+		bool runOnRemoteTimerEx_encryptRepoFailedImpl(bool &isSecureFolderSuccessful) override;
+		/**
+		** Track changes from remote server for a sharing repo.
+		** Return true if succeeds and false otherwise.
+		** @param memberDeleted is used to check if the memebership
+		** for the current user has been revoked.
+		**/
+		bool trackSharingEncryptFolder(bool &memberDeleted);
+		bool trackSharingEncryptFolder(bool &memberDeleted, bool isVerify);
+		bool trackSharingEncryptFolderImpl(bool &memberDeleted, bool isVerify);
+		void reloadSharingEncryptedRepository(const boost::filesystem::path &sharingEncryptedURL);
+		bool walkThroughSharingPlainIndex(libgit2cpp::index *plainIndex, libgit2cpp::index *encryptIndex);
+		bool walkThroughSharingEncryptedIndex(libgit2cpp::index &encryptIndex, libgit2cpp::index &plainIndex, bool &memberDeleted);
+		void reloadSharingEncryptedRepositoryImpl(const boost::filesystem::path &sharingEncryptedURL);
+		bool walkThroughSharingPlainIndexImpl(libgit2cpp::index *plainIndex, libgit2cpp::index *encryptIndex);
+		bool walkThroughSharingEncryptedIndexImpl(libgit2cpp::index &encryptIndex, libgit2cpp::index &plainIndex, bool &memberDeleted);
+		bool copyFileToPlainFolder(const boost::filesystem::path &fileName, bool &memberDeleted);
+		bool open_aes_key_file(const boost::filesystem::path &aesKeyPath, FILE **aesKeyFile, bool &membershipRevoked, bool &memberDeleted);
+		void OnGroupMembershipRevoked(ALLIVaultCore::Helpers::alli_event_args &e);
+		void OnDeleteUserStarted(ALLIVaultCore::Helpers::alli_event_args &e);
+		bool runOnRemoteTimerEx_encryptRepoBridgeSuccessImpl(bool &aLoop) override;
+		bool trackSharingPlainRepo();
+		bool trackRepoExImpl() override;
+		void fire_latest_update_event_impl(ALLIVaultCore::ALLIActionDirectionP dir) override;
+		void createCacheForServerImpl(std::string const &headSHA1) override;
 	};
 }
 

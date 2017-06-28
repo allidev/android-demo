@@ -29,6 +29,7 @@ namespace ALLIVaultCore
 		void sendFiles(const std::vector<std::string> &fList, const std::unordered_set<std::string> &recList);
 		boost::signals2::connection connectMBLatestUpdate(const MBLatestUpdateSlotType &slot);
 		void connectPlainFolder(ALLIVaultCore::ALLIEXTSecPlainFolderP *src);
+		std::unordered_set<std::string> convertRecipientList(const std::unordered_set<std::string> &src);
 
 	private:
 		friend void mailbox_timer_wrapper(void *obj);
@@ -147,6 +148,8 @@ namespace ALLIVaultCore
 		bool insertAESKeysToLocalKeySetEx(const std::string &serverSha1, const std::unordered_set<std::vector<std::string>> &aesKeys, bool isServerPath);
 		int load_mail_list_ex(const boost::filesystem::path *dbURL);
 		int ml_query_callback(sqlite3_stmt *sqlstmt);
+		bool commitStagedFiles(const std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &files, std::vector<std::string> &messages, std::string &src) override;
+		void checkAESKeysForUser(const std::string &localSHA1, const std::string &filePath, std::unordered_map<std::string, std::string> &filesToUpload);
 	};
 }
 

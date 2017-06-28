@@ -47,6 +47,8 @@ namespace ALLIVaultCore
 		boost::filesystem::path encryptFileToSecureEncryptFolder(const std::string &fileName, std::unordered_set<std::vector<std::string>> &aesKeys);
 		void copyAESKeyForGroupMembers(const std::string &aesKeyPath, const std::string &filePath, const std::string &groupName, const std::string &hostUserName, std::unordered_set<std::vector<std::string>> &aesKeys);
 		void expandAESKeyForOneFileMT(std::unique_ptr<payload_t> &&obj);
+		bool downloadOneFileEx(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow) override;
+		void createCacheForServerImpl(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet) override;
 	};
 }
 

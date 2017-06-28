@@ -3,6 +3,14 @@
 
 namespace ALLIVaultCore
 {
+	namespace Engine
+	{
+		class secure_folder_event_args;
+	}
+	namespace FrontEnd
+	{
+		class ALLIExistingUserP;
+	}
 	class ALLICacheP;
 	class ALLIEXTSecPlainFolderP;
 	class ALLIEXTSecPlainRepoP;
@@ -10,6 +18,9 @@ namespace ALLIVaultCore
 		public ALLIVaultCore::ALLIEXTRepoP
 	{
 	public:
+		typedef ALLIVaultCore::Engine::secure_folder_event::slot_type SyncSharingGroupAsHostStartedSlotType;
+		typedef ALLIVaultCore::Engine::secure_folder_event::slot_type SyncSharingGroupAsHostCompletedSlotType;
+
 		ALLIEXTSecEncryptRepoP();
 		ALLIEXTSecEncryptRepoP(const ALLIEXTSecEncryptRepoP &src);
 		virtual ~ALLIEXTSecEncryptRepoP();
@@ -17,6 +28,9 @@ namespace ALLIVaultCore
 		void openEncryptedRepository(const boost::filesystem::path &encryptedURL);
 		void initializeDBForSyncFolder();
 		void linkSecPlainRepo(ALLIVaultCore::ALLIEXTSecPlainRepoP *src);
+		void setExistingUser(ALLIVaultCore::FrontEnd::ALLIExistingUserP *eu);
+		boost::signals2::connection connectSyncSharingGroupAsHostStarted(SyncSharingGroupAsHostStartedSlotType const &slot);
+		boost::signals2::connection connectSyncSharingGroupAsHostCompleted(SyncSharingGroupAsHostCompletedSlotType const &slot);
 
 	protected:
 		ALLIVaultCore::Helpers::alli_mutex *getMutexEncryptPlainRepo() const;
@@ -24,6 +38,7 @@ namespace ALLIVaultCore
 	private:
 		friend class ALLIEXTSecPlainFolderP;
 		friend class ALLIEXTSecPlainRepoP;
+		friend class ALLIVaultCore::FrontEnd::ALLIExistingUserP;
 		ALLIVaultCore::ALLIEXTSecPlainRepoP *secPlainRepo;
 		ALLIVaultCore::Engine::SimpleRepositoryP *encryptedRepoP;
 		// init here and paired with secPlainRepo
@@ -41,6 +56,9 @@ namespace ALLIVaultCore
 		bool isEncryptRepoProcessingFiles;
 		// not init here, to be paired with plainrepo and plainfolder
 		ALLIVaultCore::ALLICacheP *syncCache;
+		ALLIVaultCore::FrontEnd::ALLIExistingUserP *existUser;
+		ALLIVaultCore::Engine::secure_folder_event SyncSharingGroupAsHostStarted, SyncSharingGroupAsHostCompleted;
+		ALLIVaultCore::Helpers::auto_reset_event *syncGroup_are;
 
 		void updateTotalBytesUsedImpl() override;
 		void openEncryptedRepositoryEx(const boost::filesystem::path &encryptedURL);
@@ -79,6 +97,15 @@ namespace ALLIVaultCore
 		void createCacheForServerImpl(std::string const &headSHA1) override;
 		virtual void linkSecPlainRepoImpl(ALLIVaultCore::ALLIEXTSecPlainRepoP *src);
 		virtual ALLIVaultCore::Helpers::alli_mutex *getMutexEncryptPlainRepoImpl() const;
+		void processSharingRepo();
+		void OnSyncSharingGroupAsHostStarted(ALLIVaultCore::Engine::secure_folder_event_args &e);
+		void OnSyncSharingGroupAsHostCompleted(ALLIVaultCore::Engine::secure_folder_event_args &e);
+		void OnGroupInvitesUpdated(ALLIVaultCore::Helpers::alli_event_args &e);
+		bool initIndexDBHistURLImpl() override;
+		bool writeIndexDBEntriesToDiskImpl(int insertType) override;
+		void processOneIndexDBRevisionImpl(std::vector<ALLIVaultCore::Engine::IndexDBFileEntry> &curIdxDBFEntry, std::unordered_set<std::string> &processedEntries) override;
+		bool decryptIndexDBFileImpl(const boost::filesystem::path &src, boost::filesystem::path &dest) override;
+		bool importIndexDBImpl(libgit2cpp::signature &cmtter, const boost::filesystem::path &dbFile) override;
 	};
 }
 

@@ -68,6 +68,7 @@ namespace ALLIVaultCore
 			void loadMemberList(const std::string &hostUserName, const std::string &groupName);
 			boost::signals2::connection attachToEventHandlerForRepoUpdated(ALLIVaultCore::ALLIEXTRepoP *src);
 			boost::signals2::connection attachToEventHandlerForLatestUpdate(ALLIVaultCore::ALLIEXTRepoP *src);
+			void initializeDBForSharingFolder(const std::string &hostUserName, const std::string &groupName);
 
 		private:
 			virtual void moveSharingPlainRepositoryImpl(const boost::filesystem::path &plainURL);
@@ -80,7 +81,6 @@ namespace ALLIVaultCore
 			virtual void copySharingEncryptedRepoToPlainRepoImpl(const boost::filesystem::path &plainURL, ALLIVaultCore::Helpers::ALLIStatusP &alli_status);
 			virtual void copyFilesFromServerToSharingPlainFolderExImpl(const boost::filesystem::path &sharingPlainFolderURL);
 			void updateTotalBytesUsedForSharingPlainFolder(const std::string &hostUserName, const std::string &groupName);
-			void initializeDBForSharingFolder(const std::string &hostUserName, const std::string &groupName);
 		};
 	}
 }

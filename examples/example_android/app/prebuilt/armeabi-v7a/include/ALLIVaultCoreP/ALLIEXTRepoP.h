@@ -24,21 +24,31 @@ namespace libgit2cpp
 	class repository;
 	class commit;
 	class index;
+	class signature;
 }
 
 namespace ALLIVaultCore
 {
 	enum class ALLIChangeStatusP;
+	enum class ALLIActionDirectionP;
+	enum class ALLIFilesBridgeKeyLocation
+	{
+		PLAIN_REPO = 0,
+		ENCRYPT_REPO
+	};
 	class latest_update_event_args;
 	class repo_event_args;
 	namespace Engine
 	{
 		class ALLIMonitorP;
+		class IndexDBFileEntry;
+		class ALLIFolderIndexHistory;
 	}
 	namespace Helpers
 	{
 		class alli_event_args;
 		class alli_mutex;
+		class auto_reset_event;
 	}
 	class ALLIEXTRepoP :
 		public ALLIRepoP
@@ -73,6 +83,8 @@ namespace ALLIVaultCore
 		std::string getRepoHeadCommitSha1();
 		bool addNewGroupToSharingGroupDB(const std::string &groupName, const std::string &hostUserName, std::string &groupSHA1, bool &hasGroup);
 		bool deleteGroupFromSharingGroupDB(const std::string &hostUserName, const std::string &groupName);
+		void appendIndexDBHistory();
+		void buildIndexDBHistory();
 
 	protected:
 		unsigned long long totalBytesUsed;
@@ -88,6 +100,8 @@ namespace ALLIVaultCore
 		std::map<std::string, std::string> filesBridge;
 		bool isEncryptRepoProcessingFiles;
 		bool isFinishUploading;
+		boost::filesystem::path *indexDBHistURL;
+		std::unordered_map<std::string, std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndexHistory>> *idxDictP;
 
 		/**
 		** Copy changed files to the encrypted repo.
@@ -157,8 +171,24 @@ namespace ALLIVaultCore
 		bool trackEncryptFolderImplEx(const std::string &fullPath, bool &git_op);
 		bool isGitIgnoreInOtherRepo(const boost::filesystem::path &fileName, libgit2cpp::index &index);
 		std::string findKeyShaForValueSha(const std::string &valueSha);
-		std::vector<std::string> allKeysForObject(const std::string &value, const std::map<std::string, std::string> &bridge);
+		std::vector<std::string> allKeysForObject(const std::string &value, const std::map<std::string, std::string> &bridge, ALLIVaultCore::ALLIFilesBridgeKeyLocation keyLoc = ALLIVaultCore::ALLIFilesBridgeKeyLocation::PLAIN_REPO);
 		bool createCacheForRepoHead();
+		bool updateFilesBridge();
+		bool isEntrySymlinkInOtherRepo(const boost::filesystem::path &fileName, libgit2cpp::index &encryptIndex);
+		bool isEntryInOtherRepo(const std::string &sha, const boost::filesystem::path &fileName, libgit2cpp::index &index);
+		void deleteFile(const boost::filesystem::path &fileName);
+		bool isIndexDBFile(const std::string &fname);
+		bool isServerInventoryDBFile(const std::string &fname);
+		void fire_latest_update_event(ALLIVaultCore::ALLIActionDirectionP dir);
+		void init_indexDbHist_are();
+		std::unordered_set<group_t> checkSharingGroups();
+		bool groupExists(const std::string &hostUserName, const std::string &groupName);
+		bool createIndexDBHistoryDB(const boost::filesystem::path &dest);
+		bool createIndexHistoryStatusDB(const boost::filesystem::path &dest);
+		bool initIndexDBHistURL();
+		bool writeIndexDBEntriesToDiskEx(const boost::filesystem::path &dest, int insertType);
+		bool processOneIndexDBEntry(ALLIVaultCore::Engine::IndexDBFileEntry &anDBEntry, std::unordered_set<std::string> &processedEntries, bool &git_shutdown);
+		bool importIndexDBEx(libgit2cpp::signature &cmtter, const boost::filesystem::path &srcDB, const boost::filesystem::path &destDB);
 
 	private:
 		boost::filesystem::path *groupDBURL;
@@ -173,6 +203,11 @@ namespace ALLIVaultCore
 		libgit2cpp::index *native_index;
 		ALLIVaultCore::Helpers::alli_mutex *repoWatchList_mutex;
 		std::unordered_map<std::string, std::string> *repoWatchList;
+		bool isIndexDBHistEmpty, isIndexDBHistRun, isTipAligned, isBottomAligned;
+		ALLIVaultCore::Helpers::alli_mutex *tip_aligned_mutex;
+		ALLIVaultCore::Helpers::auto_reset_event *indexDBHist_are;
+		std::string *commit_sha1_tip, *commit_sha1_bottom;
+		bool isVersionHistoryReady;
 
 		bool getLockForChangedFile(const boost::filesystem::path &fileName, int *fd);
 		bool releaseLockForChangedFile(int *fd);
@@ -226,8 +261,41 @@ namespace ALLIVaultCore
 		virtual std::string getRepoHeadCommitSha1Impl();
 		virtual void createCacheForServerImpl(const std::string &headSHA1);
 		virtual bool fileExistsInFilesBridgeImpl(const std::string &fileName);
-		bool groupExists(const std::string &hostUserName, const std::string &groupName);
 		virtual bool createCacheForRepoHeadImpl();
+		virtual void deleteFileImpl(const boost::filesystem::path &fileName);
+		virtual void fire_latest_update_event_impl(ALLIVaultCore::ALLIActionDirectionP dir);
+		void reloadingLockWaitTimer(std::string &src);
+		void buildIndexDBHistoryTimer(std::string &src);
+		bool processOneHeadFromIndexDBHistory(std::vector<ALLIVaultCore::Engine::IndexDBFileEntry> *head, std::string &sha1_tip, std::unordered_set<std::string> &processedEntries, bool &firstUpdate, std::string &src);
+		// inserttype 0: replace and 1: ignore
+		bool writeIndexDBEntriesToDisk(int insertType);
+		void checkCommitSha1s(const std::string &sha1_tip, std::vector<ALLIVaultCore::Engine::IndexDBFileEntry> *head, std::string &src);
+		void loadHeadCommitSHA1FromFile(std::unique_ptr<std::string> &sha1_ptr);
+		std::string getSHA1FromIndexDBHead(const std::vector<ALLIVaultCore::Engine::IndexDBFileEntry> &head);
+		bool checkIndexDBHistTip(std::string &tip);
+		bool writeIndexStatusToDisk(int status_type, const std::string &commit_sha1);
+		void processOneIndexDBRevision(std::vector<ALLIVaultCore::Engine::IndexDBFileEntry> &curIdxDBFEntry, std::unordered_set<std::string> &processedEntries);
+		virtual void processOneIndexDBRevisionImpl(std::vector<ALLIVaultCore::Engine::IndexDBFileEntry> &curIdxDBFEntry, std::unordered_set<std::string> &processedEntries);
+		virtual bool writeIndexDBEntriesToDiskImpl(int insertType);
+		void logCommitSha1s();
+		virtual bool initIndexDBHistURLImpl();
+		bool checkIndexDBHistStatus(int status_type, std::string &commit_sha1);
+		virtual bool checkIndexDBHistTipImpl(std::string &tip);
+		virtual bool writeIndexStatusToDiskImpl(int status_type, const std::string &commit_sha1);
+		virtual std::string logCommitSha1sImpl();
+		virtual void buildIndexDBHistoryImpl();
+		bool processOneHeadWhenBuildingIndexDBHistory(std::vector<ALLIVaultCore::Engine::IndexDBFileEntry> *head, bool &write_commit_tip, std::string &sha1_bottom, bool &hasProcessDB, bool &firstUpdate, std::unordered_set<std::string> &processedEntries);
+		bool checkIndexDBHistBottom();
+		bool checkTipBottomAligned(const std::vector<ALLIVaultCore::Engine::IndexDBFileEntry> &head, bool &write_commit_tip, std::string &sha1_bottom, bool hasProcessDB);
+		// default inserttype 0
+		bool writeIndexDBEntriesToDisk();
+		std::unique_ptr<std::unordered_set<void *>> convertIndexBDHist(std::unique_ptr<std::unordered_set<std::unique_ptr<ALLIVaultCore::Engine::ALLIFolderIndexHistory>>> &handle);
+		bool decryptIndexDBFile(const boost::filesystem::path &src, boost::filesystem::path &dest);
+		bool importIndexDB(libgit2cpp::signature &cmtter, const boost::filesystem::path &dbFile);
+		virtual bool decryptIndexDBFileImpl(const boost::filesystem::path &src, boost::filesystem::path &dest);
+		virtual bool importIndexDBImpl(libgit2cpp::signature &cmtter, const boost::filesystem::path &dbFile);
+		int load_index_db_ex(const boost::filesystem::path &dbURL, libgit2cpp::signature &cmtter);
+		int sf_query_callback(sqlite3_stmt *sqlstmt, libgit2cpp::signature &cmtter);
 	};
 }
 

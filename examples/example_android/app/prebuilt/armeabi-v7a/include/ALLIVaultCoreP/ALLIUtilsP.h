@@ -152,7 +152,7 @@ namespace ALLIVaultCore
 				int(*binding_callback) (sqlite3_stmt *, std::vector<void *> *params),
 				int(*sqlite_query_cb) (sqlite3_stmt *));
 			static ALLIVAULTCOREP_API std::string format_time_t(time_t src_time);
-			static ALLIVAULTCOREP_API std::string format_time_point(const std::chrono::time_point<std::chrono::system_clock> &tp);
+			static ALLIVAULTCOREP_API std::string format_time_point(const std::chrono::time_point<std::chrono::system_clock> &tp, bool convert2LocalTime = false);
 			static ALLIVAULTCOREP_API int convert_string_2_char(char **dest, const std::string &src);
 			static ALLIVAULTCOREP_API bool isSourceFileReady(const boost::filesystem::path &srcPath);
 			static boost::filesystem::path getFavoritesPath();

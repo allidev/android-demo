@@ -24,6 +24,8 @@ namespace ALLIVaultCore
 		void linkSecPlainRepoImpl(ALLIVaultCore::ALLIEXTSecPlainRepoP *src) override;
 		void trackRemoteRepoImpl() override;
 		ALLIVaultCore::Helpers::alli_mutex *getMutexEncryptPlainRepoImpl() const override;
+		void fire_latest_update_event_impl(ALLIVaultCore::ALLIActionDirectionP dir) override;
+		void buildIndexDBHistoryImpl() override;
 	};
 }
 

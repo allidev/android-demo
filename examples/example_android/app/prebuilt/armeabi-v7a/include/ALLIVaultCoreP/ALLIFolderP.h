@@ -70,6 +70,7 @@ namespace ALLIVaultCore
 		void open_aes_key_file(FILE **aesKeyFile, const boost::filesystem::path &file_path);
 		void open_aes_key_file(FILE **aesKeyFile, const std::string &fmode, const boost::filesystem::path &file_path);
 		bool decryptFile(const boost::filesystem::path &filePathURL, const boost::filesystem::path &aesKeyURL, const boost::filesystem::path &destURL);
+		bool downloadOneFileExUsingSeparateAESKey(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);
 
 	private:
 		virtual bool downloadOneFileEx(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow);

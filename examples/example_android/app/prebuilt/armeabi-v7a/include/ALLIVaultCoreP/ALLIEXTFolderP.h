@@ -13,6 +13,7 @@ namespace ALLIVaultCore
 	{
 		class ALLIMonitorP;
 		enum class ALLIFileStatusP;
+		class ALLIFolderIndexHistory;
 	}
 	class ALLICacheP;
 	class ALLIEXTRepoP;
@@ -48,6 +49,9 @@ namespace ALLIVaultCore
 		void createCacheForServer(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet);
 		const std::vector<std::string> *getFriendList();
 		bool renameFile(const std::string & old_path, const std::string & new_path, bool isDirectory);
+		void checkDataVersion();
+		bool retrieveFileHistory(std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &fileHistory, const boost::filesystem::path &filePath);
+		std::string getShaFromIndex(const std::string &fileName);
 
 	protected:
 		bool switching;
@@ -73,6 +77,7 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::alli_semaphore *mtdl_pool;
 		ALLIVaultCore::Helpers::alli_mutex *mt_count_mutex;
 		int mtdl_remaining;
+		boost::filesystem::path *indexDBHistURL;
 
 		bool setDataVersion(int ver);
 		bool isDataVersionSet(int ver);
@@ -106,6 +111,7 @@ namespace ALLIVaultCore
 		std::string encryptAESKey(const std::string &keyUser, const std::string &aesKeyPath, const std::string &filePath);
 		bool writeToSharingKeySet(std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> &payload);
 		void open_output_file_warning(FILE **output, const boost::filesystem::path &dest);
+		bool retrieveFileHistoryEx(std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &fileHistory, const boost::filesystem::path &filePath);
 
 	private:
 		bool hasFriendUserName;
@@ -154,7 +160,6 @@ namespace ALLIVaultCore
 		virtual void uploadFilesImpl(const std::unordered_map<std::string, std::string> &filesToUpload);
 		int server_query_callback(sqlite3_stmt *sqlstmt);
 		virtual bool trackFolderImpl(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, bool isDirectory);
-		std::string getShaFromIndex(const std::string &fileName);
 		bool walk_thru_folderEx(const boost::filesystem::path &curFolder);
 		void walk_thru_index();
 		// return 0 on success and -1 on error.
@@ -177,6 +182,8 @@ namespace ALLIVaultCore
 		void uploadFilesImpl_fire_event();
 		virtual void displayFileHistoryImpl();
 		virtual void createCacheForServerImpl(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet);
+		virtual bool retrieveFileHistoryImpl(std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &fileHistory, const boost::filesystem::path &filePath);
+		int fileHistory_query_cb(sqlite3_stmt *sqlstmt, std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &fileHistory);
 	};
 }
 

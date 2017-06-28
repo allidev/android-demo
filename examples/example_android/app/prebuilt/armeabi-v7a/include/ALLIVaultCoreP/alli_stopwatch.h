@@ -12,6 +12,7 @@ namespace ALLIVaultCore
 
 			void Start();
 			void Stop();
+			void Restart();
 			long long ElapsedMilliseconds() const;
 
 		private:

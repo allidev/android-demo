@@ -25,6 +25,7 @@ namespace ALLIVaultCore
 		friend class ALLIEXTSharingEncryptRepoP;
 		friend class ALLISharingCacheP;
 		ALLIVaultCore::ALLIEXTSharingEncryptRepoP *shEncryptRepo;
+		ALLIVaultCore::ALLIEXTSharingPlainFolderP *shPlainFolder;
 		ALLIVaultCore::Helpers::auto_reset_event *sharingPlainCondition;
 		// init'ed here and paired with ALLIEXTSharingPlainFolderP object
 		ALLIVaultCore::Helpers::alli_mutex *mutex_sharing_plain_repo;
@@ -44,6 +45,9 @@ namespace ALLIVaultCore
 		void terminateThread();
 		void populateSharingCache(ALLIVaultCore::ALLISharingCacheP *aCache);
 		bool createCacheForRepoHeadImpl() override;
+		void OnGuestListUpdated(ALLIVaultCore::Helpers::alli_event_args &e);
+		bool fileExistsInFilesBridgeImpl(const std::string &fileName) override;
+		std::string findKeyShaForValueShaImpl(const std::string &valueSha) override;
 	};
 }
 
