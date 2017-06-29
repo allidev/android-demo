@@ -49,6 +49,7 @@ namespace ALLIVaultCore
 		void expandAESKeyForOneFileMT(std::unique_ptr<payload_t> &&obj);
 		bool downloadOneFileEx(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow) override;
 		void createCacheForServerImpl(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet) override;
+		bool retrieveFileHistoryImpl(std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &fileHistory, const boost::filesystem::path &filePath) override;
 	};
 }
 

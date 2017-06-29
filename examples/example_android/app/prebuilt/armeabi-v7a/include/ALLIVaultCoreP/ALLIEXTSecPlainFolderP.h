@@ -16,6 +16,7 @@ namespace ALLIVaultCore
 
 		void monitorPlainFolder(const boost::filesystem::path &plainURL);
 		void downloadContactPublicKey(const std::string &contactUserName, bool &dbTimedout);
+		void setActiveStatus(bool status);
 
 	protected:
 		ALLIVaultCore::Engine::SimpleFolder *plainFolder;
@@ -34,6 +35,7 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::alli_mutex *mutex_encrypt_plain_folder;
 		// init here
 		ALLIVaultCore::ALLICacheP *syncCache;
+		bool isActive;
 
 		virtual void monitorPlainFolderImpl(const boost::filesystem::path &plainURL);
 		void downloadPublicKeysForContacts(void *obj);

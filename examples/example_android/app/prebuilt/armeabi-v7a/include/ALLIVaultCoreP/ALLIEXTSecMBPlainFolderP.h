@@ -66,6 +66,7 @@ namespace ALLIVaultCore
 		std::vector<ALLIVaultCore::ALLIMailP> mailList;
 		ALLIVaultCore::Helpers::alli_mutex *mb_lock_sentinel_mutex;
 		ALLIVaultCore::Helpers::alli_event m_MailListDBUpdated;
+		bool isCheckingMailbox;
 
 		bool downloadOneFileJsonImpl(const std::string &localPath, std::string &dest) override;
 		void monitorPlainFolderImpl(const boost::filesystem::path &plainURL) override;
@@ -114,6 +115,7 @@ namespace ALLIVaultCore
 		void setupMailboxLockHeartBeatSentinel();
 		void setupMailboxLockHeartBeatSentinelImpl();
 		void processNewMails(const std::unordered_map<std::string, ALLIVaultCore::Helpers::ALLIMailMessage> &newMails);
+		void processNewMailsEx(const std::unordered_map<std::string, ALLIVaultCore::Helpers::ALLIMailMessage> &newMails);
 		void deleteTempInboxFolder();
 		void closeMailboxLockHeartBeatSentinel();
 		void OnMailReceived(ALLIVaultCore::Helpers::alli_event_args &e);

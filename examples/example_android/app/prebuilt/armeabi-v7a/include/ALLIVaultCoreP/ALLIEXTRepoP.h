@@ -102,6 +102,7 @@ namespace ALLIVaultCore
 		bool isFinishUploading;
 		boost::filesystem::path *indexDBHistURL;
 		std::unordered_map<std::string, std::shared_ptr<ALLIVaultCore::Engine::ALLIFolderIndexHistory>> *idxDictP;
+		bool isLocalRepoActive, isRemoteRepoActive;
 
 		/**
 		** Copy changed files to the encrypted repo.

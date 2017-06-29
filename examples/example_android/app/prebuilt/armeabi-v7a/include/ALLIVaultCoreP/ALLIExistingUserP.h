@@ -98,9 +98,13 @@ namespace ALLIVaultCore
 			std::vector<std::string> getFriendList();
 			ALLIVAULTCOREP_API std::string getFriendListJson();
 			ALLIVAULTCOREP_API std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForSyncFolder(const boost::filesystem::path &src);
+			std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForSharingFolder(const std::string &hostUserName, const std::string &groupName, const boost::filesystem::path &src);
 			ALLIVAULTCOREP_API std::string retrieveFileHistoryForSyncFolderJson(const boost::filesystem::path &src);
-			std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForSyncFolderUsingRelativePath(const std::string &src);
-			std::string retrieveFileHistoryForSyncFolderUsingRelativePathJson(const std::string &src);
+			std::string retrieveFileHistoryForSharingFolderJson(const std::string &hostUserName, const std::string &groupName, const boost::filesystem::path &src);
+			ALLIVAULTCOREP_API std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForSyncFolderUsingRelativePath(const std::string &src);
+			ALLIVAULTCOREP_API std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForSharingFolderUsingRelativePath(const std::string &hostUserName, const std::string &groupName, const std::string &src);
+			ALLIVAULTCOREP_API std::string retrieveFileHistoryForSyncFolderUsingRelativePathJson(const std::string &src);
+			ALLIVAULTCOREP_API std::string retrieveFileHistoryForSharingFolderUsingRelativePathJson(const std::string &hostUserName, const std::string &groupName, const std::string &src);
 
 		private:
 			friend class ::ALLINewUserPTest;

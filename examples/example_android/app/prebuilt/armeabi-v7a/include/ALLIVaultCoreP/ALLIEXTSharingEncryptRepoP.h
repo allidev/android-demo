@@ -74,6 +74,11 @@ namespace ALLIVaultCore
 		bool trackRepoExImpl() override;
 		void fire_latest_update_event_impl(ALLIVaultCore::ALLIActionDirectionP dir) override;
 		void createCacheForServerImpl(std::string const &headSHA1) override;
+		bool writeIndexDBEntriesToDiskImpl(int insertType) override;
+		bool initIndexDBHistURLImpl() override;
+		void processOneIndexDBRevisionImpl(std::vector<ALLIVaultCore::Engine::IndexDBFileEntry> &curIdxDBFEntry, std::unordered_set<std::string> &processedEntries) override;
+		bool decryptIndexDBFileImpl(const boost::filesystem::path &src, boost::filesystem::path &dest) override;
+		bool importIndexDBImpl(libgit2cpp::signature &cmtter, const boost::filesystem::path &dbFile) override;
 	};
 }
 
