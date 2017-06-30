@@ -61,7 +61,7 @@ namespace ALLIVaultCore
 			void populateGroupMemberList(ALLIVaultCore::Helpers::ALLIGroupP &aGroup, const std::string &hostUserName, const std::string &groupName);
 			void copySharingEncryptedRepoToPlainRepo(const boost::filesystem::path &plainURL, ALLIVaultCore::Helpers::ALLIStatusP &alli_status);
 			void monitorSharingPlainRepository(const boost::filesystem::path &sharingPlainRepoURL);
-			void copyFilesFromServerToSharingPlainFolderImpl_1(void *obj);
+			virtual void copyFilesFromServerToSharingPlainFolderImpl_1(void *obj);
 			void copyFilesFromServerToSharingPlainFolderImpl_2(const std::string &hostUserName, const std::string &groupName);
 			void copyFilesFromServerToSharingPlainFolderEx(const boost::filesystem::path &sharingPlainFolderURL);
 			void monitorSharingEncryptedRepository(const boost::filesystem::path &sharingEncryptedURL, bool hasInitialCommit);

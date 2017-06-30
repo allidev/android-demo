@@ -59,6 +59,7 @@ namespace ALLIVaultCore
 			void batchSetupSharingRepo(const std::string &hostUserName, const std::string &guestUserName, const std::string &groupName, const std::string &sharingType);
 			void copyFilesFromServerToSharingPlainFolderImpl(void *obj) override;
 			void copyFilesFromServerToSharingPlainFolderExImpl(const boost::filesystem::path &sharingPlainFolderURL) override;
+			void copyFilesFromServerToSharingPlainFolderImpl_1(void *obj) override;
 		};
 	}
 }

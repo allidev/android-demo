@@ -56,6 +56,7 @@ namespace ALLIVaultCore
 			void monitorSharingSyncPlainRepoImpl(const std::string &hostUserName) override;
 			void monitorSharingSyncEncryptedRepoImpl(const std::string &hostUserName) override;
 			void monitorSharingSyncPlainFolderAtURLImpl(const boost::filesystem::path &sharingPlainFolder, const std::string &hostUserName) override;
+			void copyFilesFromServerToSharingPlainFolderImpl_1(void *obj) override;
 		};
 	}
 }
