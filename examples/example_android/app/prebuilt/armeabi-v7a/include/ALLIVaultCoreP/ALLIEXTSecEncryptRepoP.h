@@ -11,6 +11,10 @@ namespace ALLIVaultCore
 	{
 		class ALLIExistingUserP;
 	}
+	namespace Helpers
+	{
+		class ALLISharingGroupSyncP;
+	}
 	class ALLICacheP;
 	class ALLIEXTSecPlainFolderP;
 	class ALLIEXTSecPlainRepoP;
@@ -99,7 +103,7 @@ namespace ALLIVaultCore
 		virtual ALLIVaultCore::Helpers::alli_mutex *getMutexEncryptPlainRepoImpl() const;
 		void processSharingRepo();
 		void OnSyncSharingGroupAsHostStarted(ALLIVaultCore::Engine::secure_folder_event_args &e);
-		void OnSyncSharingGroupAsHostCompleted(ALLIVaultCore::Engine::secure_folder_event_args &e);
+		void OnSyncSharingGroupAsHostCompleted(ALLIVaultCore::Engine::secure_folder_event_args &e, ALLIVaultCore::Helpers::ALLISharingGroupSyncP &shSync);
 		void OnGroupInvitesUpdated(ALLIVaultCore::Helpers::alli_event_args &e);
 		bool initIndexDBHistURLImpl() override;
 		bool writeIndexDBEntriesToDiskImpl(int insertType) override;
