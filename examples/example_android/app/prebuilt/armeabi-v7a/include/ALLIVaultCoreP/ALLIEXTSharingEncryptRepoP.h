@@ -25,6 +25,7 @@ namespace ALLIVaultCore
 		void monitorSharingEncryptedRepository(const boost::filesystem::path &sharingEncryptedURL);
 		void expandAESKeysForNewGuestUser(const std::string &groupName, const std::string &guestUserName);
 		void createSharingKeyFolder();
+		void initializeDBForSharingFolder(const std::string &hostUserName, const std::string &groupName);
 
 	private:
 		friend class ALLIVaultCore::ALLIEXTSharingPlainRepoP;
