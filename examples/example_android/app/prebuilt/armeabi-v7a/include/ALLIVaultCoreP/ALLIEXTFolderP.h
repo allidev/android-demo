@@ -49,6 +49,7 @@ namespace ALLIVaultCore
 		void createCacheForServer(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet);
 		const std::vector<std::string> *getFriendList();
 		bool renameFile(const std::string & old_path, const std::string & new_path, bool isDirectory);
+		bool copyFile(const std::string & src_path, const std::string & dest_path, bool isDirectory);
 		void checkDataVersion();
 		bool retrieveFileHistory(std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &fileHistory, const boost::filesystem::path &filePath);
 		std::string getShaFromIndex(const std::string &fileName);

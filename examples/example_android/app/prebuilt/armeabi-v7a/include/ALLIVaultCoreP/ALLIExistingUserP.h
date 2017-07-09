@@ -84,7 +84,9 @@ namespace ALLIVaultCore
 			bool deleteFileForMailbox(const std::string &filePath, bool isDirectory = false);
 			ALLIVAULTCOREP_API bool deleteFileForSharingGroup(const std::string &hostUserName, const std::string &groupName, const std::string &filePath, bool isDirectory = false);
 			ALLIVAULTCOREP_API bool renameFileForSyncFolder(const std::string &old_path, const std::string &new_path, bool isDirectory = false);
+			bool copyFileForSyncFolder(const std::string &src, const std::string &dest, bool isDirectory = false);
 			ALLIVAULTCOREP_API bool renameFileForSharingGroup(const std::string &hostUserName, const std::string &groupName, const std::string &old_path, const std::string &new_path, bool isDirectory = false);
+			bool copyFileForSharingGroup(const std::string &hostUserName, const std::string &groupName, const std::string &src_path, const std::string &dest_path, bool isDirectory = false);
 			boost::signals2::connection connectAppStatusUpdated(const AppStatusUpdatedSlotType &slot);
 			ALLIVAULTCOREP_API boost::signals2::connection connectRepoLatestUpdate(RepoLatestUpdateSlotType const &slot);
 			ALLIVAULTCOREP_API std::string SyncFolderGetRootURL();
