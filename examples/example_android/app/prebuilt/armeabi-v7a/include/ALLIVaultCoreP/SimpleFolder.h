@@ -114,6 +114,7 @@ namespace ALLIVaultCore
 			void walk_thru_folder(const boost::filesystem::path &curFolder, std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> **files, std::unordered_set<std::string> *matchedFiles);
 			void walk_thru_index(const boost::filesystem::path &curFolder, std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> *files, std::unordered_set<std::string> *matchedFiles);
 			void walk_thru_index(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> *files, bool isDirectory = false);
+			void check_empty_parent_folder(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> *files);
 			int comp_wd_index(const boost::filesystem::path &aFile, std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> *files, std::unordered_set<std::string> *matchedFiles);
 			int comp_entry_workdir(const ALLIVaultCore::Engine::ALLIFolderIndex *aRow, const boost::filesystem::path &curFolder, std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> *files);
 			int sf_query_callback(sqlite3_stmt *sqlstmt);
