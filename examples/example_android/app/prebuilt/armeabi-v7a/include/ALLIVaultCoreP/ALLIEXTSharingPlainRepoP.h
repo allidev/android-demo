@@ -19,6 +19,7 @@ namespace ALLIVaultCore
 
 		void monitorSharingPlainRepository(const boost::filesystem::path &shPlainURL);
 		void connectEncryptRepoP(ALLIVaultCore::ALLIEXTSharingEncryptRepoP *src);
+		bool deleteGuestMember(const std::string &gUserName);
 
 	private:
 		friend class ALLIEXTSharingPlainFolderP;

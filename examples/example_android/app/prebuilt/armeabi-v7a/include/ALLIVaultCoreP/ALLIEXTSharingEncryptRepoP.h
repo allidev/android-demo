@@ -80,6 +80,7 @@ namespace ALLIVaultCore
 		void processOneIndexDBRevisionImpl(std::vector<ALLIVaultCore::Engine::IndexDBFileEntry> &curIdxDBFEntry, std::unordered_set<std::string> &processedEntries) override;
 		bool decryptIndexDBFileImpl(const boost::filesystem::path &src, boost::filesystem::path &dest) override;
 		bool importIndexDBImpl(libgit2cpp::signature &cmtter, const boost::filesystem::path &dbFile) override;
+		bool copyAESKeyForGuestUser(const boost::filesystem::path &filePath, const std::string &guestUserName);
 	};
 }
 

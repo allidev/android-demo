@@ -26,13 +26,13 @@ namespace ALLIVaultCore
 		std::string groupName;
 		// not init here
 		ALLIVaultCore::ALLISharingCacheP *sharingCache;
+		boost::filesystem::path *guestListURL;
 
 		void downloadGroupMemberPublicKeys();
 		void copyAESKeyForGroupMembers(const boost::filesystem::path &aesKeyPath, const boost::filesystem::path &filePath);
 
 	private:
 		std::string guestUserName;
-		boost::filesystem::path *guestListURL;
 		std::unordered_set<std::string> guestList;
 
 		void downloadGuestPublicKey(const std::string &guestUserName);

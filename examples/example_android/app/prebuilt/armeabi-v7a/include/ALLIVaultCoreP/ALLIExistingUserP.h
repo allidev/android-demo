@@ -107,6 +107,7 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForSharingFolderUsingRelativePath(const std::string &hostUserName, const std::string &groupName, const std::string &src);
 			ALLIVAULTCOREP_API std::string retrieveFileHistoryForSyncFolderUsingRelativePathJson(const std::string &src);
 			ALLIVAULTCOREP_API std::string retrieveFileHistoryForSharingFolderUsingRelativePathJson(const std::string &hostUserName, const std::string &groupName, const std::string &src);
+			void batchActionsForSharingToDeleteMember(const std::string &hostUserName, const std::string &groupName, const std::string &guestUserName);
 
 		private:
 			friend class ::ALLINewUserPTest;
@@ -203,6 +204,7 @@ namespace ALLIVaultCore
 			void OnGroupInvitesDownloaded(ALLIVaultCore::group_event_args &e);
 			void dlMailroomContactPublicKey(const std::string &contactUserName);
 			ALLIVaultCore::ALLIEXTSharingPlainFolderP *getSharingPlainFolder(const std::string &huname, const std::string &gname);
+			ALLIVaultCore::ALLIEXTSharingPlainRepoP *getSharingPlainRepo(const std::string &huname, const std::string &gname);
 			void processSyncGroupAsHostStart(void *sender, ALLIVaultCore::Engine::secure_folder_event_args &e);
 			void processSyncGroupAsHostComplete(void *sender, ALLIVaultCore::Engine::secure_folder_event_args &e);
 			std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForFolder(ALLIVaultCore::ALLIEXTFolderP *oneFolder, const boost::filesystem::path &src);

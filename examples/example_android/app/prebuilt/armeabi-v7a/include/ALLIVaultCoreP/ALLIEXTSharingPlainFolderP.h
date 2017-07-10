@@ -50,6 +50,10 @@ namespace ALLIVaultCore
 		bool downloadOneFileEx(const ALLIVaultCore::Engine::ALLIFolderIndex &aRow) override;
 		void createCacheForServerImpl(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet) override;
 		bool retrieveFileHistoryImpl(std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &fileHistory, const boost::filesystem::path &filePath) override;
+		void expandAESKeyForOneFile(ALLIVaultCore::Engine::ALLIFolderIndex &aRow, const std::string &guestUserName, std::unordered_set<std::vector<std::string>> &aesKeys);
+		void expandAESKeyForOneFile_oss(ALLIVaultCore::Engine::ALLIFolderIndex &aRow, const std::string &guestUserName, std::unordered_set<std::vector<std::string>> &aesKeys);
+		std::string copyAESKeyViaExpansion(const std::string &keyUser, const boost::filesystem::path &aesKeyPath, const std::string &serverSHA1, const std::string &localPath);
+		bool insertAESKeysToSharingKeySetBatch(const std::string &serverSha1, const std::unordered_set<std::vector<std::string>> &aesKeys);
 	};
 }
 
