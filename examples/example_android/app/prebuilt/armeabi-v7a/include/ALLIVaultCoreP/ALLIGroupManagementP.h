@@ -10,6 +10,8 @@ namespace ALLIVaultCore
 
 		bool addGroupMemberToServer();
 		bool updateServerGroupDB();
+		bool deleteGroupMemberOnServer();
+		bool deleteAllGroupMembersOnServer();
 
 	private:
 		std::string hostUserName;

@@ -24,6 +24,7 @@ namespace ALLIVaultCore
 	class ALLISSClientFolderP;
 	class ALLISSPlainFolderP;
 	class ALLIGroupInvitesP;
+	class ALLIGroupManagementP;
 	namespace Helpers
 	{
 		class ALLIGroupP;
@@ -108,6 +109,7 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API std::string retrieveFileHistoryForSyncFolderUsingRelativePathJson(const std::string &src);
 			ALLIVAULTCOREP_API std::string retrieveFileHistoryForSharingFolderUsingRelativePathJson(const std::string &hostUserName, const std::string &groupName, const std::string &src);
 			void batchActionsForSharingToDeleteMember(const std::string &hostUserName, const std::string &groupName, const std::string &guestUserName);
+			void batchActionsForDeletingSharingGroup(const std::string &hostUserName, const std::string &groupName);
 
 		private:
 			friend class ::ALLINewUserPTest;
@@ -161,6 +163,7 @@ namespace ALLIVaultCore
 			ALLIVaultCore::ALLIGroupInvitesP *groupInvites;
 			void *groupInvites_timer;
 			ALLIVaultCore::group_invites_downloaded_event groupInvitesDownloaded;
+			ALLIVaultCore::ALLIGroupManagementP *groupManagement;
 
 			std::unordered_set<group_t> checkSharingGroups();
 			bool createSharingGroupProgressFile();
@@ -210,6 +213,8 @@ namespace ALLIVaultCore
 			std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForFolder(ALLIVaultCore::ALLIEXTFolderP *oneFolder, const boost::filesystem::path &src);
 			std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForFolderUsingRelativePath(ALLIVaultCore::ALLIEXTFolderP *oneFolder, const std::string &src);
 			std::string convertFileHistory2Json(const std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &src);
+			void deleteGroupMemberOnServer(const std::string &hostUserName, const std::string &groupName, const std::string &guestUserName);
+			void deleteAllGroupMembersOnServer(const std::string &hostUserName, const std::string &groupName);
 		};
 	}
 }

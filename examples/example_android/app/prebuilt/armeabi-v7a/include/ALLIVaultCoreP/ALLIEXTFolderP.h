@@ -14,6 +14,7 @@ namespace ALLIVaultCore
 		class ALLIMonitorP;
 		enum class ALLIFileStatusP;
 		class ALLIFolderIndexHistory;
+		class ALLISharingKeySet;
 	}
 	class ALLICacheP;
 	class ALLIEXTRepoP;
@@ -73,7 +74,7 @@ namespace ALLIVaultCore
 		int ul_files_count;
 		// semaphore to control current uploading
 		ALLIVaultCore::Helpers::alli_semaphore *ul_pool;
-		std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> *sharing_key_set;
+		std::unordered_set<ALLIVaultCore::Engine::ALLISharingKeySet> *sharing_key_set;
 		// used to coordinate multi-thread download threads
 		ALLIVaultCore::Helpers::alli_semaphore *mtdl_pool;
 		ALLIVaultCore::Helpers::alli_mutex *mt_count_mutex;
@@ -110,9 +111,10 @@ namespace ALLIVaultCore
 		bool uploadAESKeys(const std::unordered_set<std::vector<std::string>> &aesKeys);
 		void deleteAESKeys(const std::unordered_set<std::vector<std::string>> &aesKeys);
 		std::string encryptAESKey(const std::string &keyUser, const std::string &aesKeyPath, const std::string &filePath);
-		bool writeToSharingKeySet(std::unordered_set<ALLIVaultCore::Engine::ALLIFolderIndex> &payload);
+		bool writeToSharingKeySet(std::unordered_set<ALLIVaultCore::Engine::ALLISharingKeySet> &payload);
 		void open_output_file_warning(FILE **output, const boost::filesystem::path &dest);
 		bool retrieveFileHistoryEx(std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &fileHistory, const boost::filesystem::path &filePath);
+		bool addRowToKeySet(const std::string &serverSha1, const std::string &keyUser, const std::string &aesKeyURL, void *payload);
 
 	private:
 		bool hasFriendUserName;

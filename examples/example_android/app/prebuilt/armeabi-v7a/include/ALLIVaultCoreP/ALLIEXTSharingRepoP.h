@@ -34,11 +34,14 @@ namespace ALLIVaultCore
 	private:
 		std::string guestUserName;
 		std::unordered_set<std::string> guestList;
+		bool deletedFromGroup;
 
 		void downloadGuestPublicKey(const std::string &guestUserName);
 		bool publicKeyExists(const std::string &userName);
 		bool encryptAESKey(const std::string &keyUser, const boost::filesystem::path &filePath);
 		virtual bool encryptAESKeyImpl(const std::string &keyUser, const boost::filesystem::path &filePath);
+		int load_guest_list_db_ex(const boost::filesystem::path &guestListDBURL);
+		int gldb_query_callback(sqlite3_stmt *sqlstmt);
 	};
 }
 

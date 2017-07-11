@@ -42,6 +42,7 @@ namespace ALLIVaultCore
 		bool membershipRevoked;
 		// not inited here
 		ALLIVaultCore::Helpers::alli_mutex *mutex_sharing_encrypt_plain_folder;
+		bool sharingGroupDeleted;
 
 		void trackRemoteRepoImpl() override;
 		bool saveBridgeDictionaryImpl(int *fd) override;
