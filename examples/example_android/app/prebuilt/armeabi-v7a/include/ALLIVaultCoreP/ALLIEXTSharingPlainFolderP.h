@@ -54,6 +54,7 @@ namespace ALLIVaultCore
 		void expandAESKeyForOneFile_oss(ALLIVaultCore::Engine::ALLIFolderIndex &aRow, const std::string &guestUserName, std::unordered_set<std::vector<std::string>> &aesKeys);
 		std::string copyAESKeyViaExpansion(const std::string &keyUser, const boost::filesystem::path &aesKeyPath, const std::string &serverSHA1, const std::string &localPath);
 		bool insertAESKeysToSharingKeySetBatch(const std::string &serverSha1, const std::unordered_set<std::vector<std::string>> &aesKeys);
+		bool downloadOneFileFromHistoryImpl(ALLIVaultCore::Engine::ALLIFolderIndexHistory &fileVersion, const boost::filesystem::path &dest) override;
 	};
 }
 

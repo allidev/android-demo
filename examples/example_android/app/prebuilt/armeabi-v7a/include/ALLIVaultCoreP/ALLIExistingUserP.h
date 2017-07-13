@@ -16,6 +16,7 @@ namespace ALLIVaultCore
 	class ALLIEXTSecMBPlainRepoP;
 	class ALLIEXTSecMBPlainFolderP;
 	class ALLIEXTSharingPlainRepoP;
+	class ALLIEXTSharingEncryptRepoP;
 	class ALLIEXTRepoP;
 	class ALLIEXTFolderP;
 	class ALLISSClientRepoP;
@@ -110,6 +111,10 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API std::string retrieveFileHistoryForSharingFolderUsingRelativePathJson(const std::string &hostUserName, const std::string &groupName, const std::string &src);
 			void batchActionsForSharingToDeleteMember(const std::string &hostUserName, const std::string &groupName, const std::string &guestUserName);
 			void batchActionsForDeletingSharingGroup(const std::string &hostUserName, const std::string &groupName);
+			bool downloadOneFileFromHistoryForSyncFolder(ALLIVaultCore::Engine::ALLIFolderIndexHistory &fileVersion, const boost::filesystem::path &dest);
+			bool downloadOneFileFromHistoryForSharingFolder(const std::string &hostUserName, const std::string &groupName, ALLIVaultCore::Engine::ALLIFolderIndexHistory &fileVersion, const boost::filesystem::path &dest);
+			int getBlockHeightForSyncFolder() const;
+			int getBlockHeightForSharingFolder(const std::string &hostUserName, const std::string &groupName);
 
 		private:
 			friend class ::ALLINewUserPTest;
@@ -208,6 +213,7 @@ namespace ALLIVaultCore
 			void dlMailroomContactPublicKey(const std::string &contactUserName);
 			ALLIVaultCore::ALLIEXTSharingPlainFolderP *getSharingPlainFolder(const std::string &huname, const std::string &gname);
 			ALLIVaultCore::ALLIEXTSharingPlainRepoP *getSharingPlainRepo(const std::string &huname, const std::string &gname);
+			ALLIVaultCore::ALLIEXTSharingEncryptRepoP *getSharingEncryptRepo(const std::string &huname, const std::string &gname);
 			void processSyncGroupAsHostStart(void *sender, ALLIVaultCore::Engine::secure_folder_event_args &e);
 			void processSyncGroupAsHostComplete(void *sender, ALLIVaultCore::Engine::secure_folder_event_args &e);
 			std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> retrieveFileHistoryForFolder(ALLIVaultCore::ALLIEXTFolderP *oneFolder, const boost::filesystem::path &src);

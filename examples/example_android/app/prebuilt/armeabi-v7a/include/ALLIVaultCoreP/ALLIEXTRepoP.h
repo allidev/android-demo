@@ -85,6 +85,7 @@ namespace ALLIVaultCore
 		bool deleteGroupFromSharingGroupDB(const std::string &hostUserName, const std::string &groupName);
 		void appendIndexDBHistory();
 		void buildIndexDBHistory();
+		int getBlockHeight() const;
 
 	protected:
 		unsigned long long totalBytesUsed;
@@ -209,6 +210,7 @@ namespace ALLIVaultCore
 		ALLIVaultCore::Helpers::auto_reset_event *indexDBHist_are;
 		std::string *commit_sha1_tip, *commit_sha1_bottom;
 		bool isVersionHistoryReady;
+		int m_block_height;
 
 		bool getLockForChangedFile(const boost::filesystem::path &fileName, int *fd);
 		bool releaseLockForChangedFile(int *fd);

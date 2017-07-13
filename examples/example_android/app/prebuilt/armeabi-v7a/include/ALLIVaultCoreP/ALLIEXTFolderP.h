@@ -54,6 +54,7 @@ namespace ALLIVaultCore
 		void checkDataVersion();
 		bool retrieveFileHistory(std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &fileHistory, const boost::filesystem::path &filePath);
 		std::string getShaFromIndex(const std::string &fileName);
+		bool downloadOneFileFromHistory(ALLIVaultCore::Engine::ALLIFolderIndexHistory &fileVersion, const boost::filesystem::path &dest);
 
 	protected:
 		bool switching;
@@ -187,6 +188,7 @@ namespace ALLIVaultCore
 		virtual void createCacheForServerImpl(std::unordered_map<std::string, ALLIVaultCore::ALLIChangeStatusP> &changeSet);
 		virtual bool retrieveFileHistoryImpl(std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &fileHistory, const boost::filesystem::path &filePath);
 		int fileHistory_query_cb(sqlite3_stmt *sqlstmt, std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &fileHistory);
+		virtual bool downloadOneFileFromHistoryImpl(ALLIVaultCore::Engine::ALLIFolderIndexHistory &fileVersion, const boost::filesystem::path &dest);
 	};
 }
 
