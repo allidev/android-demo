@@ -111,11 +111,7 @@ namespace ALLIVaultCore
 			ALLIVAULTCOREP_API std::string retrieveFileHistoryForSharingFolderUsingRelativePathJson(const std::string &hostUserName, const std::string &groupName, const std::string &src);
 			void batchActionsForSharingToDeleteMember(const std::string &hostUserName, const std::string &groupName, const std::string &guestUserName);
 			void batchActionsForDeletingSharingGroup(const std::string &hostUserName, const std::string &groupName);
-			bool downloadOneFileFromHistoryForSyncFolder(ALLIVaultCore::Engine::ALLIFolderIndexHistory &fileVersion, const boost::filesystem::path &dest);
-			bool downloadOneFileFromHistoryForSyncFolder(const std::string &filePath, const std::string &localSHA1, const boost::filesystem::path &dest);
 			bool downloadOneFileFromHistoryForSyncFolder(const std::string &filePath, const std::string &localSHA1, const std::string &dest);
-			bool downloadOneFileFromHistoryForSharingFolder(const std::string &hostUserName, const std::string &groupName, ALLIVaultCore::Engine::ALLIFolderIndexHistory &fileVersion, const boost::filesystem::path &dest);
-			bool downloadOneFileFromHistoryForSharingFolder(const std::string &hostUserName, const std::string &groupName, const std::string &filePath, const std::string &localSHA1, const boost::filesystem::path &dest);
 			bool downloadOneFileFromHistoryForSharingFolder(const std::string &hostUserName, const std::string &groupName, const std::string &filePath, const std::string &localSHA1, const std::string &dest);
 			int getBlockHeightForSyncFolder() const;
 			int getBlockHeightForSharingFolder(const std::string &hostUserName, const std::string &groupName);
@@ -225,6 +221,10 @@ namespace ALLIVaultCore
 			std::string convertFileHistory2Json(const std::vector<ALLIVaultCore::Engine::ALLIFolderIndexHistory> &src);
 			void deleteGroupMemberOnServer(const std::string &hostUserName, const std::string &groupName, const std::string &guestUserName);
 			void deleteAllGroupMembersOnServer(const std::string &hostUserName, const std::string &groupName);
+			bool downloadOneFileFromHistoryForSyncFolder(ALLIVaultCore::Engine::ALLIFolderIndexHistory &fileVersion, const boost::filesystem::path &dest);
+			bool downloadOneFileFromHistoryForSyncFolder(const std::string &filePath, const std::string &localSHA1, const boost::filesystem::path &dest);
+			bool downloadOneFileFromHistoryForSharingFolder(const std::string &hostUserName, const std::string &groupName, ALLIVaultCore::Engine::ALLIFolderIndexHistory &fileVersion, const boost::filesystem::path &dest);
+			bool downloadOneFileFromHistoryForSharingFolder(const std::string &hostUserName, const std::string &groupName, const std::string &filePath, const std::string &localSHA1, const boost::filesystem::path &dest);
 		};
 	}
 }
