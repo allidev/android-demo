@@ -114,6 +114,7 @@ namespace ALLIVaultCore
 			void walk_thru_folder(const boost::filesystem::path &curFolder, std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> **files, std::unordered_set<std::string> *matchedFiles);
 			void walk_thru_index(const boost::filesystem::path &curFolder, std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> *files, std::unordered_set<std::string> *matchedFiles);
 			void walk_thru_index(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> *files, bool isDirectory = false);
+			void walk_thru_index_directory(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &src, const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> *files);
 			void check_empty_parent_folder(const std::pair<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> &dest, std::unordered_map<std::string, std::pair<ALLIVaultCore::Engine::ALLIFileStatusP, std::string>> *files);
 			int comp_wd_index(const boost::filesystem::path &aFile, std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> *files, std::unordered_set<std::string> *matchedFiles);
 			int comp_entry_workdir(const ALLIVaultCore::Engine::ALLIFolderIndex *aRow, const boost::filesystem::path &curFolder, std::unordered_map<std::string, ALLIVaultCore::Engine::ALLIFileStatusP> *files);
@@ -129,6 +130,7 @@ namespace ALLIVaultCore
 			int query_aes_key_cb(sqlite3_stmt *sqlstmt);
 			bool load_serv_inv_dictP_from_disk(const std::string &localSha1, std::string &svrPath);
 			void search_serv_inv_dictP(const std::string &localSha1, std::string &svrPath);
+			std::string rename_parent_folder(const std::string &src, const std::string &src_parent, const std::string &dest_parent);
 		};
 	}
 }
